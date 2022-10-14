@@ -1,0 +1,67 @@
+# CONFIG script
+# Import dependencies
+ 
+import pandas as pd 
+import numpy as np
+import glob
+import matplotlib.pyplot as plt
+import os
+import datetime
+import re
+import shutil
+from numpy.core.numeric import NaN
+from openpyxl import Workbook
+import xlsxwriter
+import pandas.io.formats.excel
+from pandas import ExcelWriter
+
+# Set directory
+os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')
+
+# Set file_date_id here so that if we are running the script alone, versus through integrate, 
+# we can have the variable available
+try:
+    file_date_id
+except NameError:
+    file_date_id = None
+
+USE_LATEST_OUTPUT_DATE_ID = True
+
+# Create option to set file_date_id to the date_id of the latest created output files. 
+# (helpful when producing graphs and analysing output data)
+if USE_LATEST_OUTPUT_DATE_ID == True:
+    list_of_files = glob.glob('./results/*.csv')
+
+if len(list_of_files) > 0: 
+    latest_file = max(list_of_files, key = os.path.getctime)
+    # Get file_date_id using regular expression code as per below. 
+    # Want to grab the firt 8 digits and then an underscore and then the next 4 digits
+    file_date_id = re.search(r'date(\d{8})_(\d{4})', latest_file).group(0)
+else:
+    pass
+
+# Modelling variables
+BASE_YEAR = 2019
+END_YEAR = 2050
+Scenario_list = ['reference', 'alternative_1', 'alternative_2', 'alternative_3', 'alternative_4']
+
+model_output_file_name = 'model_output_years_{}_to_{}_{}.csv'.format(BASE_YEAR, END_YEAR, file_date_id)
+
+EIGHTH_EDITION_DATA = True
+
+scenario_id = 'model_development'
+
+# Model concordance file names
+model_concordance_version = file_date_id # Example: '20220824_1256'
+model_concordance_file_name  = 'model_concordance{}.csv'.format(model_concordance_version)
+
+# Analysis variables
+SCENARIO_OF_INTEREST = 'reference'
+
+# Economies (including larger regions)
+economy_codes_path = './data/config/'
+
+economy_list = pd.read_csv(economy_codes_path + 'APEC_economies.csv').iloc[:, 0]
+
+
+
