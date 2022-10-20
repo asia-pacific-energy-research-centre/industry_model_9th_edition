@@ -14,6 +14,18 @@ from openpyxl import Workbook
 import xlsxwriter
 import pandas.io.formats.excel
 from pandas import ExcelWriter
+import requests
+import ssl
+import urllib3
+import xml.etree.ElementTree as ET
+import io
+import typing
+import urllib.request
+from urllib.parse import urlparse
+from bs4 import BeautifulSoup
+import lxml
+import wbgapi as wb
+import json
 
 # Set directory
 os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')

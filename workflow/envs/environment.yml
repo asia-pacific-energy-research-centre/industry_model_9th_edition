@@ -12,3 +12,14 @@ dependencies:
   - openpyxl
   - xlsxwriter
   - seaborn
+  - pandasdmx
+  - requests
+  - ssl
+  - urllib3
+  - shutil
+  - re
+  - datetime
+  - os
+  - glob
+  - wbgapi
+  - json
