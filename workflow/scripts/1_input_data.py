@@ -1,33 +1,83 @@
 # Run config file
 execfile('../../config/config_oct2022.py')
 
-# Package specific to grabbing API based data
-from bs4 import BeautifulSoup
-import pandasdmx as sdmx
+# Package specific to grabbing API based data should have been grabbed in config
 
-#########################################################################
-ssl._create_default_https_context = ssl._create_unverified_context
-#########################################################################
+# FRED API key: 11824d95b466a7d1067e671666863771
+fred = Fred('./data/config/fredapi.txt')
 
-# Download ADB data
+fred.get_api_key_file()
+
+
+fred.get_series_df('JPNPROINDMISMEI')
+
+fred.series_stack
+fred.get_child_categories(2)
+
+
+
+
+
+
+
+
+
+
+# Download IMF data
 sdmx.list_sources()
 
-adb_dataflow_url = 'https://kidb.adb.org/api/v2/sdmx/metadata/dataflow/IMF&&output_format=JSON'
+imf_flow = 'http://dataservices.imf.org/REST/SDMX_JSON.svc/Dataflow'
 
-adb_dataflow = requests.get(adb_dataflow_url, verify = False)
-adb_dataflow.content
+json_flow = requests.get(imf_flow).json()
+json_flow
 
-adb_dsd_url = 'https://kidb.adb.org/api/v2/sdmx/metadata/datastructure&&output_format=JSON'
+df1 = pd.json_normalize(response['Structure']).T
+df1
 
-adb_dsd = requests.get(adb_dsd_url, verify = False)
-adb_dsd.content
+df2 = pd.json_normalize(df1.T['Dataflows.Dataflow'].explode().tolist())
+df2
 
-adb_concept_url = 'https://kidb.adb.org/api/v2/sdmx/metadata/conceptscheme&&output_format=JSON'
+str(df2.iloc[0, 0])
 
-adb_concept = requests.get(adb_concept_url, verify = False)
-adb_concept.content
+imf_dstructure = 'http://dataservices.imf.org/REST/SDMX_JSON.svc/DataStructure/' + str(df2.iloc[0, 7])
+imf_dstructure
 
-adb_code_url = 'https://kidb.adb.org/api/v2/sdmx/metadata/codelist&&output_format=JSON'
+json_dstruc = requests.get(imf_dstructure).json()
+json_dstruc
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+# FUCK THE PEOPLE AT THE ADB>>>> FUCKING MORONS
+
+adb_code_url = 'https://kidb.adb.org/api/v2/sdmx/data/IMF/A.RAFAGOLDNV_USD.AUS?startPeriod=2010&endPeriod=2020&&output_format=json'
+
+adb_code = requests.get(adb_code_url, verify = False)
+adb_code.status_code
+
+adb_code.json()
+
+
+
+
+
+
+str(adb_code.content)
+
+with open(str(adb_code.content)) as f:
+    df = json.load(f)
 
 pd.read_json(adb_code_url)
 
@@ -41,7 +91,9 @@ with open(reqeuests.get)
 
 
 
-
+#########################################################################
+# ssl._create_default_https_context = ssl._create_unverified_context
+#########################################################################
 
 
 

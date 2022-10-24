@@ -26,6 +26,10 @@ from bs4 import BeautifulSoup
 import lxml
 import wbgapi as wb
 import json
+import full_fred
+import pytest
+from full_fred import Fred
+from pandas import json_normalize
 
 # Set directory
 os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')
