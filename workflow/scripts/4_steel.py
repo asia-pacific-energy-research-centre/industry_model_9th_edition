@@ -54,7 +54,7 @@ for economy in steel_economies.keys():
     
     ax.set(title = economy + ' steel production', 
                 xlabel = 'Year', 
-                ylabel = 'Steel production (tonnes)')
+                ylabel = 'Steel production (thousand tonnes)')
 
     plt.tight_layout()
     fig.savefig(steel_charts + economy + '_steelprod.png')
