@@ -1,12 +1,15 @@
-# CONFIG script
+# CONFIG script, October 2022
 # Import dependencies
  
 import pandas as pd 
 import numpy as np
 import glob
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.dates import DateFormatter
 import os
 import datetime
+from datetime import datetime
 import re
 import shutil
 from numpy.core.numeric import NaN
@@ -28,8 +31,10 @@ import wbgapi as wb
 import json
 import full_fred
 import pytest
-from full_fred import Fred
+import seaborn as sns
+from full_fred.fred import Fred
 from pandas import json_normalize
+from textwrap import wrap
 
 # Set directory
 os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')
