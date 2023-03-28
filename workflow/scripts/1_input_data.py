@@ -14,11 +14,11 @@ execfile('./config/config_oct2022.py')
 
 # October 2022 (data to August 2022) xlsx workbook location
 # THIS URL CAN BE UPDATED EVERY MONTH TO REBUILD THE DATAFRAMES WITH MORE UP TO DATE DATA
-CPB_WTM_URL = 'https://www.cpb.nl/sites/default/files/omnidownload/CPB-World-Trade-Monitor-December-2022.xlsx'
+CPB_WTM_URL = 'https://www.cpb.nl/sites/default/files/omnidownload/CPB-World-Trade-Monitor-January-2023.xlsx'
 
 # Save the excel file
 resp = requests.get(CPB_WTM_URL)
-with open('./data/production_and_trade/source_download/CPB-World-Trade-Monitor-December-2022.xlsx', 'wb') as output:
+with open('./data/production_and_trade/source_download/CPB-World-Trade-Monitor-January-2023.xlsx', 'wb') as output:
     output.write(resp.content)
 
 # Grab sheet names (trade_out and inpro_out)
