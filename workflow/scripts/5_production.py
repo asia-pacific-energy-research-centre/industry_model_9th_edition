@@ -20,9 +20,11 @@ industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)
 macro_apec = pd.read_csv('./data/macro/APEC_GDP_population.csv')
 
 list(industry_sectors.values())
-macro_apec.variable.unique()
+list(macro_apec.variable.unique())
 
 # Want a function that creates a trajectory from historical (eg 2000) to 2100 for all subsectors
+
+
 
 # I dont have historical production for subectors for each of the economies
 # I could source some of this information
