@@ -6,7 +6,7 @@ wanted_wd = 'industry_model_9th_edition'
 os.chdir(re.split(wanted_wd, os.getcwd())[0] + wanted_wd)
 
 # Now run config file
-execfile('./config/config_oct2022.py')
+execfile('./config/config_apr2023.py')
 
 # Read in CPB data
 input_data_folder = './data/production_and_trade/'

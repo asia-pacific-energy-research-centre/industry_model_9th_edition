@@ -1,3 +1,4 @@
+# CPB Netherlands Bureau for Economic Policy Analysis: Production and trade data
 # First, set high level project space working directory 
 import os
 import re
@@ -7,12 +8,10 @@ wanted_wd = 'industry_model_9th_edition'
 os.chdir(re.split(wanted_wd, os.getcwd())[0] + wanted_wd)
 
 # Run config file
-execfile('./config/config_oct2022.py')
+execfile('./config/config_apr2023.py')
 
-# CPB Netherlands Bureau for Economic Policy Analysis 
 # CPB World Trade Monitor Excel workbook updated monthly
 
-# October 2022 (data to August 2022) xlsx workbook location
 # THIS URL CAN BE UPDATED EVERY MONTH TO REBUILD THE DATAFRAMES WITH MORE UP TO DATE DATA
 CPB_WTM_URL = 'https://www.cpb.nl/sites/default/files/omnidownload/CPB-World-Trade-Monitor-January-2023.xlsx'
 

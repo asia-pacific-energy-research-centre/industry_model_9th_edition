@@ -6,10 +6,13 @@ wanted_wd = 'industry_model_9th_edition'
 os.chdir(re.split(wanted_wd, os.getcwd())[0] + wanted_wd)
 
 # Now run config file
-execfile('./config/config_oct2022.py')
+execfile('./config/config_apr2023.py')
 
-# APEC economies
+# APEC economies and relation to CPB production/trade
 APEC_econcode = pd.read_csv('./data/config/APEC_economies.csv', header = 0, index_col = 0)\
+    .squeeze().to_dict()
+
+APEC_to_CPB = pd.read_csv('./data/config/APEC_and_CPB.csv', index_col = 0)\
     .squeeze().to_dict()
 
 # Industry sectprs
@@ -18,6 +21,9 @@ industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)
 
 # GDP and population data
 macro_apec = pd.read_csv('./data/macro/APEC_GDP_population.csv')
+
+
+
 
 list(industry_sectors.values())
 list(macro_apec.variable.unique())

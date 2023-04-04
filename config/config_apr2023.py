@@ -35,6 +35,7 @@ import seaborn as sns
 from full_fred.fred import Fred
 from pandas import json_normalize
 from textwrap import wrap
+from prophet import Prophet
 
 # Set directory
 os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')
@@ -63,8 +64,8 @@ else:
 
 # Modelling variables
 BASE_YEAR = 2019
-END_YEAR = 2050
-Scenario_list = ['reference', 'alternative_1', 'alternative_2', 'alternative_3', 'alternative_4']
+END_YEAR = 2070
+Scenario_list = ['reference', 'target']
 
 model_output_file_name = 'model_output_years_{}_to_{}_{}.csv'.format(BASE_YEAR, END_YEAR, file_date_id)
 
