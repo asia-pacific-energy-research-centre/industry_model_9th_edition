@@ -1,3 +1,7 @@
+## Industry modelling for the 9th edition of the APEC Energy Demand and Supply Outlook
+
+This repository houses input data, and builds a model that projects industrial energy consumption for 21 APEC economies out to 2070. 
+
 ### Creating the Conda environment for this industry modelling project
 
 Clone this project to your personal computer in a location of your choice.
@@ -28,3 +32,21 @@ the `environment.yml` file as necessary.
 (i.e. 'env/' is in the .gitignore file)
  
 Also note: the environment should automatically activate (as long as you've created as per above) if you're working within VS Code and have chosen the cloned project directory as your working directory.
+
+### Updating the Conda environment
+
+If you add (remove) dependencies to (from) the `environment.yml` file after the environment has 
+already been created, then you can update the environment with the following command.
+
+```bash
+$ conda env update --prefix ./env --file ./workflow/envs/environment.yml --prune
+```
+
+### Listing the full contents of the Conda environment
+
+The list of explicit dependencies for the project are listed in the `environment.yml` file. To see the full list of packages installed into the environment run the following command.
+
+```bash
+conda list --prefix ./env
+```
+
