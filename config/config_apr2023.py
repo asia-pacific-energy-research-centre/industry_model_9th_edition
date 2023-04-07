@@ -29,10 +29,8 @@ from bs4 import BeautifulSoup
 import lxml
 import wbgapi as wb
 import json
-import full_fred
 import pytest
 import seaborn as sns
-from full_fred.fred import Fred
 from pandas import json_normalize
 from textwrap import wrap
 import plotly

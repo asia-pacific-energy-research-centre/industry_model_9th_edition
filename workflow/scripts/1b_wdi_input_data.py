@@ -109,7 +109,7 @@ def ind_projection(input_data = wdi_df,
 
         sns.set_theme(style = 'ticks')
 
-        sns.scatterplot(data = ind_df2, 
+        sns.lineplot(data = ind_df2, 
                         x = 'year',
                         y = 'value',
                         hue = 'series')
@@ -123,7 +123,6 @@ def ind_projection(input_data = wdi_df,
         plt.tight_layout()
         plt.savefig(save_data + economy + '_' + series + '.png')
         plt.close()
-
 
 # High level results for all economies with default values
 for economy in wdi_df['economy_code'].unique():
