@@ -17,8 +17,8 @@ production_files = glob.glob(input_data_folder + '*.csv')
 prod_index = [idx for idx, s in enumerate(production_files) if 'industrial_production' in s][0]
 wt_index = [idx for idx, s in enumerate(production_files) if 'world_trade' in s][0]
 
-cpb_prod_df = pd.read_csv(production_files[prod_index], parse_dates = ['date'], infer_datetime_format = True)
-cpb_wt_df = pd.read_csv(production_files[wt_index], parse_dates = ['date'], infer_datetime_format = True)
+cpb_prod_df = pd.read_csv(production_files[prod_index], parse_dates = ['date'])
+cpb_wt_df = pd.read_csv(production_files[wt_index], parse_dates = ['date'])
 
 # Read in series dictionary
 long_series = pd.read_csv('./data/config/cpb_series.csv', header = None, index_col = 0)\

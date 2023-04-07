@@ -22,7 +22,10 @@ industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)
 # GDP and population data
 macro_apec = pd.read_csv('./data/macro/APEC_GDP_population.csv')
 
-
+# Build idea 1
+# Takes GDP and constructs a trajectory for each subsector and each economy (21 times 13)
+# Quantitative way to change the trajectory
+# Some sort of product intensity
 
 
 list(industry_sectors.values())

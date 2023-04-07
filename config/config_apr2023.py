@@ -1,4 +1,4 @@
-# CONFIG script, October 2022
+# CONFIG script, April 2023
 # Import dependencies
  
 import pandas as pd 
@@ -35,7 +35,8 @@ import seaborn as sns
 from full_fred.fred import Fred
 from pandas import json_normalize
 from textwrap import wrap
-from prophet import Prophet
+import plotly
+import sklearn
 
 # Set directory
 os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')
@@ -64,7 +65,7 @@ else:
 
 # Modelling variables
 BASE_YEAR = 2019
-END_YEAR = 2070
+END_YEAR = 2100
 Scenario_list = ['reference', 'target']
 
 model_output_file_name = 'model_output_years_{}_to_{}_{}.csv'.format(BASE_YEAR, END_YEAR, file_date_id)
@@ -84,6 +85,3 @@ SCENARIO_OF_INTEREST = 'reference'
 economy_codes_path = './data/config/'
 
 economy_list = pd.read_csv(economy_codes_path + 'APEC_economies.csv').iloc[:, 0]
-
-
-

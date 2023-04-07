@@ -44,31 +44,6 @@ steel_df.to_csv(production_files + 'steel_wsa_cleaned.csv', index = False)
 # Save location for stee; charts
 steel_charts = './results/steel/'
 
-if not os.path.isdir(steel_charts):
-    os.makedirs(steel_charts)
-
-# Steel production charts
-for economy in steel_economies.keys():
-    chart_df = steel_df[steel_df['economy_code'] == economy].reset_index(drop = True)
-
-    fig, ax = plt.subplots()
-    
-    sns.set_theme(style = 'ticks')
-
-    # Capital stock
-    sns.lineplot(ax = ax,
-                data = chart_df,
-                x = 'year',
-                y = 'value')
-    
-    ax.set(title = economy + ' steel production', 
-                xlabel = 'Year', 
-                ylabel = 'Steel production (thousand tonnes)')
-
-    plt.tight_layout()
-    fig.savefig(steel_charts + economy + '_steelprod.png')
-    plt.close()
-
 # Load cement data
 cement_df = pd.read_excel(prod_files[cement_index[0]], header = 5, nrows = 160)\
     .rename(columns = {'Country or locality': 'economy'})
@@ -108,31 +83,3 @@ cement_df = cement_df[['economy_code', 'economy', 'production', 'units', 'year',
 cement_df.to_csv(production_files + 'cement_usgs_cleaned.csv', index = False)
 
 APEC_cement = list(cement_df['economy_code'].unique())
-
-# Save location for cement charts
-cement_charts = './results/cement/'
-
-if not os.path.isdir(cement_charts):
-    os.makedirs(cement_charts)
-
-# Cement charts
-for economy in APEC_cement:
-    chart_df = cement_df[cement_df['economy_code'] == economy].reset_index(drop = True)
-
-    fig, ax = plt.subplots()
-    
-    sns.set_theme(style = 'ticks')
-
-    # Capital stock
-    sns.lineplot(ax = ax,
-                data = chart_df,
-                x = 'year',
-                y = 'value')
-    
-    ax.set(title = economy + ' cement production', 
-                xlabel = 'Year', 
-                ylabel = 'Cement production (thousand tonnes)')
-
-    plt.tight_layout()
-    fig.savefig(cement_charts + economy + '_cementprod.png')
-    plt.close()

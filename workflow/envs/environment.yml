@@ -11,10 +11,13 @@ dependencies:
   - pandas
   - openpyxl
   - xlsxwriter
-  - seaborn
+  - seaborn = 0.12.2
   - pandasdmx
   - requests
   - urllib3
   - wbgapi
   - pytest
+  - sympy
   - prophet
+  - plotly
+  - scikit-learn
