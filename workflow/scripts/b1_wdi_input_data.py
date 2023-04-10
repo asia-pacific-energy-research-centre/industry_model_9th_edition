@@ -50,6 +50,9 @@ wdi_df = wdi_df.sort_values(['economy_code', 'series', 'year']).copy().dropna().
 wdi_df.to_csv('./data/wdi_industry.csv', index = False)
 wdi_df = pd.read_csv('./data/wdi_industry.csv')
 
+# Remove data series we don't need
+wdi_df = wdi_df[wdi_df['series_code'] != 'NV.MNF.TECH.ZS.UN'].copy().reset_index(drop = True)
+
 # Now build a function that projects out to 2100
 def ind_projection(input_data = wdi_df,
                    economy = '01_AUS',
@@ -73,7 +76,7 @@ def ind_projection(input_data = wdi_df,
         proj_df = pd.DataFrame(columns = ind_df1.columns,
                             data = {'economy_code': economy,
                                     'series': 'Projection',
-                                    'series_code': series + ' projection',
+                                    'series_code': series,
                                     'year': proj_range})
         
         ind_df2 = pd.concat([ind_df1, proj_df]).set_index('year', drop = True)
@@ -122,10 +125,11 @@ def ind_projection(input_data = wdi_df,
         
         plt.tight_layout()
         plt.savefig(save_data + economy + '_' + series + '.png')
+        #plt.show()
         plt.close()
 
 # High level results for all economies with default values
-for economy in wdi_df['economy_code'].unique():
-    for series in wdi_df['series_code'].unique():
-        ind_projection(economy = economy,
-                       series = series)
+# for economy in wdi_df['economy_code'].unique():
+#     for series in wdi_df['series_code'].unique():
+#         ind_projection(economy = economy,
+#                        series = series)
