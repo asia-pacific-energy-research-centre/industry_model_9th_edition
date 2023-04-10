@@ -1,6 +1,4 @@
 # Choosing trajectories for all economies
-# Run script 2a first to define the function
-
 # World Development Indicators industry data
 import os
 import re
