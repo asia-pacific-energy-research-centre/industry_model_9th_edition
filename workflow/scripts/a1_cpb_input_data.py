@@ -7,9 +7,11 @@ wanted_wd = 'industry_model_9th_edition'
 
 os.chdir(re.split(wanted_wd, os.getcwd())[0] + wanted_wd)
 
-# Run config file
-execfile('./config/config_apr2023.py')
-
+# execute config file
+config_file = './config/config_apr2023.py'
+with open(config_file) as infile:
+    exec(infile.read())
+    
 # CPB World Trade Monitor Excel workbook updated monthly
 
 # THIS URL CAN BE UPDATED EVERY MONTH TO REBUILD THE DATAFRAMES WITH MORE UP TO DATE DATA

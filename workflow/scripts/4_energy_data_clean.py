@@ -7,8 +7,10 @@ import re
 wanted_wd = 'industry_model_9th_edition'
 os.chdir(re.split(wanted_wd, os.getcwd())[0] + wanted_wd)
 
-# Now run config file
-execfile('./config/config_apr2023.py')
+# execute config file
+config_file = './config/config_apr2023.py'
+with open(config_file) as infile:
+    exec(infile.read())
 
 # Read EGEDA
 EGEDA_location = './data/EGEDA/model_df/'

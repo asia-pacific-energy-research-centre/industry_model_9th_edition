@@ -6,8 +6,10 @@ wanted_wd = 'industry_model_9th_edition'
 
 os.chdir(re.split(wanted_wd, os.getcwd())[0] + wanted_wd)
 
-# Run config file
-execfile('./config/config_apr2023.py')
+# execute config file
+config_file = './config/config_apr2023.py'
+with open(config_file) as infile:
+    exec(infile.read())
 
 wdi_df1 = pd.read_excel('./data/production_rawgrab.xlsx', 
                        sheet_name = 'WDI_more', 
@@ -101,7 +103,7 @@ def ind_projection(input_data = wdi_df,
         ind_df2['economy'] = ind_df2['economy_code'].map(APEC_fullname)
         
         # Save location for data and charts
-        save_data = './data/industry_projection/{}/'.format(economy)
+        save_data = './data/industry_interim/{}/'.format(economy)
 
         if not os.path.isdir(save_data):
             os.makedirs(save_data)
@@ -125,7 +127,7 @@ def ind_projection(input_data = wdi_df,
         
         plt.tight_layout()
         plt.savefig(save_data + economy + '_' + series + '.png')
-        #plt.show()
+        plt.show()
         plt.close()
 
 # High level results for all economies with default values
