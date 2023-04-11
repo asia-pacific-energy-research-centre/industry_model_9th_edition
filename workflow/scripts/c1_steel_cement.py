@@ -85,7 +85,7 @@ for economy in steel_df['economy_code'].unique():
 
     plt.tight_layout()
     plt.savefig(steel_charts + economy + '_steel_prod.png')
-    plt.show()
+    #plt.show()
     plt.close()
 
 # Load cement data
@@ -168,6 +168,6 @@ for economy in cement_df['economy_code'].unique():
 
     plt.tight_layout()
     plt.savefig(cement_charts + economy + '_cement_prod.png')
-    plt.show()
+    #plt.show()
     plt.close()
 
