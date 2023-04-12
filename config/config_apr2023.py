@@ -35,6 +35,7 @@ from pandas import json_normalize
 from textwrap import wrap
 import plotly
 import sklearn
+import featuretools as ft
 
 # Set directory
 os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')
