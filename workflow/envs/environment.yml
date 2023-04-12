@@ -21,3 +21,4 @@ dependencies:
   - prophet
   - plotly
   - scikit-learn
+  - featuretools
