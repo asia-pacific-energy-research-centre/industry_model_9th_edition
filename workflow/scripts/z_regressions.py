@@ -308,3 +308,53 @@ for economy in wdi_df['economy_code'].unique():
         plt.tight_layout()
         plt.savefig(charts + economy + '_' + series + '.png')
         plt.close()
+
+
+#####################################################################################################
+
+input_data = pd.DataFrame([
+    [1, 5, 12, 4],
+    [1, 5, 16, 5],
+    [1, 5, 20, 6],
+    [1, 5, 8, 3],
+    [1, 5, 10, 3.5],
+    [1, 5, 22, 6.5],
+    [2, 8, 12, 44],
+    [2, 8, 10, 33],
+    [2, 8, 14, 50],
+    [2, 8, 8, 15],
+    [2, 8, 0, 0],
+    [2, 8, 3, -5]
+], columns = ['id', 'constant_feature', 'time_dependent_feature', 'target_variable'])
+
+input_data = input_data.set_index('id')
+
+unique_ids = input_data.index.unique()
+
+X = []
+Y = []
+
+for identifier in unique_ids:
+    single_process_data = input_data.loc[identifier] #1
+    
+    data = pd.DataFrame(single_process_data[['target_variable', 'time_dependent_feature']].copy()) #2
+    data.columns = ['y', 'time_dependent_feature'] #2
+
+    # last 5 values of the target variable as "lag" variables (the most recent one is the dependent feature (y))
+    for i in range(1, 6): #3
+        data['target_lag_{}'.format(i)] = data.y.shift(i)
+        
+    # last 6 values of the target variable as "time_dependent_feature" variables
+    for i in range(0, 6): #4
+        data['time_dependent_feature_lag_{}'.format(i)] = data.time_dependent_feature.shift(i)
+    
+    #rewrite constants
+    data['constant_feature'] = single_process_data['constant_feature'] #5
+
+    #the shift operations in the loops create many partial results. They are useless, and we don't want them
+    data = data.dropna()
+    y = data.y #6
+    x = data.drop(['y', 'time_dependent_feature'], axis=1) #6
+    
+    X.append(np.array(x).flatten()) #7
+    Y.append(y) #7

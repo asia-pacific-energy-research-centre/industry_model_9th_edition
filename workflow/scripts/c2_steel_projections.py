@@ -13,21 +13,22 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Import historical steel data and gdp
-
 steel_df = pd.read_csv('./data/production_and_trade/production_steel/steel_wsa_cleaned.csv') 
-steel_ex = pd.read_csv('./data/production_and_trade/wsa_steelexport.csv', index_col = 'year')
-
-for i in range(2022, 2101):
-    steel_ex.loc[i, 'export_share'] = steel_ex.loc[i - 1, 'export_share']
-
-steel_ex = steel_ex.copy().reset_index(drop = False)[['year', 'export_share']]
-
 pop_gdp_df = pd.read_csv('./data/macro/APEC_GDP_population.csv')
 
-from sklearn.linear_model import LinearRegression
+# Import some modelling dependencies
+from sklearn import preprocessing
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.metrics import mean_squared_error
 
-for economy in list(steel_df['economy_code'].unique())[0:1]:
-    hist_df = steel_df[steel_df['economy_code'] == economy].copy().dropna().reset_index(drop = True)
+from sklearn.linear_model import LinearRegression
+from sklearn.svm import LinearSVC
+
+for economy in list(steel_df['economy_code'].unique())[:1]:
+    # Target variable: steel production
+    target_df = steel_df[steel_df['economy_code'] == economy].copy().dropna().reset_index(drop = True)
+    
+    # Feature/explanatory variables
     gdp_pc = pop_gdp_df[(pop_gdp_df['economy_code'] == economy) &
                         (pop_gdp_df['variable'] == 'GDP_per_capita')].copy().reset_index(drop = True)
     
@@ -37,23 +38,155 @@ for economy in list(steel_df['economy_code'].unique())[0:1]:
     pop = pop_gdp_df[(pop_gdp_df['economy_code'] == economy) &
                         (pop_gdp_df['variable'] == 'population')].copy().reset_index(drop = True)
     
-    new_df = pd.merge(left = hist_df, right = gdp, left_on = 'year', right_on = 'year').copy().dropna()
+    # Target and features in one data frame that is historical
+    full_df = pd.merge(left = target_df, right = gdp, on = 'year', how = 'outer').copy()
 
-    new_df = new_df[['year', 'value_x', 'value_y']].rename(columns = {'value_x': 'steel',
-                                                                      'value_y': 'real_GDP'}).copy()
+    full_df = full_df[['year', 'value_x', 'value_y']].rename(columns = {'value_x': 'steel',
+                                                                        'value_y': 'real_GDP'}).copy()
     
-    new_df = pd.merge(left = new_df, right = pop, left_on = 'year', right_on = 'year')\
-        .copy().dropna().rename(columns = {'value': 'population'})
+    full_df = pd.merge(left = full_df, right = pop, on = 'year', how = 'outer')\
+        .copy().rename(columns = {'value': 'population'})
 
-    new_df = new_df[['year', 'steel', 'real_GDP', 'population']].copy()
+    full_df = full_df[['year', 'steel', 'real_GDP', 'population']].copy()
 
-    new_df = pd.merge(left = new_df, right = steel_ex, on = 'year').copy().dropna()
+    # Full data frame with steel (target only for historical) and real_GDP, population, and GDP per capita features to 2100
+    full_df = pd.merge(left = full_df, right = gdp_pc, on = 'year', how = 'outer')\
+        .copy().rename(columns = {'value': 'GDP_per_capita'})\
+            [['steel', 'year', 'real_GDP', 'population', 'GDP_per_capita']]
     
-    X = [[x, y] for x, y in zip(new_df['real_GDP'], new_df['population'])]
-    y = np.array(new_df.steel)
+    # Create historical dataframe for train and testing with known target 
+    hist_df = full_df.copy().dropna().set_index('year')
 
-    model = LinearRegression()
-    model.fit(X, y)
+    # Now need to feature engineer by generating even more features from the 3 that currently have
+    # STEP 1: create lagged variables (features and target)
+
+    lags = 3
+
+    for year in hist_df.index:    
+        for i in range(1, lags + 1):
+            if year - i > 1979:
+                hist_df.loc[year, 'steel_lag_{}'.format(i)] = hist_df.loc[year - i, 'steel']
+                hist_df.loc[year, 'gdp_lag_{}'.format(i)] = hist_df.loc[year - i, 'real_GDP']
+                hist_df.loc[year, 'pop_lag_{}'.format(i)] = hist_df.loc[year - i, 'population']
+                hist_df.loc[year, 'gdp_pc_lag_{}'.format(i)] = hist_df.loc[year - i, 'GDP_per_capita']
+            else:
+                pass
+
+    # Now only keep data that is notna
+    hist_df = hist_df.dropna()
+
+
+
+    
+
+
+
+
+
+
+
+
+    x_n = hist_df.shape[1] - 1
+
+    X1 = hist_df.iloc[:, [2]].to_numpy()
+    X2 = hist_df.iloc[:, [3]].to_numpy()
+    X3 = hist_df.iloc[:, [4]].to_numpy()
+    X4 = hist_df.iloc[:, [2, 3]].to_numpy()
+    X5 = hist_df.iloc[:, [2, 4]].to_numpy()
+    X6 = hist_df.iloc[:, [3, 4]].to_numpy()
+    X7 = hist_df.iloc[:, 2:].to_numpy()
+
+    y = np.array(hist_df.iloc[:, 0])
+
+    # Time series cross validation
+    tscv = TimeSeriesSplit(n_splits = int(hist_df.shape[0] / 3), test_size = 2)
+
+    mse_results = pd.DataFrame(columns = ['Economy', 'Fold', 'MSE', 'Model'])
+
+    for fold, (train_index, test_index) in enumerate(tscv.split(X1)):
+        # print("Fold: {}".format(fold))
+        # print('%s %s' % (train_index, test_index))
+        X1_train, X1_test = X1[train_index], X1[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+
+        X2_train, X2_test = X2[train_index], X2[test_index]
+        X3_train, X3_test = X3[train_index], X3[test_index]
+        X4_train, X4_test = X4[train_index], X4[test_index]
+        X5_train, X5_test = X5[train_index], X5[test_index]
+        X6_train, X6_test = X6[train_index], X6[test_index]
+        X7_train, X7_test = X7[train_index], X7[test_index]
+
+        lm_1 = LinearRegression()
+        lm_1.fit(X1_train, y_train)
+
+        y_pred = lm_1.predict(X1_test)
+        mse = mean_squared_error(y_test, y_pred)
+
+        mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS_1']
+
+        lm_2 = LinearRegression()
+        lm_2.fit(X2_train, y_train)
+
+        y_pred = lm_2.predict(X2_test)
+        mse = mean_squared_error(y_test, y_pred)
+
+        mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS_2']
+
+        lm_3 = LinearRegression()
+        lm_3.fit(X3_train, y_train)
+
+        y_pred = lm_3.predict(X3_test)
+        mse = mean_squared_error(y_test, y_pred)
+
+        mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS_3']
+
+        lm_4 = LinearRegression()
+        lm_4.fit(X4_train, y_train)
+
+        y_pred = lm_4.predict(X4_test)
+        mse = mean_squared_error(y_test, y_pred)
+
+        mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS_4']
+
+        lm_5 = LinearRegression()
+        lm_5.fit(X5_train, y_train)
+
+        y_pred = lm_5.predict(X5_test)
+        mse = mean_squared_error(y_test, y_pred)
+
+        mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS_5']
+
+        lm_6 = LinearRegression()
+        lm_6.fit(X6_train, y_train)
+
+        y_pred = lm_6.predict(X6_test)
+        mse = mean_squared_error(y_test, y_pred)
+
+        mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS_6']
+
+        lm_7 = LinearRegression()
+        lm_7.fit(X7_train, y_train)
+
+        y_pred = lm_7.predict(X7_test)
+        mse = mean_squared_error(y_test, y_pred)
+
+        mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS_7']
+
+        fig, ax = plt.subplots()
+
+        sns.lineplot(data = mse_results,
+                        x = 'Fold',
+                        y = 'MSE',
+                        hue = 'Model')
+
+        ax.set(title = economy)
+
+        
+        
+
+
+
+
 
     x_start = new_df['year'].max() + 1
     x_years = range(x_start, END_YEAR + 1, 1)
@@ -102,6 +235,63 @@ for economy in list(steel_df['economy_code'].unique())[0:1]:
     plt.close()
 
 
+
+
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+pd.options.display.max_columns = 30
+import os
+import re
+from colorama import Fore, Back, Style
+import seaborn as sns
+import plotly.express as px
+import matplotlib
+from matplotlib.patches import Patch
+from matplotlib import pyplot as plt
+plt.rcParams.update({'figure.max_open_warning': 0})
+plt.style.use('fivethirtyeight')
+cmap_data = plt.cm.Paired
+cmap_cv = plt.cm.coolwarm
+import warnings
+warnings.filterwarnings('ignore')
+
+
+
+def plot_cv_indices(cv, n_splits, X, y, date_col = None):
+    """Create a sample plot for indices of a cross-validation object."""
+    
+    fig, ax = plt.subplots()
+    
+    # Generate the training/testing visualizations for each CV split
+    for ii, (tr, tt) in enumerate(cv.split(X=X, y=y)):
+        # Fill in indices with the training/test groups
+        indices = np.array([np.nan] * len(X))
+        indices[tt] = 1
+        indices[tr] = 0
+
+        # Visualize the results
+        ax.scatter(range(len(indices)), [ii + .5] * len(indices),
+                   c=indices, marker='_', lw=10, cmap = cmap_cv,
+                   vmin=-.2, vmax=1.2)
+
+
+    # Formatting
+    yticklabels = list(range(n_splits))
+    
+    if date_col is not None:
+        tick_locations  = ax.get_xticks()
+        tick_dates = [" "] + date_col.iloc[list(tick_locations[1:-1])].astype(str).tolist() + [" "]
+
+        tick_locations_str = [str(int(i)) for i in tick_locations]
+        new_labels = ['\n\n'.join(x) for x in zip(list(tick_locations_str), tick_dates) ]
+        ax.set_xticks(tick_locations)
+        ax.set_xticklabels(new_labels)
+    
+    ax.set()
+    ax.legend()
+
+
+
 ##################################
 
 from sklearn.svm import LinearSVC
@@ -131,4 +321,21 @@ X_new.shape
 
 X
 
-import featuretools as ft
+
+
+
+
+# Global steel exports as a percentange of production
+steel_ex = pd.read_csv('./data/production_and_trade/wsa_steelexport.csv', index_col = 'year')
+
+# Project it to 2100 so that it stays constant
+for i in range(2022, 2101):
+    steel_ex.loc[i, 'export_share'] = steel_ex.loc[i - 1, 'export_share']
+
+steel_ex = steel_ex.copy().reset_index(drop = False)[['year', 'export_share']]
+
+# Normalise: possibly incorporate this later
+    # X = np.array(hist_df.iloc[:, 1:])
+    # y = np.array(hist_df.iloc[:, 0])
+
+    # X_normalised = preprocessing.normalize(X, norm = 'l2', axis = 0)
