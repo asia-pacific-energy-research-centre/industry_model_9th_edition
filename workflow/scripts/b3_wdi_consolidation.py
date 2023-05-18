@@ -12,7 +12,7 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Read in gdp data
-APEC_gdp = pd.read_csv('./data/macro/APEC_GDP_population.csv')
+APEC_gdp = pd.read_csv('./data/macro/APEC_GDP_data.csv')
 APEC_gdp = APEC_gdp[APEC_gdp['variable'] == 'real_GDP'].copy().reset_index(drop = True)
 
 # Read in WDI industry share of GDP (or manufacturing) data
