@@ -24,11 +24,14 @@ from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import LinearSVC
 
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+
 from mlearn_functions import listGen, powerset
 
-mse_results = pd.DataFrame(columns = ['Economy', 'Fold', 'MSE', 'Model', 'Model build'])
+mse_results = pd.DataFrame(columns = ['Economy', 'Fold', 'MSE', 'Model', 'Model build', 'Features'])
 
-for economy in list(steel_df['economy_code'].unique())[:-1]:
+for economy in list(steel_df['economy_code'].unique())[:1]:
     # Target variable: steel production
     target_df = steel_df[steel_df['economy_code'] == economy].copy().dropna().reset_index(drop = True)
     
@@ -68,7 +71,7 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
 
     for year in hist_df.index:    
         for i in range(1, lags + 1):
-            if (year - i > 1979) & (year - 1 in hist_df.index):
+            if (year - i > 1979) & (year - i in hist_df.index):
                 hist_df.loc[year, 'steel_lag_{}'.format(i)] = hist_df.loc[year - i, 'steel']
                 hist_df.loc[year, 'gdp_lag_{}'.format(i)] = hist_df.loc[year - i, 'real_GDP']
                 hist_df.loc[year, 'pop_lag_{}'.format(i)] = hist_df.loc[year - i, 'population']
@@ -86,17 +89,21 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
     # Build numpy combinations of feature variables to use in models
     # Note: the first combination is an empyty set []
     X_arrays = {}
+    X_cols = {}
+
     for i, combo in enumerate(powerset(list(range(1, x_n + 1, 1))), 1):
         X_arrays[i] = hist_df.iloc[:, list(combo)].to_numpy()
+        X_cols[i] = list(combo)
 
-    # Now remove the first empty X array
+    # Now remove the first empty X array 
+    # (a relic of the powerset function which includes an empty set)
     del X_arrays[1]
 
     # Split out the target variable
     y = np.array(hist_df.iloc[:, 0])
 
     # Now split the data into training and test sets
-    tscv = TimeSeriesSplit(n_splits = 5, test_size = None)
+    tscv = TimeSeriesSplit(n_splits = 3, test_size = None)
 
     for key, array in X_arrays.items():
         for fold, (train_index, test_index) in enumerate(tscv.split(array)):
@@ -104,13 +111,57 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
             X_train, X_test = array[train_index], array[test_index]
             y_train, y_test = y[train_index], y[test_index]
 
-            lm_1 = LinearRegression()
-            lm_1.fit(X_train, y_train)
+            # Define scalar to scale the features
+            sc = StandardScaler()
 
-            y_pred = lm_1.predict(X_test)
+            sc_X_train = sc.fit_transform(X_train)
+            sc_X_test = sc.transform(X_test)
+
+            lm_1 = LinearRegression()
+
+            lm_1.fit(sc_X_train, y_train)
+
+            y_pred = lm_1.predict(sc_X_test)
             mse = mean_squared_error(y_test, y_pred)
 
-            mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS', key]
+            mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS', key, list(hist_df.columns[X_cols[key]])]
+
+            # Charts
+            # Save location for data and charts
+            save_data = './results/ml_steel/{}/'.format(economy)
+
+            if not os.path.isdir(save_data):
+                os.makedirs(save_data)
+
+            chart_df = hist_df[['steel']].copy() 
+            y_pred_df = pd.DataFrame(y_pred, index = hist_df.index[test_index], columns = ['steel_prediction'])
+            
+            chart_df = pd.concat([chart_df, y_pred_df], axis = 1).reset_index().melt(id_vars = 'year')
+
+            fig, ax = plt.subplots()
+
+            sns.set_theme(style = 'ticks')
+
+            sns.lineplot(data = chart_df,
+                         x = 'year',
+                         y = 'value',
+                         hue = 'variable')
+            
+            ax.set(title = economy + ' ' + str(list(hist_df.columns[X_cols[key]])) + ' ' + str(fold),
+                   xlabel = 'Year',
+                   ylabel = 'Steel production')
+            
+            plt.legend(title = '')
+        
+            plt.tight_layout()
+            plt.savefig(save_data + economy + '_' + str(key) + '_' + str(fold) + '.png')
+            plt.show()
+            plt.close()
+
+
+
+
+
 
 
 
