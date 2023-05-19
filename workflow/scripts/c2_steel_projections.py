@@ -14,7 +14,7 @@ with open(config_file) as infile:
 
 # Import historical steel data and gdp
 steel_df = pd.read_csv('./data/production_and_trade/production_steel/steel_wsa_cleaned.csv') 
-pop_gdp_df = pd.read_csv('./data/macro/APEC_GDP_population.csv')
+gdp_df = pd.read_csv('./data/macro/APEC_GDP_data.csv')
 
 # Import some modelling dependencies
 from sklearn import preprocessing
@@ -24,19 +24,21 @@ from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import LinearSVC
 
+from mlearn_functions import listGen
+
 for economy in list(steel_df['economy_code'].unique())[:1]:
     # Target variable: steel production
     target_df = steel_df[steel_df['economy_code'] == economy].copy().dropna().reset_index(drop = True)
     
     # Feature/explanatory variables
-    gdp_pc = pop_gdp_df[(pop_gdp_df['economy_code'] == economy) &
-                        (pop_gdp_df['variable'] == 'GDP_per_capita')].copy().reset_index(drop = True)
+    gdp_pc = gdp_df[(gdp_df['economy_code'] == economy) &
+                    (gdp_df['variable'] == 'GDP_per_capita')].copy().reset_index(drop = True)
     
-    gdp = pop_gdp_df[(pop_gdp_df['economy_code'] == economy) &
-                        (pop_gdp_df['variable'] == 'real_GDP')].copy().reset_index(drop = True)
+    gdp = gdp_df[(gdp_df['economy_code'] == economy) &
+                 (gdp_df['variable'] == 'real_GDP')].copy().reset_index(drop = True)
     
-    pop = pop_gdp_df[(pop_gdp_df['economy_code'] == economy) &
-                        (pop_gdp_df['variable'] == 'population')].copy().reset_index(drop = True)
+    pop = gdp_df[(gdp_df['economy_code'] == economy) &
+                 (gdp_df['variable'] == 'population')].copy().reset_index(drop = True)
     
     # Target and features in one data frame that is historical
     full_df = pd.merge(left = target_df, right = gdp, on = 'year', how = 'outer').copy()
@@ -60,7 +62,7 @@ for economy in list(steel_df['economy_code'].unique())[:1]:
     # Now need to feature engineer by generating even more features from the 3 that currently have
     # STEP 1: create lagged variables (features and target)
 
-    lags = 3
+    lags = 1
 
     for year in hist_df.index:    
         for i in range(1, lags + 1):
@@ -80,13 +82,44 @@ for economy in list(steel_df['economy_code'].unique())[:1]:
     
 
 
-
-
-
-
-
-
+    # Define number of features in historical data: number of columns minus 1 which is the 
+    # target (steel production in year i)
     x_n = hist_df.shape[1] - 1
+
+    # Combinations
+
+    print(listGen(2, x_n))
+    
+
+    X_arrays = {}
+
+    for n in range(1, x_n, 1):        
+        desired_list1 = [n]
+        print(desired_list1)
+        for r in range(n, x_n, 1):
+            desired_list2 = [n, r + 1]
+            print(desired_list2)
+            for j in range(r, x_n, 1):
+                desired_list3 = [n, r + 1, j + 2]
+                print(desired_list3)
+                    
+
+
+
+    
+    X_arrays = {} 
+
+    # Combination equation: n choose r
+
+    
+    
+    for i in range(1, x_n + 1, 1):
+        X_arrays[i] = hist_df.iloc[:, [i]].to_numpy()
+
+    max_update = max(X_arrays.keys())
+
+    for i in range(max_update + 1, max_update + (x_n * 2), 1)
+
 
     X1 = hist_df.iloc[:, [2]].to_numpy()
     X2 = hist_df.iloc[:, [3]].to_numpy()

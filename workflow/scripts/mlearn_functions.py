@@ -38,3 +38,12 @@ def save_ktss_datasets(X, y, k):
        np.savetxt(f'./data/model_dev/test/{fold_idx}/test_y.csv', y_test, delimiter = ',')
        
        fold_idx += 1
+
+
+def listGen(start, stop):
+    return [[x for x in range(start, i + 1)] for i in range(start, stop + 1)]
+
+def powerset(iterable):
+    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)  # allows duplicate elements
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
