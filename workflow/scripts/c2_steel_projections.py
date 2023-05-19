@@ -24,9 +24,11 @@ from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import LinearSVC
 
-from mlearn_functions import listGen
+from mlearn_functions import listGen, powerset
 
-for economy in list(steel_df['economy_code'].unique())[:1]:
+mse_results = pd.DataFrame(columns = ['Economy', 'Fold', 'MSE', 'Model', 'Model build'])
+
+for economy in list(steel_df['economy_code'].unique())[:-1]:
     # Target variable: steel production
     target_df = steel_df[steel_df['economy_code'] == economy].copy().dropna().reset_index(drop = True)
     
@@ -66,7 +68,7 @@ for economy in list(steel_df['economy_code'].unique())[:1]:
 
     for year in hist_df.index:    
         for i in range(1, lags + 1):
-            if year - i > 1979:
+            if (year - i > 1979) & (year - 1 in hist_df.index):
                 hist_df.loc[year, 'steel_lag_{}'.format(i)] = hist_df.loc[year - i, 'steel']
                 hist_df.loc[year, 'gdp_lag_{}'.format(i)] = hist_df.loc[year - i, 'real_GDP']
                 hist_df.loc[year, 'pop_lag_{}'.format(i)] = hist_df.loc[year - i, 'population']
@@ -77,59 +79,51 @@ for economy in list(steel_df['economy_code'].unique())[:1]:
     # Now only keep data that is notna
     hist_df = hist_df.dropna()
 
-
-
-    
-
-
     # Define number of features in historical data: number of columns minus 1 which is the 
     # target (steel production in year i)
     x_n = hist_df.shape[1] - 1
 
-    # Combinations
-
-    print(listGen(2, x_n))
-    
-
+    # Build numpy combinations of feature variables to use in models
+    # Note: the first combination is an empyty set []
     X_arrays = {}
+    for i, combo in enumerate(powerset(list(range(1, x_n + 1, 1))), 1):
+        X_arrays[i] = hist_df.iloc[:, list(combo)].to_numpy()
 
-    for n in range(1, x_n, 1):        
-        desired_list1 = [n]
-        print(desired_list1)
-        for r in range(n, x_n, 1):
-            desired_list2 = [n, r + 1]
-            print(desired_list2)
-            for j in range(r, x_n, 1):
-                desired_list3 = [n, r + 1, j + 2]
-                print(desired_list3)
-                    
+    # Now remove the first empty X array
+    del X_arrays[1]
+
+    # Split out the target variable
+    y = np.array(hist_df.iloc[:, 0])
+
+    # Now split the data into training and test sets
+    tscv = TimeSeriesSplit(n_splits = 5, test_size = None)
+
+    for key, array in X_arrays.items():
+        for fold, (train_index, test_index) in enumerate(tscv.split(array)):
+
+            X_train, X_test = array[train_index], array[test_index]
+            y_train, y_test = y[train_index], y[test_index]
+
+            lm_1 = LinearRegression()
+            lm_1.fit(X_train, y_train)
+
+            y_pred = lm_1.predict(X_test)
+            mse = mean_squared_error(y_test, y_pred)
+
+            mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS', key]
+
+
 
 
 
     
-    X_arrays = {} 
+    # Now standardise the size of x variables
+     
 
     # Combination equation: n choose r
 
     
     
-    for i in range(1, x_n + 1, 1):
-        X_arrays[i] = hist_df.iloc[:, [i]].to_numpy()
-
-    max_update = max(X_arrays.keys())
-
-    for i in range(max_update + 1, max_update + (x_n * 2), 1)
-
-
-    X1 = hist_df.iloc[:, [2]].to_numpy()
-    X2 = hist_df.iloc[:, [3]].to_numpy()
-    X3 = hist_df.iloc[:, [4]].to_numpy()
-    X4 = hist_df.iloc[:, [2, 3]].to_numpy()
-    X5 = hist_df.iloc[:, [2, 4]].to_numpy()
-    X6 = hist_df.iloc[:, [3, 4]].to_numpy()
-    X7 = hist_df.iloc[:, 2:].to_numpy()
-
-    y = np.array(hist_df.iloc[:, 0])
 
     # Time series cross validation
     tscv = TimeSeriesSplit(n_splits = int(hist_df.shape[0] / 3), test_size = 2)
