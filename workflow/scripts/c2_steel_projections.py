@@ -18,10 +18,11 @@ gdp_df = pd.read_csv('./data/macro/APEC_GDP_data.csv')
 
 # Import some modelling dependencies
 from sklearn import preprocessing
-from sklearn.model_selection import TimeSeriesSplit
+from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.metrics import mean_squared_error
 
-from sklearn.linear_model import LinearRegression
+from sklearn import linear_model
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.svm import LinearSVC
 
 from sklearn.pipeline import make_pipeline
@@ -29,9 +30,9 @@ from sklearn.preprocessing import StandardScaler
 
 from mlearn_functions import listGen, powerset
 
-mse_results = pd.DataFrame(columns = ['Economy', 'Fold', 'MSE', 'Model', 'Model build', 'Features'])
+mse_results = pd.DataFrame(columns = ['Economy', 'Fold', 'MSE', 'RMSE', 'Model', 'Model build', 'Features'])
 
-for economy in list(steel_df['economy_code'].unique())[:1]:
+for economy in list(steel_df['economy_code'].unique())[3:4]:
     # Target variable: steel production
     target_df = steel_df[steel_df['economy_code'] == economy].copy().dropna().reset_index(drop = True)
     
@@ -105,6 +106,17 @@ for economy in list(steel_df['economy_code'].unique())[:1]:
     # Now split the data into training and test sets
     tscv = TimeSeriesSplit(n_splits = 3, test_size = None)
 
+    # For ridge regression and lasso, define a grid search to identify best alpha
+    rr_alpha = GridSearchCV(estimator = Ridge(),
+                            param_grid = {'alpha': np.logspace(-3, 3, 7)},
+                            scoring = 'neg_root_mean_squared_error',
+                            cv = tscv)
+    
+    lasso_alpha = GridSearchCV(estimator = Lasso(),
+                               param_grid = {'alpha': np.logspace(-3, 3, 7)},
+                               scoring = 'neg_root_mean_squared_error',
+                               cv = tscv)
+
     # Save location for data and charts
     save_data = './results/ml_steel/{}/'.format(economy)
 
@@ -124,42 +136,72 @@ for economy in list(steel_df['economy_code'].unique())[:1]:
             sc_X_test = sc.transform(X_test)
 
             lm_1 = LinearRegression()
+            # For ridge regression and lasso, determine optimal alpha
+            rr_alpha.fit(sc_X_train, y_train)
+            alpha_rr = rr_alpha.best_params_['alpha']
+            
+            lasso_alpha.fit(sc_X_train, y_train)
+            alpha_lasso = lasso_alpha.best_params_['alpha']
+
+            rr_1 = Ridge(alpha = alpha_rr)
+            lasso_1 = Lasso(alpha = alpha_lasso)
 
             lm_1.fit(sc_X_train, y_train)
+            rr_1.fit(sc_X_train, y_train)
+            lasso_1.fit(sc_X_train, y_train)
 
-            y_pred = lm_1.predict(sc_X_test)
-            mse = mean_squared_error(y_test, y_pred)
+            # Linear
+            y_pred_lm = lm_1.predict(sc_X_test)
+            mse_lm = mean_squared_error(y_test, y_pred_lm)
+            rmse_lm = mean_squared_error(y_test, y_pred_lm, squared = False)
 
-            mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS', key, list(hist_df.columns[X_cols[key]])]
+            # Ridge regression
+            y_pred_rr = rr_1.predict(sc_X_test)
+            mse_rr = mean_squared_error(y_test, y_pred_rr)
+            rmse_rr = mean_squared_error(y_test, y_pred_rr, squared = False)
 
-            # Charts
-            chart_df = hist_df[['steel']].copy() 
-            y_pred_df = pd.DataFrame(y_pred, index = hist_df.index[test_index], columns = ['steel_prediction'])
+            # Lasso
+            y_pred_lasso = lasso_1.predict(sc_X_test)
+            mse_lasso = mean_squared_error(y_test, y_pred_lasso)
+            rmse_lasso = mean_squared_error(y_test, y_pred_lasso, squared = False)
+
+            mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse_lm, rmse_lm, 'OLS', key, list(hist_df.columns[X_cols[key]])]
+            mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse_rr, rmse_rr, 'Ridge', key, list(hist_df.columns[X_cols[key]])]
+            mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse_lasso, rmse_lasso, 'Lasso', key, list(hist_df.columns[X_cols[key]])]
+
+            # # Charts
+            # chart_df = hist_df[['steel']].copy() 
+            # y_pred_lm_df = pd.DataFrame(y_pred_lm, index = hist_df.index[test_index], columns = ['steel_prediction_lm'])
+            # y_pred_rr_df = pd.DataFrame(y_pred_rr, index = hist_df.index[test_index], columns = ['steel_prediction_rr'])
             
-            chart_df = pd.concat([chart_df, y_pred_df], axis = 1).reset_index().melt(id_vars = 'year')
+            # chart_df = pd.concat([chart_df, y_pred_lm_df, y_pred_rr_df], axis = 1).reset_index().melt(id_vars = 'year')
 
-            fig, ax = plt.subplots()
+            # fig, ax = plt.subplots()
 
-            sns.set_theme(style = 'ticks')
+            # sns.set_theme(style = 'ticks')
 
-            sns.lineplot(data = chart_df,
-                         x = 'year',
-                         y = 'value',
-                         hue = 'variable')
+            # sns.lineplot(data = chart_df,
+            #              x = 'year',
+            #              y = 'value',
+            #              hue = 'variable')
             
-            ax.set(title = economy + ' ' + str(list(hist_df.columns[X_cols[key]])) + ' ' + str(fold),
-                   xlabel = 'Year',
-                   ylabel = 'Steel production')
+            # ax.set(title = economy + ' ' + str(list(hist_df.columns[X_cols[key]])) + ' ' + str(fold),
+            #        xlabel = 'Year',
+            #        ylabel = 'Steel production')
             
-            plt.legend(title = '')
+            # plt.legend(title = '')
         
-            plt.tight_layout()
-            plt.savefig(save_data + economy + '_' + str(key) + '_' + str(fold) + '.png')
-            plt.show()
-            plt.close()
+            # plt.tight_layout()
+            # plt.savefig(save_data + economy + '_' + str(key) + '_' + str(fold) + '.png')
+            # plt.close()
 
     # Save results dataframe after looping through all models
-    mse_results.to_csv(save_data + economy + '_' + 'mse_results.csv')
+    mse_results.to_csv(save_data + economy + '_' + 'mse_results.csv', index = False)
+
+    # Best model will be in the 0 index, 2nd best in 1 index, etc.
+    model_sort = pd.DataFrame(mse_results.groupby(['Model', 'Model build'])[['MSE', 'RMSE']]\
+                              .sum()).reset_index().sort_values('RMSE')\
+                                .reset_index(drop = True)
 
 
 
