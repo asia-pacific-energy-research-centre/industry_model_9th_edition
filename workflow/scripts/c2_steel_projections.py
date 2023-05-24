@@ -105,6 +105,12 @@ for economy in list(steel_df['economy_code'].unique())[:1]:
     # Now split the data into training and test sets
     tscv = TimeSeriesSplit(n_splits = 3, test_size = None)
 
+    # Save location for data and charts
+    save_data = './results/ml_steel/{}/'.format(economy)
+
+    if not os.path.isdir(save_data):
+        os.makedirs(save_data)
+
     for key, array in X_arrays.items():
         for fold, (train_index, test_index) in enumerate(tscv.split(array)):
 
@@ -127,12 +133,6 @@ for economy in list(steel_df['economy_code'].unique())[:1]:
             mse_results.loc[len(mse_results.index)] = [economy, int(fold), mse, 'OLS', key, list(hist_df.columns[X_cols[key]])]
 
             # Charts
-            # Save location for data and charts
-            save_data = './results/ml_steel/{}/'.format(economy)
-
-            if not os.path.isdir(save_data):
-                os.makedirs(save_data)
-
             chart_df = hist_df[['steel']].copy() 
             y_pred_df = pd.DataFrame(y_pred, index = hist_df.index[test_index], columns = ['steel_prediction'])
             
@@ -157,6 +157,9 @@ for economy in list(steel_df['economy_code'].unique())[:1]:
             plt.savefig(save_data + economy + '_' + str(key) + '_' + str(fold) + '.png')
             plt.show()
             plt.close()
+
+    # Save results dataframe after looping through all models
+    mse_results.to_csv(save_data + economy + '_' + 'mse_results.csv')
 
 
 
