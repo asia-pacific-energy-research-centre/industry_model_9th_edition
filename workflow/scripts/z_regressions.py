@@ -358,3 +358,59 @@ for identifier in unique_ids:
     
     X.append(np.array(x).flatten()) #7
     Y.append(y) #7
+
+# From ML steel projections
+
+
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+pd.options.display.max_columns = 30
+import os
+import re
+from colorama import Fore, Back, Style
+import seaborn as sns
+import plotly.express as px
+import matplotlib
+from matplotlib.patches import Patch
+from matplotlib import pyplot as plt
+plt.rcParams.update({'figure.max_open_warning': 0})
+plt.style.use('fivethirtyeight')
+cmap_data = plt.cm.Paired
+cmap_cv = plt.cm.coolwarm
+import warnings
+warnings.filterwarnings('ignore')
+
+
+
+def plot_cv_indices(cv, n_splits, X, y, date_col = None):
+    """Create a sample plot for indices of a cross-validation object."""
+    
+    fig, ax = plt.subplots()
+    
+    # Generate the training/testing visualizations for each CV split
+    for ii, (tr, tt) in enumerate(cv.split(X=X, y=y)):
+        # Fill in indices with the training/test groups
+        indices = np.array([np.nan] * len(X))
+        indices[tt] = 1
+        indices[tr] = 0
+
+        # Visualize the results
+        ax.scatter(range(len(indices)), [ii + .5] * len(indices),
+                   c=indices, marker='_', lw=10, cmap = cmap_cv,
+                   vmin=-.2, vmax=1.2)
+
+
+    # Formatting
+    yticklabels = list(range(n_splits))
+    
+    if date_col is not None:
+        tick_locations  = ax.get_xticks()
+        tick_dates = [" "] + date_col.iloc[list(tick_locations[1:-1])].astype(str).tolist() + [" "]
+
+        tick_locations_str = [str(int(i)) for i in tick_locations]
+        new_labels = ['\n\n'.join(x) for x in zip(list(tick_locations_str), tick_dates) ]
+        ax.set_xticks(tick_locations)
+        ax.set_xticklabels(new_labels)
+    
+    ax.set()
+    ax.legend()

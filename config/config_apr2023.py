@@ -39,6 +39,7 @@ import featuretools as ft
 import math
 import itertools
 from itertools import chain, combinations
+import warnings
 
 # Set directory
 os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')
