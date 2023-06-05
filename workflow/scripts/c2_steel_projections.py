@@ -1,4 +1,4 @@
-# Steel projections
+# Steel projections using Machine Learning
 
 # Set working directory to be the project folder
 import os
@@ -237,7 +237,7 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
     # From the above, we now have a list of the best performing models for each economy in 'model_sort'
 
     # Choose number of top models to generate results from
-    best_models = 10
+    best_models = 6
 
     # Save location for final model builds and charts
     build_save = save_data + 'ml_build/'
