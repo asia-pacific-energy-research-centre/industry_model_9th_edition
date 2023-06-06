@@ -67,11 +67,12 @@ else:
     pass
 
 # Modelling variables
-BASE_YEAR = 2019
+BASE_YEAR = 2017
 END_YEAR = 2100
 Scenario_list = ['reference', 'target']
 
 # Machine learning
+LAGS = 1
 KFOLD_SPLIT = 3
 TOP_MODELS = 6
 
