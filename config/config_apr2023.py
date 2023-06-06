@@ -71,6 +71,10 @@ BASE_YEAR = 2019
 END_YEAR = 2100
 Scenario_list = ['reference', 'target']
 
+# Machine learning
+KFOLD_SPLIT = 3
+TOP_MODELS = 6
+
 model_output_file_name = 'model_output_years_{}_to_{}_{}.csv'.format(BASE_YEAR, END_YEAR, file_date_id)
 
 EIGHTH_EDITION_DATA = True

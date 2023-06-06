@@ -124,7 +124,7 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
     y = np.array(hist_df.iloc[:, 0])
 
     # Now split the data into training and test sets
-    tscv = TimeSeriesSplit(n_splits = 3, test_size = None)
+    tscv = TimeSeriesSplit(n_splits = KFOLD_SPLIT, test_size = None)
 
     # For ridge regression and lasso, define a grid search to identify best alpha
     rr_alpha = GridSearchCV(estimator = Ridge(),
@@ -235,10 +235,6 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
                                 .reset_index(drop = True)
     
     # From the above, we now have a list of the best performing models for each economy in 'model_sort'
-
-    # Choose number of top models to generate results from
-    best_models = 6
-
     # Save location for final model builds and charts
     build_save = save_data + 'ml_build/'
 
@@ -250,7 +246,7 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
     saved_predictions = hist_df.copy().reset_index()[['year', 'steel']]
     saved_predictions['model'] = 'Historic steel production'
 
-    for i in range(best_models):
+    for i in range(TOP_MODELS):
         # Check whether any of the features are lagged versions of the target
         features = hist_df.columns[X_cols[model_sort.iloc[i, 1]]]
         if pd.Series(features).str.contains('steel_lag').any():
