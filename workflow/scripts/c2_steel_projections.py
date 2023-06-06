@@ -344,6 +344,29 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
             predicted.columns = ['year', 'steel']
             predicted['model'] = 'model_' + str(i + 1) + '_' + str(model_sort.iloc[i, 0]) + str(model_sort.iloc[i, 1])
 
-            saved_predictions = pd.concat([saved_predictions, predicted]).copy()
+            saved_predictions = pd.concat([saved_predictions, predicted]).copy().reset_index(drop = True)
 
         saved_predictions.to_csv(build_save + 'model_predictions_' + economy + '.csv', index = False)
+
+        # Build some charts
+        chart_df = pd.read_csv(build_save + 'model_predictions_' + economy + '.csv')
+
+        fig, ax = plt.subplots()
+
+        sns.set_theme(style = 'ticks')
+
+        sns.lineplot(data = chart_df,
+                        x = 'year',
+                        y = 'steel',
+                        hue = 'model')
+        
+        ax.set(title = economy + ' best performing models',
+                xlabel = 'Year',
+                ylabel = 'Steel production')
+        
+        plt.legend(title = '')
+
+        plt.tight_layout()
+        plt.savefig(build_save + economy + '_model_prediction.png')
+        plt.close()
+
