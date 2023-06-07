@@ -72,9 +72,10 @@ END_YEAR = 2100
 Scenario_list = ['reference', 'target']
 
 # Machine learning
+DEGREE = 2
 LAGS = 1
 KFOLD_SPLIT = 3
-TOP_MODELS = 6
+TOP_MODELS = 5
 
 model_output_file_name = 'model_output_years_{}_to_{}_{}.csv'.format(BASE_YEAR, END_YEAR, file_date_id)
 

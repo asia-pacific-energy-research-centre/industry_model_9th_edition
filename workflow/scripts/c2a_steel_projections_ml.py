@@ -46,7 +46,11 @@ model_choice = {'OLS': LinearRegression,
 
 ##############################################################################################
 
-for economy in list(steel_df['economy_code'].unique())[:-1]:
+economy_list = list(steel_df['economy_code'].unique())
+# Remove Brunei
+economy_list = [i for i in economy_list if i not in ['06_HKC', 'World']]
+
+for economy in economy_list[6:]:
     # Create empty data frame that saves k-fold fit information later
     mse_results = pd.DataFrame(columns = ['Economy', 'Fold', 'MSE', 'RMSE', 'Model', 'Model build', 'Features'])
 
@@ -83,7 +87,19 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
     hist_df = full_df.copy().set_index('year')
 
     # Now need to feature engineer by generating even more features from the 3 that currently have
-    # STEP 1: create lagged variables (features and target)
+    # STEP 1: natural log transform independent variables and target variable (steel)
+
+    hist_df['steel'] = np.log(hist_df['steel'])
+    hist_df['real_GDP'] = np.log(hist_df['real_GDP'])
+    hist_df['population'] = np.log(hist_df['population'])
+    hist_df['GDP_per_capita'] = np.log(hist_df['GDP_per_capita'])
+    
+    # STEP 2: create polynomial transformations of GDP, population and GDP_per_capita
+    for b in range(DEGREE, DEGREE + 1, 1):
+        hist_df['gdp_{}'.format(b)] = hist_df['real_GDP'] ** b
+        hist_df['pop_{}'.format(b)] = hist_df['population'] ** b
+
+    # STEP 3: create lagged variables (features and target)
 
     for year in hist_df.index:    
         for i in range(1, LAGS + 1):
@@ -197,32 +213,32 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
             except ConvergenceWarning:
                 pass
 
-            # Charts
-            chart_df = hist_df[['steel']].copy() 
-            y_pred_lm_df = pd.DataFrame(y_pred_lm, index = hist_df.index[test_index], columns = ['steel_prediction_lm'])
-            y_pred_rr_df = pd.DataFrame(y_pred_rr, index = hist_df.index[test_index], columns = ['steel_prediction_rr'])
-            y_pred_lasso_df = pd.DataFrame(y_pred_lasso, index = hist_df.index[test_index], columns = ['steel_prediction_lasso'])
+            # # Charts
+            # chart_df = hist_df[['steel']].copy() 
+            # y_pred_lm_df = pd.DataFrame(y_pred_lm, index = hist_df.index[test_index], columns = ['steel_prediction_lm'])
+            # y_pred_rr_df = pd.DataFrame(y_pred_rr, index = hist_df.index[test_index], columns = ['steel_prediction_rr'])
+            # y_pred_lasso_df = pd.DataFrame(y_pred_lasso, index = hist_df.index[test_index], columns = ['steel_prediction_lasso'])
             
-            chart_df = pd.concat([chart_df, y_pred_lm_df, y_pred_rr_df, y_pred_lasso_df], axis = 1).reset_index().melt(id_vars = 'year')
+            # chart_df = pd.concat([chart_df, y_pred_lm_df, y_pred_rr_df, y_pred_lasso_df], axis = 1).reset_index().melt(id_vars = 'year')
 
-            fig, ax = plt.subplots()
+            # fig, ax = plt.subplots()
 
-            sns.set_theme(style = 'ticks')
+            # sns.set_theme(style = 'ticks')
 
-            sns.lineplot(data = chart_df,
-                         x = 'year',
-                         y = 'value',
-                         hue = 'variable')
+            # sns.lineplot(data = chart_df,
+            #              x = 'year',
+            #              y = 'value',
+            #              hue = 'variable')
             
-            ax.set(title = economy + ' ' + str(list(hist_df.columns[X_cols[key]])) + ' ' + str(fold),
-                   xlabel = 'Year',
-                   ylabel = 'Steel production')
+            # ax.set(title = economy + ' ' + str(list(hist_df.columns[X_cols[key]])) + ' ' + str(fold),
+            #        xlabel = 'Year',
+            #        ylabel = 'Steel production')
             
-            plt.legend(title = '')
+            # plt.legend(title = '')
         
-            plt.tight_layout()
-            plt.savefig(save_data + economy + '_' + str(key) + '_' + str(fold) + '.png')
-            plt.close()
+            # plt.tight_layout()
+            # plt.savefig(save_data + economy + '_' + str(key) + '_' + str(fold) + '.png')
+            # plt.close()
 
     # Save results dataframe after looping through all models
     mse_results.to_csv(save_data + economy + '_' + 'mse_results.csv', index = False)
@@ -232,6 +248,16 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
                               .sum()).reset_index().sort_values('RMSE')\
                                 .reset_index(drop = True)
     
+    model_sort['target_lag'] = np.nan
+    model_sort['target_lag'] = model_sort['target_lag'].astype('boolean') 
+
+    for q in range(model_sort.shape[0]):
+        features = hist_df.columns[X_cols[model_sort.iloc[q, 1]]]
+        if pd.Series(features).str.contains('steel_lag').any():
+            model_sort.iloc[q, 4] = True
+        else:
+            model_sort.iloc[q, 4] = False
+
     # From the above, we now have a list of the best performing models for each economy in 'model_sort'
     # Save location for final model builds and charts
     build_save = save_data + 'ml_build/'
@@ -244,10 +270,14 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
     saved_predictions = hist_df.copy().reset_index()[['year', 'steel']]
     saved_predictions['model'] = 'Historic steel production'
 
+    target_lag_models = 0
+
     for i in range(TOP_MODELS):
         # Check whether any of the features are lagged versions of the target
         features = hist_df.columns[X_cols[model_sort.iloc[i, 1]]]
         if pd.Series(features).str.contains('steel_lag').any():
+            target_lag_models += 1
+            
             X_array = X_arrays[model_sort.iloc[i, 1]]
             X_col = X_cols[model_sort.iloc[i, 1]]
 
@@ -336,31 +366,130 @@ for economy in list(steel_df['economy_code'].unique())[:-1]:
             predicted = pd.DataFrame(y_pred, index = range(hist_df.index.max() + 1, temp_hist_df.index.max()))
             predicted = predicted.reset_index()
             predicted.columns = ['year', 'steel']
-            predicted['model'] = 'model_' + str(i + 1) + '_' + str(model_sort.iloc[i, 0]) + str(model_sort.iloc[i, 1])
+            predicted['model'] = 'model_' + str(i + 1) + '_' + str(model_sort.iloc[i, 0]) + str(model_sort.iloc[i, 1]) + '_no_tlag'
 
             saved_predictions = pd.concat([saved_predictions, predicted]).copy().reset_index(drop = True)
 
-        saved_predictions.to_csv(build_save + 'model_predictions_' + economy + '.csv', index = False)
+    # Now ensure some non-lagged target variable models are included
+    model_sort_nolag = model_sort[model_sort['target_lag'] == False].copy().reset_index(drop = True)
 
-        # Build some charts
-        chart_df = pd.read_csv(build_save + 'model_predictions_' + economy + '.csv')
+    for p in range(target_lag_models, 0, -1):
+        # This is for where there are no lagged feature variables
+        nolag_index = TOP_MODELS - p
+        features = hist_df.columns[X_cols[model_sort_nolag.iloc[nolag_index, 1]]]
 
-        fig, ax = plt.subplots()
+        X_array = X_arrays[model_sort_nolag.iloc[nolag_index, 1]]
+        X_col = X_cols[model_sort_nolag.iloc[nolag_index, 1]]
 
-        sns.set_theme(style = 'ticks')
+        temp_hist_df = all_hist_df.copy()
 
-        sns.lineplot(data = chart_df,
-                        x = 'year',
-                        y = 'steel',
-                        hue = 'model')
+        # Scale the X array (y array is already defined above as 'y')
+        sc_X = sc.fit_transform(X_array)
+
+        # Optimise alpha if it is Ridge or Lasso
+        if model_sort_nolag.iloc[nolag_index, 0] in ['Ridge', 'Lasso']:
+            alpha_sel = model_alpha[model_sort_nolag.iloc[nolag_index, 0]]
+            alpha_sel.fit(sc_X, y)
+            alpha_choice = alpha_sel.best_params_['alpha']
+            
+            model = model_choice[model_sort_nolag.iloc[nolag_index, 0]](alpha = alpha_choice)
+
+        else:
+            model = model_choice[model_sort_nolag.iloc[nolag_index, 0]]()
+
+        model.fit(sc_X, y)
+    
+        # Create new line of X's to then predict steel
+        new_X = temp_hist_df.loc[(hist_df.index.max() + 1):(temp_hist_df.index.max() - 1), features]
+
+        # Save this new array to predict y, and also append to X_array
+        new_X_array = pd.DataFrame(new_X).to_numpy()
+        X_array = np.append(X_array, new_X_array, axis = 0)
         
-        ax.set(title = economy + ' best performing models',
-                xlabel = 'Year',
-                ylabel = 'Steel production')
-        
-        plt.legend(title = '')
+        # Scale the x array
+        new_X_sc = sc.transform(new_X_array)
 
-        plt.tight_layout()
-        plt.savefig(build_save + economy + '_model_prediction.png')
-        plt.close()
+        # Now predict and save that y in the temp_hist_df
+        y_pred = model.predict(new_X_sc)
+
+        predicted = pd.DataFrame(y_pred, index = range(hist_df.index.max() + 1, temp_hist_df.index.max()))
+        predicted = predicted.reset_index()
+        predicted.columns = ['year', 'steel']
+        predicted['model'] = 'model_' + str(target_lag_models + nolag_index + 1) + '_' + str(model_sort_nolag.iloc[nolag_index, 0]) + str(model_sort_nolag.iloc[nolag_index, 1]) + '_no_tlag'
+
+        saved_predictions = pd.concat([saved_predictions, predicted]).copy().reset_index(drop = True)
+
+    # Revert steel to original unit (reverse log transformation)
+    saved_predictions['steel'] = np.exp(saved_predictions['steel']) 
+
+    saved_predictions.to_csv(build_save + 'model_predictions_' + economy + '.csv', index = False)
+
+    # Build some charts
+    chart_df = pd.read_csv(build_save + 'model_predictions_' + economy + '.csv')
+
+    fig, ax = plt.subplots()
+
+    sns.set_theme(style = 'ticks')
+
+    sns.lineplot(data = chart_df,
+                    x = 'year',
+                    y = 'steel',
+                    hue = 'model')
+    
+    ax.set(title = economy + ' best performing models',
+            xlabel = 'Year',
+            ylabel = 'Steel production')
+    
+    plt.legend(title = '')
+
+    plt.tight_layout()
+    plt.savefig(build_save + economy + '_model_prediction_all.png')
+    plt.close()
+
+    # Second chart and third charts
+
+    best = chart_df[~(chart_df['model'].str.contains('tlag'))]
+    
+    fig, ax = plt.subplots()
+
+    sns.set_theme(style = 'ticks')
+
+    sns.lineplot(data = best,
+                    x = 'year',
+                    y = 'steel',
+                    hue = 'model')
+    
+    ax.set(title = economy + ' best performing models w target lag',
+            xlabel = 'Year',
+            ylabel = 'Steel production')
+    
+    plt.legend(title = '')
+
+    plt.tight_layout()
+    plt.savefig(build_save + economy + '_model_prediction_tlag.png')
+    plt.close()
+
+    # Third chart
+    no_tlag = chart_df[(chart_df['model'].str.contains('tlag')) |
+                       (chart_df['model'].str.contains('Historic'))] 
+    
+    fig, ax = plt.subplots()
+
+    sns.set_theme(style = 'ticks')
+
+    sns.lineplot(data = no_tlag,
+                    x = 'year',
+                    y = 'steel',
+                    hue = 'model')
+    
+    ax.set(title = economy + ' best performing models no target lag variables',
+            xlabel = 'Year',
+            ylabel = 'Steel production')
+    
+    plt.legend(title = '')
+
+    plt.tight_layout()
+    plt.savefig(build_save + economy + '_model_prediction_no_tlag.png')
+    plt.close()
+
 
