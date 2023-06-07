@@ -52,7 +52,7 @@ economy_list = list(cement_df['economy_code'].unique())
 # Remove Brunei
 economy_list = [i for i in economy_list if i != '02_BD']
 
-for economy in economy_list[6:]:
+for economy in economy_list:
     # Create empty data frame that saves k-fold fit information later
     mse_results = pd.DataFrame(columns = ['Economy', 'Fold', 'MSE', 'RMSE', 'Model', 'Model build', 'Features'])
 
