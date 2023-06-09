@@ -157,7 +157,7 @@ for economy in economy_list:
     ##############################################################################################
     
     # Save location for data and charts
-    save_data = './results/ml_steel/{}/'.format(economy)
+    save_data = './data/ml_steel/{}/'.format(economy)
 
     if not os.path.isdir(save_data):
         os.makedirs(save_data)
@@ -248,6 +248,7 @@ for economy in economy_list:
                               .sum()).reset_index().sort_values('RMSE')\
                                 .reset_index(drop = True)
     
+    # Generate indicator for whether model uses lagged target variable
     model_sort['target_lag'] = np.nan
     model_sort['target_lag'] = model_sort['target_lag'].astype('boolean') 
 

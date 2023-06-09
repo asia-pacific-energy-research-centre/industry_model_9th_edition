@@ -159,7 +159,7 @@ for economy in economy_list:
     ##############################################################################################
     
     # Save location for data and charts
-    save_data = './results/ml_cement/{}/'.format(economy)
+    save_data = './data/ml_cement/{}/'.format(economy)
 
     if not os.path.isdir(save_data):
         os.makedirs(save_data)
