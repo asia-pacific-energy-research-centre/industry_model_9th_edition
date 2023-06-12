@@ -1,4 +1,4 @@
-# Consolidated grab of steel and cement baseline production estimates
+# Consolidated grab of steel, cement and aluminium baseline production estimates
 
 # Set working directory to be the project folder
 import os
@@ -76,7 +76,7 @@ for economy in interim_steel_df['economy_code'].unique():
     chart_df = interim_steel_df[(interim_steel_df['economy_code'] == economy) &
                                 (interim_steel_df['year'] <= 2070)].copy().reset_index(drop = True)
     
-    model = int(re.findall(r'\d+', chart_df.iloc[-1, 2])[1])
+    model = [int(s) for s in re.findall(r'\d+', chart_df.iloc[-1, 2])][1]
     
     model_mse = pd.read_csv('./data/ml_steel/{}/{}_mse_results.csv'.format(economy, economy))
     model_features = model_mse[model_mse['Model build'] == model].reset_index(drop = True).iloc[0, -1]
@@ -90,7 +90,7 @@ for economy in interim_steel_df['economy_code'].unique():
                     y = 'steel',
                     hue = 'model')
     
-    ax.set(title = economy + ' selected ML steel for baseline production\n' + model_features,
+    ax.set(title = economy + ' selected ML steel for baseline production\nFeatures: ' + model_features,
             xlabel = 'Year',
             ylabel = 'Steel production (thousand tonnes)')
     
@@ -164,7 +164,7 @@ for economy in interim_cement_df['economy_code'].unique():
     chart_df = interim_cement_df[(interim_cement_df['economy_code'] == economy) &
                                 (interim_cement_df['year'] <= 2070)].copy().reset_index(drop = True)
     
-    model = int(re.findall(r'\d+', chart_df.iloc[-1, 2])[1])
+    model = [int(s) for s in re.findall(r'\d+', chart_df.iloc[-1, 2])][1]
     
     model_mse = pd.read_csv('./data/ml_cement/{}/{}_mse_results.csv'.format(economy, economy))
     model_features = model_mse[model_mse['Model build'] == model].reset_index(drop = True).iloc[0, -1]
@@ -178,7 +178,7 @@ for economy in interim_cement_df['economy_code'].unique():
                     y = 'cement',
                     hue = 'model')
     
-    ax.set(title = economy + ' selected ML cement for baseline production\n' + model_features,
+    ax.set(title = economy + ' selected ML cement for baseline production\nFeatures: ' + model_features,
             xlabel = 'Year',
             ylabel = 'Cement production (thousand tonnes)')
     
@@ -189,4 +189,93 @@ for economy in interim_cement_df['economy_code'].unique():
 
     plt.tight_layout()
     plt.savefig(cement_save + economy + '_cement_prod.png')
+    plt.close()
+
+
+######################################################################################
+
+# Read in ML results: aluminium
+combined_df = pd.DataFrame()
+
+for economy in APEC_code[:-7]:
+    filenames = glob.glob('./data/ml_alum/{}/ml_build/model_predictions*.csv'.format(economy))
+    for i in filenames:
+        temp_df = pd.read_csv(i)
+        temp_df['economy_code'] = economy
+        temp_df['production'] = 'Aluminium production'
+        temp_df['units'] = 'Thousand tonnes' #USGS source
+        combined_df = pd.concat([combined_df, temp_df]).copy()
+
+combined_df.to_csv('./data/ml_alum/ml_alum_all.csv', index = False)
+
+# Choice of appropriate ML models for each of the economies
+alum_model_dict = pd.read_csv('./data/config/ml_baseline_alum.csv', index_col = 0).squeeze().to_dict()
+
+# Save location
+alum_save = './data/ml_alum/interim_alum/'
+
+if not os.path.isdir(alum_save):
+    os.makedirs(alum_save)
+
+interim_alum_df = pd.DataFrame()
+
+for economy in APEC_code[:-7]:
+    temp_alum = combined_df[(combined_df['economy_code'] == economy) &
+                             (combined_df['model'].isin(['Historic aluminium production', 
+                                                         alum_model_dict[economy]]))]\
+                                                            .copy().reset_index(drop = True)
+    
+    interim_alum_df = pd.concat([interim_alum_df, temp_alum]).copy().reset_index(drop = True)
+
+interim_alum_df.to_csv(alum_save + 'ml_alum_selected.csv', index = False)
+
+alum_index_df = pd.DataFrame()
+
+# Generate indexed dataframe
+for economy in interim_alum_df['economy_code'].unique():
+    index_temp = interim_alum_df[interim_alum_df['economy_code'] == economy].copy()
+
+    base_year = index_temp.loc[index_temp['year'] == BASE_YEAR, 'alum']\
+                    .reset_index(drop = True).values[0]
+
+    index_temp['value'] = index_temp['alum'] / base_year * 100
+    index_temp['economy'] = index_temp['economy_code'].map(APEC_map)
+    index_temp['units'] = 'Indexed (2017 = 100)'
+
+    index_temp = index_temp[['economy', 'economy_code', 'production', 'year', 'value', 'units']].copy()
+
+    alum_index_df = pd.concat([alum_index_df, index_temp]).copy().reset_index(drop = True)
+
+alum_index_df.to_csv(alum_save + 'ml_alum_indexed.csv', index = False)
+
+# Build some alum charts
+for economy in interim_alum_df['economy_code'].unique():
+    chart_df = interim_alum_df[(interim_alum_df['economy_code'] == economy) &
+                                (interim_alum_df['year'] <= 2070)].copy().reset_index(drop = True)
+    
+    model = [int(s) for s in re.findall(r'\d+', chart_df.iloc[-1, 2])][1]
+    
+    model_mse = pd.read_csv('./data/ml_alum/{}/{}_mse_results.csv'.format(economy, economy))
+    model_features = model_mse[model_mse['Model build'] == model].reset_index(drop = True).iloc[0, -1]
+
+    fig, ax = plt.subplots()
+
+    sns.set_theme(style = 'ticks')
+
+    sns.lineplot(data = chart_df,
+                    x = 'year',
+                    y = 'alum',
+                    hue = 'model')
+    
+    ax.set(title = economy + ' selected ML aluminium for baseline production\nFeatures: ' + model_features,
+            xlabel = 'Year',
+            ylabel = 'Aluminium production (thousand tonnes)')
+    
+    ax.set_ylim([0, max(chart_df['alum']) * 1.1])
+    ax.set_xlim([min(chart_df['year']) - 1, 2070])
+    
+    plt.legend(title = '')
+
+    plt.tight_layout()
+    plt.savefig(alum_save + economy + '_alum_prod.png')
     plt.close()

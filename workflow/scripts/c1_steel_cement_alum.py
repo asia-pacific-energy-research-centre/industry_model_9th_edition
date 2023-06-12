@@ -174,7 +174,6 @@ for economy in cement_df['economy_code'].unique():
     plt.close()
 
 #####################################################################################################
-
 # Load aluminium data
 alum_df = pd.read_excel(prod_files[alum_index[0]], header = 5, nrows = 160)\
     .rename(columns = {'Country or locality': 'economy'})
