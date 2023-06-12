@@ -13,13 +13,13 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Grab APEC economies
-gdp_df = pd.read_csv('./data/macro/APEC_GDP_data.csv')
-APEC_economies = gdp_df['economy_code'].unique()
+APEC_map = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
+APEC_code = list(APEC_map.keys())
 
 # Read in ML results: steel
 combined_df = pd.DataFrame()
 
-for economy in APEC_economies:
+for economy in APEC_code[:-7]:
     filenames = glob.glob('./data/ml_steel/{}/ml_build/model_predictions*.csv'.format(economy))
     for i in filenames:
         temp_df = pd.read_csv(i)
@@ -41,7 +41,7 @@ if not os.path.isdir(steel_save):
 
 interim_steel_df = pd.DataFrame()
 
-for economy in APEC_economies:
+for economy in APEC_code[:-7]:
     temp_steel = combined_df[(combined_df['economy_code'] == economy) &
                              (combined_df['model'].isin(['Historic steel production', 
                                                          steel_model_dict[economy]]))]\
@@ -51,6 +51,25 @@ for economy in APEC_economies:
 
 # Save steel df with selected baseline model results for production 
 interim_steel_df.to_csv(steel_save + 'ml_steel_selected.csv', index = False)
+
+steel_index_df = pd.DataFrame()
+
+# Generate indexed dataframe
+for economy in interim_steel_df['economy_code'].unique():
+    index_temp = interim_steel_df[interim_steel_df['economy_code'] == economy].copy()
+
+    base_year = index_temp.loc[index_temp['year'] == BASE_YEAR, 'steel']\
+                    .reset_index(drop = True).values[0]
+
+    index_temp['value'] = index_temp['steel'] / base_year * 100
+    index_temp['economy'] = index_temp['economy_code'].map(APEC_map)
+    index_temp['units'] = 'Indexed (2017 = 100)'
+
+    index_temp = index_temp[['economy', 'economy_code', 'production', 'year', 'value', 'units']].copy()
+
+    steel_index_df = pd.concat([steel_index_df, index_temp]).copy().reset_index(drop = True)
+
+steel_index_df.to_csv(steel_save + 'ml_steel_indexed.csv', index = False)
 
 # Build some steel charts
 for economy in interim_steel_df['economy_code'].unique():
@@ -84,7 +103,7 @@ for economy in interim_steel_df['economy_code'].unique():
 # Read in ML results: cement
 combined_df = pd.DataFrame()
 
-for economy in APEC_economies:
+for economy in APEC_code[:-7]:
     filenames = glob.glob('./data/ml_cement/{}/ml_build/model_predictions*.csv'.format(economy))
     for i in filenames:
         temp_df = pd.read_csv(i)
@@ -106,7 +125,7 @@ if not os.path.isdir(cement_save):
 
 interim_cement_df = pd.DataFrame()
 
-for economy in APEC_economies:
+for economy in APEC_code[:-7]:
     temp_cement = combined_df[(combined_df['economy_code'] == economy) &
                              (combined_df['model'].isin(['Historic cement production', 
                                                          cement_model_dict[economy]]))]\
@@ -115,6 +134,25 @@ for economy in APEC_economies:
     interim_cement_df = pd.concat([interim_cement_df, temp_cement]).copy().reset_index(drop = True)
 
 interim_cement_df.to_csv(cement_save + 'ml_cement_selected.csv', index = False)
+
+cement_index_df = pd.DataFrame()
+
+# Generate indexed dataframe
+for economy in interim_cement_df['economy_code'].unique():
+    index_temp = interim_cement_df[interim_cement_df['economy_code'] == economy].copy()
+
+    base_year = index_temp.loc[index_temp['year'] == BASE_YEAR, 'cement']\
+                    .reset_index(drop = True).values[0]
+
+    index_temp['value'] = index_temp['cement'] / base_year * 100
+    index_temp['economy'] = index_temp['economy_code'].map(APEC_map)
+    index_temp['units'] = 'Indexed (2017 = 100)'
+
+    index_temp = index_temp[['economy', 'economy_code', 'production', 'year', 'value', 'units']].copy()
+
+    cement_index_df = pd.concat([cement_index_df, index_temp]).copy().reset_index(drop = True)
+
+cement_index_df.to_csv(cement_save + 'ml_cement_indexed.csv', index = False)
 
 # Build some cement charts
 for economy in interim_cement_df['economy_code'].unique():
