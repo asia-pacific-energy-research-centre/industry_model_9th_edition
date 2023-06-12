@@ -56,9 +56,10 @@ for economy in APEC_gdp['economy_code'].unique():
                                    'economy_x': 'economy',
                                    'indexed': 'value'})
             
-            combined_data['series'] = hl_sector + ' index (2017 = 100)'
+            combined_data['series'] = hl_sector
+            combined_data['units'] = 'Indexed (2017 = 100)'
 
-            combined_data = combined_data[['economy', 'economy_code', 'series', 'year', 'value']].copy()
+            combined_data = combined_data[['economy', 'economy_code', 'series', 'year', 'value', 'units']].copy()
 
             combined_data.to_csv(save_data + economy + '_' + hl_sector + '.csv', index = False)
 
@@ -72,10 +73,10 @@ for economy in APEC_gdp['economy_code'].unique():
                             y = 'value',
                             hue = 'series')
             
-            ax.set(title = economy,
+            ax.set(title = economy + ' sectoral production (2017 = 100)',
                 xlabel = 'year',
                 ylabel = hl_sector,
-                ylim = (0, combined_data['value'].max() * 1.1),
+                ylim = (0, combined_data[combined_data['year'] <= 2070]['value'].max() * 1.1),
                 xlim = (combined_data['year'].min(), 2070))
             
             plt.legend(title = '')
@@ -120,9 +121,10 @@ for economy in APEC_gdp['economy_code'].unique():
                                    'economy_x': 'economy',
                                    'indexed': 'value'})
             
-            combined_data['series'] = sector + ' index (2017 = 100)'
+            combined_data['series'] = sector
+            combined_data['units'] = 'Indexed (2017 = 100)'
 
-            combined_data = combined_data[['economy', 'economy_code', 'series', 'year', 'value']].copy()
+            combined_data = combined_data[['economy', 'economy_code', 'series', 'year', 'value', 'units']].copy()
 
             combined_data.to_csv(save_data + economy + '_' + sector + '.csv', index = False) 
 
@@ -136,10 +138,10 @@ for economy in APEC_gdp['economy_code'].unique():
                             y = 'value',
                             hue = 'series')
             
-            ax.set(title = economy,
+            ax.set(title = economy + ' sectoral production (2017 = 100)',
                 xlabel = 'year',
                 ylabel = sector,
-                ylim = (0, combined_data['value'].max() * 1.1),
+                ylim = (0, combined_data[combined_data['year'] <= 2070]['value'].max() * 1.1),
                 xlim = (combined_data['year'].min(), 2070))
             
             plt.legend(title = '')

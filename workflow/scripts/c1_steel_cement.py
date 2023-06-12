@@ -16,6 +16,7 @@ production_files = './data/production_and_trade/'
 prod_files = glob.glob(production_files + '*.xlsx')
 steel_index = [idx for idx, s in enumerate(prod_files) if 'steel_wsa' in s]
 cement_index = [idx for idx, s in enumerate(prod_files) if 'cement_usgs' in s]
+alum_index = [idx for idx, s in enumerate(prod_files) if 'alum_usgs' in s]
 
 # Load steel data 
 steel_to_2021 = pd.read_excel(prod_files[steel_index[0]], header = 2, nrows = 125, index_col = 'Country')
@@ -41,7 +42,7 @@ steel_df['units'] = 'Thousand tonnes'
 steel_df = steel_df[['economy_code', 'production', 'units', 'year', 'value']]
 
 # Read in older steel production from 8th Outlook
-steel8th = pd.read_excel('./data/production_and_trade/cement_steel_8th_production.xlsx', sheet_name = 'steel')
+steel8th = pd.read_excel('./data/production_and_trade/cement_steel_alum_8th_production.xlsx', sheet_name = 'steel')
 steel8th = steel8th.melt(id_vars = ['economy', 'item', 'unit']).rename(columns = {'variable': 'year',
                                                                                   'unit': 'units',
                                                                                   'economy': 'economy_code',
@@ -88,6 +89,7 @@ for economy in steel_df['economy_code'].unique():
     #plt.show()
     plt.close()
 
+#############################################################################################################
 # Load cement data
 cement_df = pd.read_excel(prod_files[cement_index[0]], header = 5, nrows = 160)\
     .rename(columns = {'Country or locality': 'economy'})
@@ -124,7 +126,7 @@ cement_df['units'] = 'Thousand tonnes'
 cement_df = cement_df[['economy_code', 'economy', 'production', 'units', 'year', 'value']]
 
 # Read in older cement production from 8th Outlook
-cement8th = pd.read_excel('./data/production_and_trade/cement_steel_8th_production.xlsx', sheet_name = 'cement')
+cement8th = pd.read_excel('./data/production_and_trade/cement_steel_alum_8th_production.xlsx', sheet_name = 'cement')
 cement8th = cement8th.melt(id_vars = ['economy', 'item', 'unit']).rename(columns = {'variable': 'year',
                                                                                   'unit': 'units',
                                                                                   'economy': 'economy_code',
@@ -168,6 +170,83 @@ for economy in cement_df['economy_code'].unique():
 
     plt.tight_layout()
     plt.savefig(cement_charts + economy + '_cement_prod.png')
+    #plt.show()
+    plt.close()
+
+#####################################################################################################
+
+# Load aluminium data
+alum_df = pd.read_excel(prod_files[alum_index[0]], header = 5, nrows = 160)\
+    .rename(columns = {'Country or locality': 'economy'})
+alum_df = alum_df[['economy', 2016, 2017, 2018, 2019, 2020]]
+
+APEC_alum = ['Australia', 'Canada', 'China', 'Indonesia', 'Malaysiae', 'New Zealand', 
+             'Russia', 'United States']
+
+alum_df = alum_df[alum_df['economy'].isin(APEC_alum)].copy()\
+    .replace({'Malaysiae': 'Malaysia'}).reset_index(drop = True)
+
+alum_df.to_csv(production_files + 'alum_usgs_interim.csv', index = False)
+alum_df = pd.read_csv(production_files + 'alum_usgs_interim.csv')
+
+# Load the APEC alum economies
+alum_economies = pd.read_csv('./data/config/alum_economies.csv', header = None, index_col = 0)\
+    .squeeze().to_dict()
+
+alum_df['economy_code'] = alum_df['economy'].map({v: k for k, v in alum_economies.items()})
+alum_df = alum_df[['economy_code', 'economy', '2016', '2017', '2018', '2019', '2020']].sort_values('economy_code')
+alum_df = alum_df.melt(id_vars = ['economy_code', 'economy']).rename(columns = {'variable': 'year'})
+
+alum_df['production'] = 'Aluminium USGS'
+alum_df['units'] = 'Thousand tonnes'
+
+alum_df = alum_df[['economy_code', 'economy', 'production', 'units', 'year', 'value']]
+
+# Read in older alum production from 8th Outlook
+alum8th = pd.read_excel('./data/production_and_trade/cement_steel_alum_8th_production.xlsx', sheet_name = 'alum')
+alum8th = alum8th.melt(id_vars = ['economy', 'item', 'unit']).rename(columns = {'variable': 'year',
+                                                                                  'unit': 'units',
+                                                                                  'economy': 'economy_code',
+                                                                                  'item': 'production'}).dropna()
+
+alum8th['production'] = 'Aluminium USGS'
+alum8th['units'] = 'Thousand tonnes'
+
+alum8th = alum8th[alum8th['year'] < 2016].copy().reset_index(drop = True)
+
+alum_df = pd.concat([alum_df, alum8th]).sort_values(['economy_code', 'year']).copy().reset_index(drop = True)
+
+# Save location for steel charts
+alum_charts = './data/production_and_trade/production_aluminium/'
+
+if not os.path.isdir(alum_charts):
+    os.makedirs(alum_charts)
+
+# Save alum dataframe
+alum_df.to_csv(alum_charts + 'alum_usgs_cleaned.csv', index = False)
+
+for economy in alum_df['economy_code'].unique():
+    chart_df = alum_df[alum_df['economy_code'] == economy].copy()
+
+    # Construct some plots
+    fig, ax = plt.subplots()
+
+    sns.set_theme(style = 'ticks')
+
+    sns.lineplot(data = chart_df, 
+                    x = 'year',
+                    y = 'value',
+                    hue = 'production')
+
+    ax.set(title = economy,
+           xlabel = 'Year',
+           ylabel = 'Thousand tonnes',
+           ylim = (0, chart_df['value'].max() * 1.1))
+
+    plt.legend(title = '')
+
+    plt.tight_layout()
+    plt.savefig(alum_charts + economy + '_alum_prod.png')
     #plt.show()
     plt.close()
 

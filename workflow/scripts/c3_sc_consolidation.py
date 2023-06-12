@@ -75,6 +75,11 @@ steel_index_df.to_csv(steel_save + 'ml_steel_indexed.csv', index = False)
 for economy in interim_steel_df['economy_code'].unique():
     chart_df = interim_steel_df[(interim_steel_df['economy_code'] == economy) &
                                 (interim_steel_df['year'] <= 2070)].copy().reset_index(drop = True)
+    
+    model = int(re.findall(r'\d+', chart_df.iloc[-1, 2])[1])
+    
+    model_mse = pd.read_csv('./data/ml_steel/{}/{}_mse_results.csv'.format(economy, economy))
+    model_features = model_mse[model_mse['Model build'] == model].reset_index(drop = True).iloc[0, -1]
 
     fig, ax = plt.subplots()
 
@@ -85,7 +90,7 @@ for economy in interim_steel_df['economy_code'].unique():
                     y = 'steel',
                     hue = 'model')
     
-    ax.set(title = economy + ' selected ML steel for baseline production',
+    ax.set(title = economy + ' selected ML steel for baseline production\n' + model_features,
             xlabel = 'Year',
             ylabel = 'Steel production (thousand tonnes)')
     
@@ -158,6 +163,11 @@ cement_index_df.to_csv(cement_save + 'ml_cement_indexed.csv', index = False)
 for economy in interim_cement_df['economy_code'].unique():
     chart_df = interim_cement_df[(interim_cement_df['economy_code'] == economy) &
                                 (interim_cement_df['year'] <= 2070)].copy().reset_index(drop = True)
+    
+    model = int(re.findall(r'\d+', chart_df.iloc[-1, 2])[1])
+    
+    model_mse = pd.read_csv('./data/ml_cement/{}/{}_mse_results.csv'.format(economy, economy))
+    model_features = model_mse[model_mse['Model build'] == model].reset_index(drop = True).iloc[0, -1]
 
     fig, ax = plt.subplots()
 
@@ -168,7 +178,7 @@ for economy in interim_cement_df['economy_code'].unique():
                     y = 'cement',
                     hue = 'model')
     
-    ax.set(title = economy + ' selected ML cement for baseline production',
+    ax.set(title = economy + ' selected ML cement for baseline production\n' + model_features,
             xlabel = 'Year',
             ylabel = 'Cement production (thousand tonnes)')
     
