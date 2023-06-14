@@ -14,7 +14,7 @@ with open(config_file) as infile:
 
 # Import historical steel data and gdp
 steel_df = pd.read_csv('./data/production_and_trade/production_steel/steel_wsa_cleaned.csv') 
-gdp_df = pd.read_csv('./data/macro/APEC_GDP_data.csv')
+gdp_df = pd.read_csv('./data/macro/APEC_GDP_data_2023_06_14.csv')
 
 # Import some modelling dependencies
 from sklearn import preprocessing

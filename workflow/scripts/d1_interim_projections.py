@@ -172,3 +172,5 @@ for economy in economy_list:
             plt.savefig(save_data + economy + '_' + sector + '.png')
             plt.show()
             plt.close()
+
+ind_prod_df.to_csv('./data/industry_projections/interim_all_sectors.csv', index = False)
