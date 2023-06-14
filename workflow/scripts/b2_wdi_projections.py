@@ -396,9 +396,9 @@ ind_projection(economy = '21_VN', series = 'NV.MNF.TXTL.ZS.UN')
 combined_df = pd.DataFrame()
 
 for economy in wdi_df['economy_code'].unique():
-    filenames = glob.glob('./data/industry_interim/{}/*.csv'.format(economy))
+    filenames = glob.glob('./data/industry_interim1/{}/*.csv'.format(economy))
     for i in filenames:
         temp_df = pd.read_csv(i)
         combined_df = pd.concat([combined_df, temp_df]).copy()
 
-combined_df.to_csv('./data/industry_interim/wdi_projections.csv', index = False)
+combined_df.to_csv('./data/industry_interim1/wdi_projections.csv', index = False)
