@@ -108,9 +108,6 @@ ind_prod_df = ind_prod_df[['economy', 'economy_code', 'series', 'year', 'units',
     .sort_values(by = ['economy_code', 'sub1sectors', 'sub2sectors']).copy().reset_index(drop = True)
 
 economy_list = list(APEC_economies.keys())[:-7]
-# Remove CT
-economy_list = [i for i in economy_list if i != '18_CT']
-
 for economy in economy_list:
     # Save data
     save_data = './data/industry_projections/{}/'.format(economy)
@@ -175,5 +172,3 @@ for economy in economy_list:
             plt.savefig(save_data + economy + '_' + sector + '.png')
             plt.show()
             plt.close()
- 
-
