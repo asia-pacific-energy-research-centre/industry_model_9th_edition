@@ -1,5 +1,4 @@
-# Manual refinement
-
+# Interim projections
 # Set working directory to be the project folder
 import os
 import re
@@ -43,35 +42,35 @@ alum_df['sub2sectors'] = ind2[2]
 alum_df = alum_df.rename(columns = {'production': 'series'})
 
 ################################# Other (WDI based) manufacturing sectors ############################
-# Chemicals 
+# Chemicals (WDI: CHEM)
 chem_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.CHEM.ZS.UN'].copy().reset_index(drop = True)
 chem_df['sub2sectors'] = ind2[1]
 
-# Transportation equipment
+# Transportation equipment (WDI: MTRN)
 trans_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.MTRN.ZS.UN'].copy().reset_index(drop = True)
 trans_df['sub2sectors'] = ind2[4]
 
-# Machinery
+# Machinery (WDI: MTRN)
 mach_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.MTRN.ZS.UN'].copy().reset_index(drop = True)
 mach_df['sub2sectors'] = ind2[5]
 
-# Food and beverages
+# Food and beverages (WDI: FBTO)
 fb_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.FBTO.ZS.UN'].copy().reset_index(drop = True)
 fb_df['sub2sectors'] = ind2[6]
 
-# Pulp, paper and printing
+# Pulp, paper and printing (WDI: OTHR)
 pp_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.OTHR.ZS.UN'].copy().reset_index(drop = True)
 pp_df['sub2sectors'] = ind2[7]
 
-# Wood and wood products
+# Wood and wood products (WDI: OTHR)
 ww_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.OTHR.ZS.UN'].copy().reset_index(drop = True)
 ww_df['sub2sectors'] = ind2[8]
 
-# Textiles
+# Textiles (WDI: TXTL)
 txt_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.TXTL.ZS.UN'].copy().reset_index(drop = True)
 txt_df['sub2sectors'] = ind2[9]
 
-# Non-specified
+# Non-specified (WDI: IND.TOTL)
 ns_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.IND.TOTL.ZS'].copy().reset_index(drop = True)
 # No IND.TOTL for Viet Nam, so different grab:
 vn_ns_df = wdi_subsectors[(wdi_subsectors['series'] == 'NV.IND.MANF.ZS') &
@@ -85,12 +84,12 @@ all_manf = pd.concat([steel_df, chem_df, alum_df, cement_df, trans_df, mach_df, 
 all_manf['sub1sectors'] = ind1[2]
 
 ################################# Level 1 industry: construction and mining ######################
-# Construction
+# Construction (WDI: OTHR)
 cons_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.OTHR.ZS.UN'].copy().reset_index(drop = True)
 cons_df['sub1sectors'] = ind1[1]
 cons_df['sub2sectors'] = 'x'
 
-# Mining
+# Mining (WDI: OTHR)
 min_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.IND.TOTL.ZS'].copy().reset_index(drop = True)
 # No IND.TOTL for Viet Nam, so different grab:
 vn_min_df = wdi_subsectors[(wdi_subsectors['series'] == 'NV.IND.MANF.ZS') &
