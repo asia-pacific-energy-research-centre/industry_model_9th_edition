@@ -16,7 +16,8 @@ with open(config_file) as infile:
 cement_df = pd.read_csv('./data/production_and_trade/production_cement/cement_usgs_cleaned.csv')
 # Remove unneeded column
 cement_df = cement_df.iloc[:, [0, 2, 3, 4, 5]] 
-gdp_df = pd.read_csv('./data/macro/APEC_GDP_data_2023_06_14.csv')
+gdp_df = pd.read_csv(latest_gdp)
+print('GDP data input was built:', gdp_date)
 
 # Import some modelling dependencies
 from sklearn import preprocessing

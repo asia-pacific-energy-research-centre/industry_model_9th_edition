@@ -94,3 +94,16 @@ SCENARIO_OF_INTEREST = 'reference'
 economy_codes_path = './data/config/'
 
 economy_list = pd.read_csv(economy_codes_path + 'APEC_economies.csv').iloc[:, 0]
+
+# Latest APEC_GDP_data file
+path_to_gdp = '../macro_variables_9th/results/GDP_estimates/data/'
+gdp_prefix = 'APEC_GDP_data_'
+
+gdp_files = glob.glob(path_to_gdp + gdp_prefix + '*.csv')
+
+if len(gdp_files) > 0:
+    latest_gdp = max(gdp_files, key = os.path.getctime)
+    gdp_date = re.search(r'(\d{4})_(\d{2})_(\d{2})', latest_gdp).group(0)
+
+else:
+    pass
