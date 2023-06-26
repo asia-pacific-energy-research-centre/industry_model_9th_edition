@@ -40,7 +40,7 @@ import math
 import itertools
 from itertools import chain, combinations
 import warnings
-from scipy.interpolate import interp1d
+from scipy.interpolate import interp1d, splev, splrep
 
 # Set directory
 os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')
