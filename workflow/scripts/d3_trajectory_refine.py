@@ -199,4 +199,4 @@ industry_refine = industry_production.merge(traj_overwrite_df, how = 'left',
 industry_refine['value'] = (industry_refine['value_x']).where(industry_refine['value_y'].isna(), industry_refine['value_y'])
 
 industry_refine = industry_refine.copy().drop(columns = ['value_x', 'value_y'])
-industry_refine.to_csv('./data/industry_production/industry_refine1/refined_industry_all.csv', index = False)
+industry_refine.to_csv('./data/industry_production/industry_refine1/refined_industry_all.csv', index = False) 

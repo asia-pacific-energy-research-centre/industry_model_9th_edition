@@ -36,10 +36,10 @@ def industry_traj(economy = '01_AUS',
             data = industry_production):
     
     # Where to save files
-    industry_final = './data/industry_production/industry_refine1/{}/'.format(economy)
+    industry_refine1 = './data/industry_production/industry_refine1/{}/'.format(economy)
 
-    if not os.path.isdir(industry_final):
-        os.makedirs(industry_final)
+    if not os.path.isdir(industry_refine1):
+        os.makedirs(industry_refine1)
     
     # Relevant dataframe grab
     refined_df = data[(data['economy_code'] == economy) &
@@ -102,9 +102,9 @@ def industry_traj(economy = '01_AUS',
     plt.show()
 
     if sub2sectors == 'x':
-        fig.savefig(industry_final + economy + '_' + sub1sectors + '.png')
+        fig.savefig(industry_refine1 + economy + '_' + sub1sectors + '.png')
     elif sub1sectors == '14_03_manufacturing':
-        fig.savefig(industry_final + economy + '_' + sub2sectors + '.png')
+        fig.savefig(industry_refine1 + economy + '_' + sub2sectors + '.png')
     else:
         pass
     
@@ -114,9 +114,9 @@ def industry_traj(economy = '01_AUS',
         .rename(columns = {'adj_value': 'value'})
     
     if sub2sectors == 'x':
-        adj_data.to_csv(industry_final + economy + '_' + sub1sectors + '.csv', index = False)
+        adj_data.to_csv(industry_refine1 + economy + '_' + sub1sectors + '.csv', index = False)
     elif sub1sectors == '14_03_manufacturing':
-        adj_data.to_csv(industry_final + economy + '_' + sub2sectors + '.csv', index = False)
+        adj_data.to_csv(industry_refine1 + economy + '_' + sub2sectors + '.csv', index = False)
     else:
         pass
 
@@ -130,10 +130,10 @@ def industry_adj(economy = '01_AUS',
             data = industry_production):
 
     # Where to save files
-    industry_final = './data/industry_production/industry_final/{}/'.format(economy)
+    industry_refine2 = './data/industry_production/industry_refine2/{}/'.format(economy)
 
-    if not os.path.isdir(industry_final):
-        os.makedirs(industry_final)
+    if not os.path.isdir(industry_refine2):
+        os.makedirs(industry_refine2)
     
     # Relevant dataframe grab
     refined_df = data[(data['economy_code'] == economy) &
@@ -195,9 +195,9 @@ def industry_adj(economy = '01_AUS',
     plt.show()
 
     if sub2sectors == 'x':
-        fig.savefig(industry_final + economy + '_' + sub1sectors + '.png')
+        fig.savefig(industry_refine2 + economy + '_' + sub1sectors + '.png')
     elif sub1sectors == '14_03_manufacturing':
-        fig.savefig(industry_final + economy + '_' + sub2sectors + '.png')
+        fig.savefig(industry_refine2 + economy + '_' + sub2sectors + '.png')
     else:
         pass
     
@@ -207,18 +207,98 @@ def industry_adj(economy = '01_AUS',
         .rename(columns = {'adj_value': 'value'})
     
     if sub2sectors == 'x':
-        adj_data.to_csv(industry_final + economy + '_' + sub1sectors + '.csv', index = False)
+        adj_data.to_csv(industry_refine2 + economy + '_' + sub1sectors + '.csv', index = False)
     elif sub1sectors == '14_03_manufacturing':
-        adj_data.to_csv(industry_final + economy + '_' + sub2sectors + '.csv', index = False)
+        adj_data.to_csv(industry_refine2 + economy + '_' + sub2sectors + '.csv', index = False)
     else:
         pass
+
+# Define function that creates trajectories for target scenario
 
 def scenario_adj(economy = '01_AUS', 
                  sub1sectors = '14_01_mining_and_quarrying', 
                  sub2sectors = 'x',
                  increment = 0.01,
+                 start_year = 2021,
+                 end_year = 2040,
                  data = industry_production):
     
     # Where to save files
-    industry_scenarios = './data/industry_production/industry_final/{}/'.format(economy)
+    industry_scenarios = './data/industry_production/industry_scenarios/{}/'.format(economy)
+
+    if not os.path.isdir(industry_scenarios):
+        os.makedirs(industry_scenarios)
+    
+    # Relevant dataframe grab
+    refined_df = data[(data['economy_code'] == economy) &
+                    (data['sub1sectors'] == sub1sectors) &
+                    (data['sub2sectors'] == sub2sectors)].copy().reset_index(drop = True)
+    
+    # Set year as index
+    refined_df = refined_df.set_index('year')
+    # Updated column with refined estimates
+    refined_df['tgt_value'] = refined_df['value']
+    refined_df['scenario'] = 'target'
+
+    for year in refined_df.index:
+        if (year >= start_year) & (year <= end_year):
+            growth_factor = (1 + increment) ** (year - start_year)
+            refined_df.loc[year, 'tgt_value'] = refined_df.loc[year, 'value'] * growth_factor
+
+        elif year > end_year:
+            refined_df.loc[year, 'tgt_value'] = refined_df.loc[year - 1, 'tgt_value'] + (refined_df.loc[year, 'value'] - refined_df.loc[year - 1, 'value'])
+
+        elif year < start_year:
+            refined_df.loc[year, 'tgt_value'] = refined_df.loc[year, 'value']
+
+        else:
+            pass
+
+    refined_df = refined_df.copy().reset_index()
+
+    # Now chart the result
+    chart_df = refined_df.copy().melt(id_vars = ['year', 'economy', 'economy_code', 'series', 'units', 'sub1sectors', 'sub2sectors', 'scenario'], 
+                                      value_vars = ['value', 'tgt_value'], 
+                                      value_name = 'production_value')
+
+    fig, ax = plt.subplots()
+
+    sns.set_theme(style = 'ticks')
+
+    sns.lineplot(data = chart_df,
+                x = 'year',
+                y = 'production_value',
+                hue = 'variable')
+
+    ax.set(title = economy + ' ' + sub1sectors + ' ' + sub2sectors,
+           xlabel = 'Year',
+           ylabel = 'Production index (2017 = 100)',
+           ylim = (0, chart_df['production_value'].max() * 1.1))
+
+    plt.legend(title = '')
+
+    plt.tight_layout()
+    plt.show()
+
+    if sub2sectors == 'x':
+        fig.savefig(industry_scenarios + economy + '_' + sub1sectors + '.png')
+    elif sub1sectors == '14_03_manufacturing':
+        fig.savefig(industry_scenarios + economy + '_' + sub2sectors + '.png')
+    else:
+        pass
+    
+    plt.close()
+
+    adj_data = refined_df.copy()[['economy', 'economy_code', 'series', 'year', 'units', 'sub1sectors', 'sub2sectors', 'tgt_value', 'scenario']]\
+        .rename(columns = {'adj_value': 'value'})
+    
+    if sub2sectors == 'x':
+        adj_data.to_csv(industry_scenarios + economy + '_' + sub1sectors + '.csv', index = False)
+    elif sub1sectors == '14_03_manufacturing':
+        adj_data.to_csv(industry_scenarios + economy + '_' + sub2sectors + '.csv', index = False)
+    else:
+        pass
+
+scenario_adj(increment = -0.005)
+
     
