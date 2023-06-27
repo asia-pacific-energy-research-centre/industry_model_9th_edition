@@ -103,7 +103,7 @@ def ind_projection(input_data = wdi_df,
         ind_df2['economy'] = ind_df2['economy_code'].map(APEC_fullname)
         
         # Save location for data and charts
-        save_data = './data/industry_interim1/{}/'.format(economy)
+        save_data = './data/industry_production/industry_interim1/{}/'.format(economy)
 
         if not os.path.isdir(save_data):
             os.makedirs(save_data)
@@ -121,7 +121,8 @@ def ind_projection(input_data = wdi_df,
         
         ax.set(title = economy + ' ' + series,
             xlabel = 'year',
-            ylabel = 'Proportion %')
+            ylabel = 'Proportion %',
+            ylim = (0, ind_df2['value'].max() * 1.1))
         
         plt.legend(title = '')
         

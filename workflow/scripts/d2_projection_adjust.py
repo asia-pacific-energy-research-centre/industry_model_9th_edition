@@ -4,7 +4,6 @@ import os
 import re
 
 # Grab relevant functions from 'useful_functions.py'
-from useful_functions import modify_trajectory
 from useful_functions import generate_smooth_curve
 
 wanted_wd = 'industry_model_9th_edition'
@@ -19,9 +18,9 @@ with open(config_file) as infile:
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 
 # Interim industry projections
-industry_production = pd.read_csv('./data/industry_projections/interim_all_sectors.csv')
+industry_production = pd.read_csv('./data/industry_production/industry_projections/interim_all_sectors.csv')
 
-# Define years dictionary tp adjust later 
+# Define years list tp adjust later 
 years = [i for i in range(1980, 2101, 1)]
 
 # Function definition to override modelled trajectory
@@ -32,11 +31,12 @@ def industry_traj(economy = '01_AUS',
             proj_start_year = 2021,
             shape = 'increase',
             magnitude = 1.5,
-            apex_choice = 1.5,
+            apex_mag = 1.5,
+            apex_loc = 10,
             data = industry_production):
     
     # Where to save files
-    industry_final = './data/industry_final/{}/'.format(economy)
+    industry_final = './data/industry_production/industry_refine1/{}/'.format(economy)
 
     if not os.path.isdir(industry_final):
         os.makedirs(industry_final)
@@ -54,17 +54,15 @@ def industry_traj(economy = '01_AUS',
     # Want to build a new trajectory: up, down, bottom, top, constant
     traj_start = refined_df.loc[proj_start_year, 'value'] 
     traj_end = refined_df.loc[proj_start_year, 'value'] * magnitude
-    apex = apex_choice * traj_end
-
-    # Choose position
-    #ap = position
+    apex = apex_mag * traj_end
     
     # Generate new trajectory 
     outcome = generate_smooth_curve(num_points = max(years) - proj_start_year + 1, 
                                     shape = shape,
                                     start_value = traj_start,
                                     end_value = traj_end,
-                                    apex_point = apex)
+                                    apex_point = apex,
+                                    apex_position = apex_loc)
     
     outcome_df = pd.DataFrame(outcome, index = range(proj_start_year, max(refined_df.index) + 1))
 
@@ -95,11 +93,12 @@ def industry_traj(economy = '01_AUS',
 
     ax.set(title = economy + ' ' + sub1sectors + ' ' + sub2sectors,
            xlabel = 'Year',
-           ylabel = 'Production index (2017 = 100)')
+           ylabel = 'Production index (2017 = 100)',
+           ylim = (0, chart_df['production_value'].max() * 1.1))
 
     plt.legend(title = '')
 
-    plt.tight_layout()
+    plt.tight_layout() 
     plt.show()
 
     if sub2sectors == 'x':
@@ -127,14 +126,11 @@ def industry_traj(economy = '01_AUS',
 def industry_adj(economy = '01_AUS', 
             sub1sectors = '14_01_mining_and_quarrying', 
             sub2sectors = 'x',
-            adjustment = True,
             adjust = {},
-            proj_start_year = 2021,
-            increment = 0.001,
             data = industry_production):
 
     # Where to save files
-    industry_final = './data/industry_final/{}/'.format(economy)
+    industry_final = './data/industry_production/industry_final/{}/'.format(economy)
 
     if not os.path.isdir(industry_final):
         os.makedirs(industry_final)
@@ -150,40 +146,29 @@ def industry_adj(economy = '01_AUS',
     refined_df['adj_value'] = np.nan
     
     # Refinement to existing trajectory
-    if adjustment:
-        years_dict = {}
-        for year in years:
-            years_dict[year] = 1.0
+    years_dict = {}
+    for year in years:
+        years_dict[year] = 1.0
 
-        # Dictionary that stores the increase in the series required (as defined by the manual_adj applied
-        # to original series)
-        temp_dict = {}
+    # Dictionary that stores the increase in the series required (as defined by the manual_adj applied
+    # to original series)
+    temp_dict = {}
 
-        for year in years_dict.keys():
-            if year in adjust:
-                years_dict.update([(year, adjust[year])])
-            else:
-                pass 
+    for year in years_dict.keys():
+        if year in adjust:
+            years_dict.update([(year, adjust[year])])
+        else:
+            pass 
 
-            if year in refined_df.index:
-                temp_dict[year] = (refined_df.loc[year, 'value'] * years_dict[year]) - refined_df.loc[year, 'value']
-                
-                refined_df.loc[year, 'adj_value'] = refined_df.loc[year, 'value'] + sum(temp_dict.values())
+        if year in refined_df.index:
+            temp_dict[year] = (refined_df.loc[year, 'value'] * years_dict[year]) - refined_df.loc[year, 'value']
+            
+            refined_df.loc[year, 'adj_value'] = refined_df.loc[year, 'value'] + sum(temp_dict.values())
 
-            else:
-                pass
+        else:
+            pass
 
-        refined_df = refined_df.copy().reset_index()
-
-    else:
-        for year in refined_df.index:
-            if year < proj_start_year:
-                refined_df.loc[year, 'adj_value'] = refined_df.loc[year, 'value']
-
-            else:
-                refined_df.loc[year, 'adj_value'] = refined_df.loc[year - 1, 'adj_value'] * (1 + increment)
-
-        refined_df = refined_df.copy().reset_index()
+    refined_df = refined_df.copy().reset_index()
     
     # Now chart the result
     chart_df = refined_df.copy().melt(id_vars = ['year', 'economy', 'economy_code', 'series', 'units', 'sub1sectors', 'sub2sectors'], 
@@ -201,7 +186,8 @@ def industry_adj(economy = '01_AUS',
 
     ax.set(title = economy + ' ' + sub1sectors + ' ' + sub2sectors,
            xlabel = 'Year',
-           ylabel = 'Production index (2017 = 100)')
+           ylabel = 'Production index (2017 = 100)',
+           ylim = (0, chart_df['production_value'].max() * 1.1))
 
     plt.legend(title = '')
 
@@ -217,23 +203,22 @@ def industry_adj(economy = '01_AUS',
     
     plt.close()
 
-# Test function runs
-industry_adj(economy = '05_PRC',
-             adjustment = True,
-             adjust = {}, 
-             increment = -0.01,
-             proj_start_year = 2023, 
-             sub1sectors = '14_03_manufacturing', 
-             sub2sectors = '14_03_01_iron_and_steel') 
+    adj_data = refined_df.copy()[['economy', 'economy_code', 'series', 'year', 'units', 'sub1sectors', 'sub2sectors', 'adj_value']]\
+        .rename(columns = {'adj_value': 'value'})
+    
+    if sub2sectors == 'x':
+        adj_data.to_csv(industry_final + economy + '_' + sub1sectors + '.csv', index = False)
+    elif sub1sectors == '14_03_manufacturing':
+        adj_data.to_csv(industry_final + economy + '_' + sub2sectors + '.csv', index = False)
+    else:
+        pass
 
-industry_adj(economy = '01_AUS', adjust = {2025: 1.15, 2029: 1.25}, adjustment = True, increment = 0.0) 
-
-industry_traj(economy = '05_PRC', 
-              sub1sectors = '14_03_manufacturing', 
-              sub2sectors = '14_03_01_iron_and_steel', 
-              magnitude = -0.1,
-              apex_choice = 1.1,
-              shape = 'peak',
-              proj_start_year = 2024)
-
-industry_traj(shape = 'peak', magnitude = 0.95)
+def scenario_adj(economy = '01_AUS', 
+                 sub1sectors = '14_01_mining_and_quarrying', 
+                 sub2sectors = 'x',
+                 increment = 0.01,
+                 data = industry_production):
+    
+    # Where to save files
+    industry_scenarios = './data/industry_production/industry_final/{}/'.format(economy)
+    

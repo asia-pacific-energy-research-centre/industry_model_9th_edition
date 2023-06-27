@@ -15,7 +15,7 @@ with open(config_file) as infile:
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 
 # Read in historical production data
-hist_prod = pd.read_csv('./data/industry_projections/interim_all_sectors.csv')
+hist_prod = pd.read_csv('./data/industry_production/industry_projections/interim_all_sectors.csv')
 hist_prod = hist_prod[hist_prod['year'] <= 2020]
 
 # Sectors that we have production data for 
