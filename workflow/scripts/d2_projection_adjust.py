@@ -18,7 +18,7 @@ with open(config_file) as infile:
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 
 # Interim industry projections
-industry_production = pd.read_csv('./data/industry_production/industry_projections/interim_all_sectors.csv')
+industry_production = pd.read_csv('./data/industry_production/3_industry_projections/interim_all_sectors.csv')
 
 # Define years list tp adjust later 
 years = [i for i in range(1980, 2101, 1)]
@@ -36,7 +36,7 @@ def industry_traj(economy = '01_AUS',
             data = industry_production):
     
     # Where to save files
-    industry_refine1 = './data/industry_production/industry_refine1/{}/'.format(economy)
+    industry_refine1 = './data/industry_production/4_industry_refine1/{}/'.format(economy)
 
     if not os.path.isdir(industry_refine1):
         os.makedirs(industry_refine1)
@@ -130,7 +130,7 @@ def industry_adj(economy = '01_AUS',
             data = industry_production):
 
     # Where to save files
-    industry_refine2 = './data/industry_production/industry_refine2/{}/'.format(economy)
+    industry_refine2 = './data/industry_production/5_industry_refine2/{}/'.format(economy)
 
     if not os.path.isdir(industry_refine2):
         os.makedirs(industry_refine2)
@@ -224,7 +224,7 @@ def scenario_adj(economy = '01_AUS',
                  data = industry_production):
     
     # Where to save files
-    industry_scenarios = './data/industry_production/industry_scenarios/{}/'.format(economy)
+    industry_scenarios = './data/industry_production/6_industry_scenarios/{}/'.format(economy)
 
     if not os.path.isdir(industry_scenarios):
         os.makedirs(industry_scenarios)
@@ -238,7 +238,6 @@ def scenario_adj(economy = '01_AUS',
     refined_df = refined_df.set_index('year')
     # Updated column with refined estimates
     refined_df['tgt_value'] = refined_df['value']
-    refined_df['scenario'] = 'target'
 
     for year in refined_df.index:
         if (year >= start_year) & (year <= end_year):
@@ -257,7 +256,7 @@ def scenario_adj(economy = '01_AUS',
     refined_df = refined_df.copy().reset_index()
 
     # Now chart the result
-    chart_df = refined_df.copy().melt(id_vars = ['year', 'economy', 'economy_code', 'series', 'units', 'sub1sectors', 'sub2sectors', 'scenario'], 
+    chart_df = refined_df.copy().melt(id_vars = ['year', 'economy', 'economy_code', 'series', 'units', 'sub1sectors', 'sub2sectors'], 
                                       value_vars = ['value', 'tgt_value'], 
                                       value_name = 'production_value')
 
@@ -289,8 +288,8 @@ def scenario_adj(economy = '01_AUS',
     
     plt.close()
 
-    adj_data = refined_df.copy()[['economy', 'economy_code', 'series', 'year', 'units', 'sub1sectors', 'sub2sectors', 'tgt_value', 'scenario']]\
-        .rename(columns = {'adj_value': 'value'})
+    adj_data = refined_df.copy()[['economy', 'economy_code', 'series', 'year', 'units', 'sub1sectors', 'sub2sectors', 'tgt_value']]\
+        .rename(columns = {'tgt_value': 'value'})
     
     if sub2sectors == 'x':
         adj_data.to_csv(industry_scenarios + economy + '_' + sub1sectors + '.csv', index = False)
@@ -298,7 +297,5 @@ def scenario_adj(economy = '01_AUS',
         adj_data.to_csv(industry_scenarios + economy + '_' + sub2sectors + '.csv', index = False)
     else:
         pass
-
-scenario_adj(increment = -0.005)
 
     

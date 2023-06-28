@@ -17,7 +17,7 @@ APEC_gdp = APEC_gdp[APEC_gdp['variable'] == 'real_GDP'].copy().reset_index(drop 
 print('GDP data input was built:', gdp_date)
 
 # Read in WDI industry share of GDP (or manufacturing) data
-APEC_indshare = pd.read_csv('./data/industry_production/industry_interim1/wdi_projections.csv')
+APEC_indshare = pd.read_csv('./data/industry_production/1_industry_interim1/wdi_projections.csv')
 
 #############################################################################################
 # Generate production trajectories for industry (incl construction), manufacturing, and subsectors of manu
@@ -33,7 +33,7 @@ for economy in APEC_gdp['economy_code'].unique():
             .dropna().reset_index(drop = True)
         
         # Save data
-        save_data = './data/industry_production/industry_interim2/{}/'.format(economy)
+        save_data = './data/industry_production/2_industry_interim2/{}/'.format(economy)
 
         if not os.path.isdir(save_data):
             os.makedirs(save_data)
@@ -156,9 +156,9 @@ for economy in APEC_gdp['economy_code'].unique():
 combined_df = pd.DataFrame()
 
 for economy in APEC_gdp['economy_code'].unique():
-    filenames = glob.glob('./data/industry_production/industry_interim2/{}/*.csv'.format(economy))
+    filenames = glob.glob('./data/industry_production/2_industry_interim2/{}/*.csv'.format(economy))
     for i in filenames:
         temp_df = pd.read_csv(i)
         combined_df = pd.concat([combined_df, temp_df]).copy()
 
-combined_df.to_csv('./data/industry_production/industry_interim2/industry_subsectors.csv', index = False)
+combined_df.to_csv('./data/industry_production/2_industry_interim2/industry_subsectors.csv', index = False)

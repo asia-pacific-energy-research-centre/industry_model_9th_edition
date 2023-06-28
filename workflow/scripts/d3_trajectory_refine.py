@@ -31,7 +31,7 @@ ind2 = list(industry_sectors.values())[3:]
 
 # The interim modelled production estimates are located here (pre adjustment and refinement)
 # Interim industry projections
-industry_production = pd.read_csv('./data/industry_production/industry_projections/interim_all_sectors.csv')
+industry_interim = pd.read_csv('./data/industry_production/3_industry_projections/interim_all_sectors.csv')
 
 ###################################################################################################
 # Alter trajectory where necesary
@@ -39,55 +39,55 @@ industry_production = pd.read_csv('./data/industry_production/industry_projectio
 #################################### Australia #################################################################
 # Mining
 industry_traj(economy = '01_AUS', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2070,
-              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20)
+              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Construction
 industry_traj(economy = '01_AUS', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2070,
-              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20)
+              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Steel
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20)
+              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Chemicals
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2021,
-              shape = 'increase', magnitude = 1.1, apex_mag = 1.5, apex_loc = 20)
+              shape = 'increase', magnitude = 1.1, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Non-ferrous metals
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[2], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Non-metallic minerals
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Transportation equipment
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Machinery
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Food and beverages
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Pulp and paper
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Wood and wood products
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Textiles
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Non-specified
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 
 # Brunei
@@ -96,7 +96,17 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[10],
 # China
 # HKC
 # Indonesia
-# Japan
+
+#################################### Japan #################################################################
+# Non-ferrous metals
+industry_traj(economy = '08_JPN', sub1sectors = ind1[2], sub2sectors = ind2[2], proj_start_year = 2021,
+              shape = 'constant', magnitude = 1.2, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+
+# Non-metallic minerals
+industry_traj(economy = '08_JPN', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 0.9, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+
+
 # Korea
 # Malaysia
 # Mexico
@@ -112,65 +122,65 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[10],
 ############################ Thailand ###########################################################
 # Steel
 industry_traj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 3, apex_mag = 1.5, apex_loc = 20)
+              shape = 'decrease', magnitude = 3, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Non-metallic minerals
 industry_traj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Textiles
 industry_traj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 2.3, apex_mag = 0.8, apex_loc = 50)
+              shape = 'decrease', magnitude = 2.3, apex_mag = 0.8, apex_loc = 50, data = industry_interim)
 
 # Non-specified
 industry_traj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 2.5, apex_mag = 0.9, apex_loc = 40)
+              shape = 'decrease', magnitude = 2.5, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 
 ############################ USA ##############################################################
 # Mining
 industry_traj(economy = '20_USA', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2021,
-              shape = 'increase', magnitude = 3.1, apex_mag = 0.8, apex_loc = 20)
+              shape = 'increase', magnitude = 3.1, apex_mag = 0.8, apex_loc = 20, data = industry_interim)
 
 # Construction
 industry_traj(economy = '20_USA', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.7, apex_mag = 1.5, apex_loc = 20)
+              shape = 'decrease', magnitude = 1.7, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Steel
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.5, apex_mag = 1.5, apex_loc = 20)
+              shape = 'decrease', magnitude = 1.5, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Non-ferrous metals
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[2], proj_start_year = 2021,
-              shape = 'peak', magnitude = 2.2, apex_mag = 0.9, apex_loc = 60)
+              shape = 'peak', magnitude = 2.2, apex_mag = 0.9, apex_loc = 60, data = industry_interim)
 
 # Transportation equipment
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2030,
-              shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40)
+              shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Machinery
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2030,
-              shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40)
+              shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Food and beverages
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Pulp and paper
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.7, apex_mag = 1.1, apex_loc = 40)
+              shape = 'decrease', magnitude = 1.7, apex_mag = 1.1, apex_loc = 40, data = industry_interim)
 
 # Wood and wood products
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40)
+              shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Textiles
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40)
+              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Non-specified
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.9, apex_mag = 0.9, apex_loc = 40) 
+              shape = 'decrease', magnitude = 1.9, apex_mag = 0.9, apex_loc = 40, data = industry_interim) 
 
 
 # VN
@@ -183,20 +193,20 @@ industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[10],
 traj_overwrite_df = pd.DataFrame()
 
 for economy in list(APEC_economies.keys())[:-7]:
-    filenames = glob.glob('./data/industry_production/industry_refine1/{}/*.csv'.format(economy))
+    filenames = glob.glob('./data/industry_production/4_industry_refine1/{}/*.csv'.format(economy))
     for i in filenames:
         temp_df = pd.read_csv(i)
         traj_overwrite_df = pd.concat([traj_overwrite_df, temp_df]).copy()
 
-traj_overwrite_df.to_csv('./data/industry_production/industry_refine1/industry_refine1.csv', index = False)
+traj_overwrite_df.to_csv('./data/industry_production/4_industry_refine1/industry_refine1.csv', index = False)
 
 ####################################################################
 
-industry_refine = industry_production.merge(traj_overwrite_df, how = 'left',
+industry_refine = industry_interim.merge(traj_overwrite_df, how = 'left',
                               on = ['economy', 'economy_code', 'series', 
                                     'year', 'units', 'sub1sectors', 'sub2sectors'])
 
 industry_refine['value'] = (industry_refine['value_x']).where(industry_refine['value_y'].isna(), industry_refine['value_y'])
 
 industry_refine = industry_refine.copy().drop(columns = ['value_x', 'value_y'])
-industry_refine.to_csv('./data/industry_production/industry_refine1/refined_industry_all.csv', index = False) 
+industry_refine.to_csv('./data/industry_production/4_industry_refine1/refined_industry_all.csv', index = False) 

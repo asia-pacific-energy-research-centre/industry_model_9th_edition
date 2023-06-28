@@ -45,6 +45,9 @@ from scipy.interpolate import interp1d, splev, splrep
 # Set directory
 os.chdir(re.split('industry_model_9th_edition', os.getcwd())[0] + 'industry_model_9th_edition')
 
+# Date
+timestamp = datetime.now().strftime('%Y_%m_%d')
+
 # Set file_date_id here so that if we are running the script alone, versus through integrate, 
 # we can have the variable available
 try:
@@ -105,6 +108,20 @@ gdp_files = glob.glob(path_to_gdp + gdp_prefix + '*.csv')
 if len(gdp_files) > 0:
     latest_gdp = max(gdp_files, key = os.path.getctime)
     gdp_date = re.search(r'(\d{4})_(\d{2})_(\d{2})', latest_gdp).group(0)
+
+else:
+    pass
+
+# Path to industry production
+
+path_to_prod = './data/industry_production/6_industry_scenarios/'
+prod_prefix = 'industry_production_'
+
+prod_files = glob.glob(path_to_prod + prod_prefix + '*.csv')
+
+if len(prod_files) > 0:
+    latest_prod = max(prod_files, key = os.path.getctime)
+    prod_date = re.search(r'(\d{4})_(\d{2})_(\d{2})', latest_gdp).group(0)
 
 else:
     pass

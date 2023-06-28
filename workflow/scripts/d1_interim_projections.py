@@ -15,7 +15,7 @@ with open(config_file) as infile:
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 
 # Read in industry projections data
-wdi_subsectors = pd.read_csv('./data/industry_production/industry_interim2/industry_subsectors.csv')
+wdi_subsectors = pd.read_csv('./data/industry_production/2_industry_interim2/industry_subsectors.csv')
 steel_df = pd.read_csv('./data/ml_steel/interim_steel/ml_steel_indexed.csv')
 cement_df = pd.read_csv('./data/ml_cement/interim_cement/ml_cement_indexed.csv')
 alum_df = pd.read_csv('./data/ml_alum/interim_alum/ml_alum_indexed.csv')
@@ -109,7 +109,7 @@ ind_prod_df = ind_prod_df[['economy', 'economy_code', 'series', 'year', 'units',
 economy_list = list(APEC_economies.keys())[:-7]
 for economy in economy_list:
     # Save data
-    save_data = './data/industry_production/industry_projections/{}/'.format(economy)
+    save_data = './data/industry_production/3_industry_projections/{}/'.format(economy)
 
     if not os.path.isdir(save_data):
         os.makedirs(save_data)
@@ -172,4 +172,4 @@ for economy in economy_list:
             plt.show()
             plt.close()
 
-ind_prod_df.to_csv('./data/industry_production/industry_projections/interim_all_sectors.csv', index = False)
+ind_prod_df.to_csv('./data/industry_production/3_industry_projections/interim_all_sectors.csv', index = False)
