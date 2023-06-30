@@ -95,9 +95,11 @@ model_concordance_file_name  = 'model_concordance{}.csv'.format(model_concordanc
 SCENARIO_OF_INTEREST = 'reference'
 
 # Economies (including larger regions)
-economy_codes_path = './data/config/'
+variable_path = './data/config/'
 
-economy_list = pd.read_csv(economy_codes_path + 'APEC_economies.csv').iloc[:, 0]
+economy_list = pd.read_csv(variable_path + 'APEC_economies.csv').iloc[:, 0]
+fuels_list = pd.read_csv(variable_path + 'EGEDA_fuels.csv').iloc[:, 0]
+subfuels_list = pd.read_csv(variable_path + 'EGEDA_subfuels.csv').iloc[:, 0]
 
 # Latest APEC_GDP_data file
 path_to_gdp = '../macro_variables_9th/results/GDP_estimates/data/'
@@ -125,3 +127,32 @@ if len(prod_files) > 0:
 
 else:
     pass
+
+# Colour palettes
+
+pink_foam = ["#54bebe", "#76c8c8", "#98d1d1", "#badbdb", "#dedad2", "#e4bcad", "#df979e", "#d7658b", "#c80064"]
+salmon_aqua = ["#e27c7c", "#a86464", "#6d4b4b", "#503f3f", "#333333", "#3c4e4b", "#466964", "#599e94", "#6cd4c5"]
+
+custom_palette = {'reference': salmon_aqua[0],
+                  'target': salmon_aqua[-1],
+                  'reference activity': salmon_aqua[0],
+                  'target activity': salmon_aqua[-1],
+                  'reference energy': salmon_aqua[0],
+                  'target energy': salmon_aqua[-1]}
+
+fuel_industry = fuels_list[[0, 1, 5, 6, 7, 14, 15, 16, 17]].reset_index(drop = True)
+
+fuel_palette1 = {fuel_industry[x]: salmon_aqua[x] for x in range(0, len(fuel_industry), 1)}
+fuel_palette2 = {fuel_industry[x]: pink_foam[x] for x in range(0, len(fuel_industry), 1)}
+
+def generate_sequence(n):
+    sequence = [((-1) ** (x + 1)) * math.ceil(x / 2) * -1 for x in range(n)]
+    return sequence
+
+salaq_n = len(salmon_aqua)  # Length of the sequence
+sequence = generate_sequence(salaq_n)
+
+generate_sequence(15)
+sequence
+
+fuel_palette3 = {fuel_industry[y]: pink_foam[x] for x, y in zip(sequence, range(salaq_n))}

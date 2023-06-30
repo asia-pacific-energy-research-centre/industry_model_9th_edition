@@ -15,14 +15,14 @@ with open(config_file) as infile:
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 
 # Read in historical production data
-hist_prod = pd.read_csv('./data/industry_production/industry_projections/interim_all_sectors.csv')
+hist_prod = pd.read_csv('./data/industry_production/3_industry_projections/interim_all_sectors.csv')
 hist_prod = hist_prod[hist_prod['year'] <= 2020]
 
 # Sectors that we have production data for 
 relevant_sectors = hist_prod['sub2sectors'].unique()[[1, 2, 3, 4, 5, 6, 7, 10]]
 
 # Read in energy data
-EGEDA_2020 = pd.read_csv('./data/EGEDA/model_df/model_df_wide_ref_20230404.csv')
+EGEDA_2020 = pd.read_csv('./data/EGEDA/model_df/model_df_wide_ref_20230630.csv')
 
 EGEDA_2020 = EGEDA_2020[(EGEDA_2020['sub1sectors'].str.startswith('14_')) &
                         (EGEDA_2020['fuels'] == '19_total') &
@@ -36,6 +36,7 @@ EGEDA_2020 = EGEDA_2020.melt(id_vars = ['economy', 'sub1sectors', 'sub2sectors']
 
 EGEDA_2020['year'] = EGEDA_2020['year'].astype('int')
 
+# Energy intensity analysis
 for economy in hist_prod['economy_code'].unique():
     # Define empty datadrame to save all en_int for each economy
     en_int_economy_df = pd.DataFrame()

@@ -11,8 +11,6 @@ config_file = './config/config_apr2023.py'
 with open(config_file) as infile:
     exec(infile.read())
 
-
-
 # Grab insudtrial production trajectories
 indprod_df = pd.read_csv(latest_prod)
 
@@ -78,22 +76,41 @@ def energy_use(economy = '01_AUS',
     # Now chart the result
     chart_df = both_sectors[(both_sectors['year'] <= 2070) &
                             (both_sectors['year'] >= 2017)].copy()
+    
+    chart_df['scenario_act'] = chart_df['scenario'] + ' activity'
+    chart_df['scenario_en'] = chart_df['scenario'] + ' energy'
 
-    fig, ax = plt.subplots()
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (8, 8))
 
     sns.set_theme(style = 'ticks')
 
     sns.lineplot(data = chart_df,
-                x = 'year',
-                y = 'energy',
-                hue = 'scenario')
+                 ax = ax1,
+                 x = 'year',
+                 y = 'value',
+                 hue = 'scenario_act',
+                 palette = custom_palette)
+    
+    sns.lineplot(data = chart_df,
+                 ax = ax2,
+                 x = 'year',
+                 y = 'energy',
+                 hue = 'scenario_en',
+                 palette = custom_palette,
+                 linestyle = '-')
 
-    ax.set(title = economy + ' ' + sub1sectors + ' ' + sub2sectors,
+    ax1.set(title = economy + ' ' + sub1sectors + ' ' + sub2sectors,
            xlabel = 'Year',
-           ylabel = 'Total energy use index (2017 = 100)',
-           ylim = (0, chart_df['energy'].max() * 1.1))
+           ylabel = 'Activity index (2017 = 100)',
+           ylim = (0, chart_df['value'].max() * 1.1))
+    
+    ax2.set(title = 'REF annual efficiency improvement: ' + str(increment_ref) + '\n' + 'TGT annual efficiency improvement: ' + str(increment_tgt),
+             xlabel = 'Year',
+            ylabel = 'Energy use (indexed)',
+            ylim = (0, chart_df['value'].max() * 1.1))
 
-    plt.legend(title = '')
+    ax1.legend(title = '')
+    ax2.legend(title = '')
 
     plt.tight_layout()
     plt.show()
@@ -114,4 +131,4 @@ def energy_use(economy = '01_AUS',
     else:
         pass
 
-energy_use(increment_ref = 0.01, increment_tgt = 0.015, end_year = 2030)
+# energy_use(increment_ref = 0.01, increment_tgt = 0.015, end_year = 2100)
