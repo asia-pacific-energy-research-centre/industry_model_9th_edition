@@ -76,4 +76,19 @@ energy_use(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[10],
            increment_ref = 0.01, increment_tgt = 0.015, end_year = 2100)
 
 
+# Save all data in one csv
+# Now package up all the results and save in one combined data frame
+combined_df = pd.DataFrame()
+
+for economy in economy_list[:-7]:
+    filenames = glob.glob('./results/industry/1_total_energy_subsector/{}/*.csv'.format(economy))
+    for i in filenames:
+        temp_df = pd.read_csv(i)
+        combined_df = pd.concat([combined_df, temp_df]).copy()
+
+combined_df = combined_df.drop(['series', 'value'], axis = 1).rename(columns = {'energy': 'value'})
+combined_df['units'] = 'Indexed energy use'
+
+combined_df.to_csv('./results/industry/1_total_energy_subsector/industry_subsector_energy_trajectories_' + timestamp + '.csv', index = False)
+
 

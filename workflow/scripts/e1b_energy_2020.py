@@ -12,7 +12,7 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Read in historical industry energy data
-EGEDA_df = pd.read_csv('./data/EGEDA/model_df/model_df_wide_ref_20230630.csv')
+EGEDA_df = pd.read_csv(latest_EGEDA)
 
 EGEDA_ind_df = EGEDA_df[(EGEDA_df['sub1sectors'].str.startswith('14_')) &
                         (EGEDA_df['sub3sectors'] == 'x')]\
@@ -38,7 +38,7 @@ for economy in economy_list:
     energy_df = EGEDA_ind_total[(EGEDA_ind_total['economy'] == economy) &
                                 (EGEDA_ind_total['energy'] != 0) & 
                                 (EGEDA_ind_total['sector'] != '14_03_manufacturing') & 
-                                (EGEDA_ind_total['year'] == 2020)].copy().reset_index(drop = True)
+                                (EGEDA_ind_total['year'].isin([2019, 2020]))].copy().reset_index(drop = True)
     
     energy_df['cumulative'] = energy_df.groupby(['year', 'sector'])['energy'].cumsum()
 
@@ -48,19 +48,22 @@ for economy in economy_list:
         os.makedirs(save_location)
 
     # Pivot the DataFrame
-    stacked_df = energy_df.pivot(index='year', columns='sector', values='cumulative')
+    stacked_df = energy_df.pivot(index = 'year', columns = 'sector', values = 'cumulative')
 
     # Chart
     fig, ax = plt.subplots(figsize = (5, 7))
 
-    sns.set_theme(style='ticks')
+    sns.set_theme(style = 'ticks')
 
-    stacked_df.plot(kind='bar', stacked=True, ax = ax)
+    stacked_df.plot(kind = 'bar', stacked = True, ax = ax)
+
+    max_y = max(energy_df[energy_df['year'] == 2019]['energy'].sum(), 
+                energy_df[energy_df['year'] == 2020]['energy'].sum())
 
     ax.set(title = economy + ' industry energy use 2020',
            xlabel = 'Year',
            ylabel = 'Petajoules',
-           ylim = (0, energy_df['energy'].sum() * 1.1))
+           ylim = (0, max_y * 1.1))
 
     plt.legend(title = '', fontsize = 8)
 
@@ -102,7 +105,7 @@ for economy in economy_list:
         energy_df = EGEDA_ind_df[(EGEDA_ind_df['economy'] == economy) &
                                  (EGEDA_ind_df['energy'] != 0) & 
                                  (EGEDA_ind_df['sector'] == sector) & 
-                                 (EGEDA_ind_df['year'] == 2020)].copy().reset_index(drop = True)
+                                 (EGEDA_ind_df['year'].isin([2019, 2020]))].copy().reset_index(drop = True)
         
         if energy_df.empty:
             pass
@@ -118,18 +121,18 @@ for economy in economy_list:
 
             sns.set_theme(style = 'ticks')
 
-            stacked_df.plot(kind = 'bar', stacked = True, ax = ax, color = fuel_palette3)
+            stacked_df.plot(kind = 'bar', stacked = True, ax = ax, color = fuel_palette4)
+
+            max_y = max(energy_df[energy_df['year'] == 2019]['energy'].sum(),
+                        energy_df[energy_df['year'] == 2020]['energy'].sum())
 
             ax.set(title = economy + ' ' + sector + ' fuel',
                 xlabel = 'Year',
                 ylabel = 'Petajoules',
-                ylim = (0, energy_df['energy'].sum() * 1.1))
+                ylim = (0, max_y * 1.1))
 
             plt.legend(title = '', fontsize = 8)
 
             plt.tight_layout()
             plt.show()
             fig.savefig(save_location + economy + '_' + sector + '.png')
-
-
-    

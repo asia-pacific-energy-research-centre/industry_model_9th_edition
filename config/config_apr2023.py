@@ -115,7 +115,6 @@ else:
     pass
 
 # Path to industry production
-
 path_to_prod = './data/industry_production/6_industry_scenarios/'
 prod_prefix = 'industry_production_'
 
@@ -123,15 +122,43 @@ prod_files = glob.glob(path_to_prod + prod_prefix + '*.csv')
 
 if len(prod_files) > 0:
     latest_prod = max(prod_files, key = os.path.getctime)
-    prod_date = re.search(r'(\d{4})_(\d{2})_(\d{2})', latest_gdp).group(0)
+    prod_date = re.search(r'(\d{4})_(\d{2})_(\d{2})', latest_prod).group(0)
 
 else:
+    pass
+
+# Path to industry energy trajectory
+path_to_inden = './results/industry/1_total_energy_subsector/'
+inden_prefix = 'industry_subsector_energy_trajectories_'
+
+inden_files = glob.glob(path_to_inden + inden_prefix + '*.csv')
+
+if len(inden_files) > 0:
+    latest_inden = max(inden_files, key = os.path.getctime)
+    inden_date = re.search(r'(\d{4})_(\d{2})_(\d{2})', latest_inden).group(0)
+
+else:
+    pass
+
+# Path to EGEDA energy data
+EGEDA_path = '../Outlook9th_EBT/results/'
+EGEDA_prefix = 'model_df_wide_ref_'
+
+EGEDA_files = glob.glob(EGEDA_path + EGEDA_prefix + '*.csv')
+
+if len(EGEDA_files) > 0:
+    latest_EGEDA = max(EGEDA_files, key = os.path.getctime)
+    EGEDA_date = re.search(r'(\d{4})(\d{2})(\d{2})', latest_EGEDA).group(0)
+
+else: 
     pass
 
 # Colour palettes
 
 pink_foam = ["#54bebe", "#76c8c8", "#98d1d1", "#badbdb", "#dedad2", "#e4bcad", "#df979e", "#d7658b", "#c80064"]
 salmon_aqua = ["#e27c7c", "#a86464", "#6d4b4b", "#503f3f", "#333333", "#3c4e4b", "#466964", "#599e94", "#6cd4c5"]
+retro_metro = ["#ea5545", "#f46a9b", "#ef9b20", "#edbf33", "#ede15b", "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"]
+dutch_field = ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"]
 
 custom_palette = {'reference': salmon_aqua[0],
                   'target': salmon_aqua[-1],
@@ -144,6 +171,7 @@ fuel_industry = fuels_list[[0, 1, 5, 6, 7, 14, 15, 16, 17]].reset_index(drop = T
 
 fuel_palette1 = {fuel_industry[x]: salmon_aqua[x] for x in range(0, len(fuel_industry), 1)}
 fuel_palette2 = {fuel_industry[x]: pink_foam[x] for x in range(0, len(fuel_industry), 1)}
+fuel_palette4 = {fuel_industry[x]: dutch_field[x] for x in range(0, len(fuel_industry), 1)}
 
 def generate_sequence(n):
     sequence = [((-1) ** (x + 1)) * math.ceil(x / 2) * -1 for x in range(n)]
