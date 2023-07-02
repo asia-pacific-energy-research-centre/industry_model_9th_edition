@@ -155,10 +155,10 @@ else:
 
 # Colour palettes
 
-pink_foam = ["#54bebe", "#76c8c8", "#98d1d1", "#badbdb", "#dedad2", "#e4bcad", "#df979e", "#d7658b", "#c80064"]
-salmon_aqua = ["#e27c7c", "#a86464", "#6d4b4b", "#503f3f", "#333333", "#3c4e4b", "#466964", "#599e94", "#6cd4c5"]
-retro_metro = ["#ea5545", "#f46a9b", "#ef9b20", "#edbf33", "#ede15b", "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"]
-dutch_field = ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"]
+pink_foam = ["#54bebe", "#76c8c8", "#98d1d1", "#badbdb", "#dedad2", "#e4bcad", "#df979e", "#d7658b", "#c80064"] + ["#ea5545"]
+salmon_aqua = ["#e27c7c", "#a86464", "#6d4b4b", "#503f3f", "#333333", "#3c4e4b", "#466964", "#599e94", "#6cd4c5"] + ["#ea5545"]
+retro_metro = ["#ea5545", "#f46a9b", "#ef9b20", "#edbf33", "#ede15b", "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"] + ["#ea5545"]
+dutch_field = ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"] + ["#e60049"]
 
 custom_palette = {'reference': salmon_aqua[0],
                   'target': salmon_aqua[-1],
@@ -167,7 +167,7 @@ custom_palette = {'reference': salmon_aqua[0],
                   'reference energy': salmon_aqua[0],
                   'target energy': salmon_aqua[-1]}
 
-fuel_industry = fuels_list[[0, 1, 5, 6, 7, 14, 15, 16, 17]].reset_index(drop = True)
+fuel_industry = fuels_list[[0, 1, 5, 6, 7, 11, 14, 15, 16, 17]].reset_index(drop = True)
 
 fuel_palette1 = {fuel_industry[x]: salmon_aqua[x] for x in range(0, len(fuel_industry), 1)}
 fuel_palette2 = {fuel_industry[x]: pink_foam[x] for x in range(0, len(fuel_industry), 1)}

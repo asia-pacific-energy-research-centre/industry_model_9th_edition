@@ -43,6 +43,10 @@ energy_use(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[0],
 energy_use(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[1],
            increment_ref = 0.01, increment_tgt = 0.015, end_year = 2100)
 
+# Non-ferrous metals
+energy_use(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[2],
+           increment_ref = 0.01, increment_tgt = 0.015, end_year = 2100)
+
 # Non-metallic mineral products
 energy_use(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[3],
            increment_ref = 0.005, increment_tgt = 0.01, end_year = 2100)
@@ -74,7 +78,6 @@ energy_use(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[9],
 # Non-specified
 energy_use(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[10],
            increment_ref = 0.01, increment_tgt = 0.015, end_year = 2100)
-
 
 # Save all data in one csv
 # Now package up all the results and save in one combined data frame

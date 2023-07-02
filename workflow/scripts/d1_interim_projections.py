@@ -41,6 +41,14 @@ cement_df = cement_df.rename(columns = {'production': 'series'})
 alum_df['sub2sectors'] = ind2[2]
 alum_df = alum_df.rename(columns = {'production': 'series'})
 
+# Custom grab for aluminium using industry total trajectory
+alum_add_on = wdi_subsectors[(wdi_subsectors['series'] == 'NV.IND.TOTL.ZS') &
+                             (wdi_subsectors['economy_code'].isin(['09_ROK', '10_MAS', '11_MEX', '19_THA']))].copy().reset_index(drop = True)
+
+alum_add_on['sub2sectors'] = ind2[2]
+
+alum_df = pd.concat([alum_df, alum_add_on]).sort_values(['economy_code', 'year']).copy().reset_index(drop = True)
+
 ################################# Other (WDI based) manufacturing sectors ############################
 # Chemicals (WDI: CHEM)
 chem_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.CHEM.ZS.UN'].copy().reset_index(drop = True)
