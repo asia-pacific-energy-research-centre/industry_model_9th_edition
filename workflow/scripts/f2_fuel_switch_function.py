@@ -281,6 +281,22 @@ def fuel_switch(economy = '01_AUS',
         fuel_ratio_ref.loc[fuel_ratio_ref['year'] == year, 'new_energy'] = fuel_ratio_ref.loc[fuel_ratio_ref['year'] == year, 'energy'] * total_ref[year]
 
     switched_ref = fuel_ratio_ref.copy()[['fuels', 'year', 'new_energy']].rename(columns = {'new_energy': 'energy'})
+    
+    # Create metadata
+    switched_ref['scenarios'] = 'reference'
+    switched_ref['economy'] = economy
+    switched_ref['sectors'] = '14_industry_sector'
+    if sector in [ind1[0], ind1[1]]:
+        switched_ref['sub1sectors'] = sector
+        switched_ref['sub2sectors'] = 'x'
+    else:
+        switched_ref['sub1sectors'] = '14_03_manufacturing'
+        switched_ref['sub2sectors'] = sector
+    switched_ref['subfuels'] = 'x'
+
+    # Organise the dataframe to be saved
+    switched_ref = switched_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year', 'energy']]
+
     switched_ref.to_csv(save_location + economy + '_' + sector + '_switched_ref.csv', index = False)
 
     # TGT
@@ -290,6 +306,22 @@ def fuel_switch(economy = '01_AUS',
         fuel_ratio_tgt.loc[fuel_ratio_tgt['year'] == year, 'new_energy'] = fuel_ratio_tgt.loc[fuel_ratio_tgt['year'] == year, 'energy'] * total_tgt[year]
 
     switched_tgt = fuel_ratio_tgt.copy()[['fuels', 'year', 'new_energy']].rename(columns = {'new_energy': 'energy'})
+    
+    # Create metadata
+    switched_tgt['scenarios'] = 'target'
+    switched_tgt['economy'] = economy
+    switched_tgt['sectors'] = '14_industry_sector'
+    if sector in [ind1[0], ind1[1]]:
+        switched_tgt['sub1sectors'] = sector
+        switched_tgt['sub2sectors'] = 'x'
+    else:
+        switched_tgt['sub1sectors'] = '14_03_manufacturing'
+        switched_tgt['sub2sectors'] = sector
+    switched_tgt['subfuels'] = 'x'
+
+    # Organise the dataframe to be saved
+    switched_tgt = switched_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year', 'energy']]
+
     switched_tgt.to_csv(save_location + economy + '_' + sector + '_switched_tgt.csv', index = False)
     
     ##############################################################################################################################

@@ -165,11 +165,11 @@ custom1 = ['#167288', '#8cdaec', '#b45248', '#d48c84', '#a89a49', '#d6cfa2', '#3
 san_andreas = ['#000000', '#2a77a1', '#840410', '#263739', '#86446e', '#d78e10', '#4c75b7', '#bdbec6', '#58595a', '#335f3f']
 
 custom_palette = {'reference': salmon_aqua[0],
-                  'target': salmon_aqua[-1],
+                  'target': salmon_aqua[-2],
                   'reference activity': salmon_aqua[0],
-                  'target activity': salmon_aqua[-1],
+                  'target activity': salmon_aqua[-2],
                   'reference energy': salmon_aqua[0],
-                  'target energy': salmon_aqua[-1]}
+                  'target energy': salmon_aqua[-2]}
 
 fuel_industry = fuels_list[[0, 1, 5, 6, 7, 11, 14, 15, 16, 17]].reset_index(drop = True)
 

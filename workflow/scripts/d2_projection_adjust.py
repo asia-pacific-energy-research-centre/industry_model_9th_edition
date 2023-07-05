@@ -297,5 +297,3 @@ def scenario_adj(economy = '01_AUS',
         adj_data.to_csv(industry_scenarios + economy + '_' + sub2sectors + '.csv', index = False)
     else:
         pass
-
-    

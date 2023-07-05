@@ -36,7 +36,7 @@ industry_refine1 = pd.read_csv('./data/industry_production/4_industry_refine1/re
 #################################################################################################
 # Thailand
 
-industry_adj(economy = '19_THA',
+industry_adj(economy = '01_AUS',
              adjust = {},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_03_non_ferrous_metals',

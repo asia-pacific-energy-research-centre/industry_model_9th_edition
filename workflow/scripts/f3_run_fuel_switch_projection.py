@@ -75,3 +75,22 @@ fuel_switch(economy = '19_THA', sector = ind2[9])
 
 # Non-specified
 fuel_switch(economy = '19_THA', sector = ind2[10])
+
+#################################################################################################
+
+# Now read in all data for each economy
+for economy in economy_select:
+    save_location = './results/industry/3_fuel_switch/{}/'.format(economy)
+
+    if not os.path.isdir(save_location):
+        os.makedirs(save_location)
+
+    economy_df = pd.DataFrame()
+
+    economy_files = glob.glob(save_location + '*.csv')
+
+    for i in economy_files:
+        temp_df = pd.read_csv(i)
+        economy_df = pd.concat([economy_df, temp_df]).copy().reset_index(drop = True)
+
+    economy_df.to_csv(save_location + '{}_all_subsectors.csv'.format(economy), index = False)
