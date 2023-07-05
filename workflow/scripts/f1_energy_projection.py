@@ -54,7 +54,7 @@ relevant_fuels = EGEDA_df['fuels'].unique()[[0, 1, 5, 6, 7, 11, 14, 15, 16, 17]]
 
 for economy in economy_select:
     # Save location for charts and data
-    save_location = './results/industry/2_energy_projctions/{}/'.format(economy)
+    save_location = './results/industry/2_energy_projections/{}/'.format(economy)
 
     if not os.path.isdir(save_location):
         os.makedirs(save_location)
@@ -141,31 +141,45 @@ for economy in economy_select:
             energy_proj_tgt.to_csv(save_location + economy + '_' + sector + '_energy_tgt.csv', index = False)
 
         # Create some charts
-        if energy_proj_ref.empty:
+        if energy_proj_ref.empty | energy_proj_tgt.empty:
             pass
 
         else:
-            chart_df = energy_proj_ref.copy().loc[~(energy_proj_ref == 0).any(axis = 1)].reset_index(drop = True)
+            chart_ref_df = energy_proj_ref.copy().loc[~(energy_proj_ref == 0).any(axis = 1)].reset_index(drop = True)
+            chart_ref_df = chart_ref_df[chart_ref_df['year'] <= 2070].copy().reset_index(drop = True)
+            chart_tgt_df = energy_proj_tgt.copy().loc[~(energy_proj_tgt == 0).any(axis = 1)].reset_index(drop = True)
+            chart_tgt_df = chart_tgt_df[chart_tgt_df['year'] <= 2070].copy().reset_index(drop = True)
 
             # Pivot the DataFrame
-            chart_pivot = chart_df.pivot(index = 'year', columns = 'fuels', values = 'energy')
+            chart_pivot_ref = chart_ref_df.pivot(index = 'year', columns = 'fuels', values = 'energy')
+            chart_pivot_tgt = chart_tgt_df.pivot(index = 'year', columns = 'fuels', values = 'energy')
 
-            fig, ax = plt.subplots()
+            fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (8, 8))
 
             sns.set_theme(style = 'ticks')
 
-            chart_pivot.plot.area(ax = ax,
-                                  stacked = True,
-                                  alpha = 0.8,
-                                  color = fuel_palette4)
+            chart_pivot_ref.plot.area(ax = ax1,
+                                      stacked = True,
+                                      alpha = 0.8,
+                                      color = fuel_palette4)
             
-            ax.set(title = economy + ' ' + sector,
-                   xlabel = 'Year',
-                   ylabel = 'Energy (PJ)')
+            chart_pivot_tgt.plot.area(ax = ax2,
+                                      stacked = True,
+                                      alpha = 0.8,
+                                      color = fuel_palette4)
             
-            plt.legend(title = '')
+            ax1.set(title = economy + ' ' + sector + ' REF',
+                    xlabel = 'Year',
+                    ylabel = 'Energy (PJ)')
+            
+            ax2.set(title = economy + ' ' + sector + ' TGT',
+                    xlabel = 'Year',
+                    ylabel = 'Energy (PJ)')
+            
+            ax1.legend(title = '', fontsize = 8)
+            ax2.legend(title = '', fontsize = 8)
                     
             plt.tight_layout()
-            plt.savefig(save_location + economy + '_' + sector + '_energy_ref.png')
+            plt.savefig(save_location + economy + '_' + sector + '_energy.png')
             plt.show()
             plt.close()

@@ -45,6 +45,18 @@ scenario_adj(economy = '08_JPN', sub1sectors = ind1[0], sub2sectors = 'x',
 scenario_adj(economy = '08_JPN', sub1sectors = ind1[2], sub2sectors = ind2[2], 
              increment = 0.01, start_year = 2023, end_year = 2040, data = industry_refine2)
 
+##########################################################################################
+# Thailand
+# Mining
+scenario_adj(economy = '19_THA', sub1sectors = ind1[0], sub2sectors = 'x', 
+             increment = 0.02, start_year = 2023, end_year = 2040, data = industry_refine2)
+
+# Non-ferrous metals
+scenario_adj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[2], 
+             increment = 0.02, start_year = 2023, end_year = 2040, data = industry_refine2)
+
+
+
 # Consolidate new results
 traj_overwrite_df = pd.DataFrame()
 

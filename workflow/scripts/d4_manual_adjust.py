@@ -33,15 +33,15 @@ ind2 = list(industry_sectors.values())[3:]
 # Interim industry projections
 industry_refine1 = pd.read_csv('./data/industry_production/4_industry_refine1/refined_industry_all.csv')
 
-# Some tests
-industry_adj(economy = '10_MAS',
+#################################################################################################
+# Thailand
+
+industry_adj(economy = '19_THA',
              adjust = {},  
              sub1sectors = '14_03_manufacturing', 
-             sub2sectors = '14_03_01_iron_and_steel',
-             data = industry_refine1) 
+             sub2sectors = '14_03_03_non_ferrous_metals',
+             data = industry_refine1)
 
-industry_adj(economy = '10_MAS', adjust = {2025: 1.15, 2029: 1.25}, data = industry_refine1)
-industry_adj(economy = '10_MAS', adjust = {}, data = industry_refine1)
 
 # Consolidate new results
 traj_overwrite_df = pd.DataFrame()
