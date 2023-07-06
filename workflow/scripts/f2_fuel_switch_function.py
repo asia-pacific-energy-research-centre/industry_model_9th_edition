@@ -415,8 +415,8 @@ def fuel_switch(economy = '01_AUS',
     
     ax1.set(title = economy + ' ' + sector + ' REF\n' + 'Electrification rate: ' + str(elec_rate_ref) + \
             ', starting in ' + str(elec_start_ref) + '\nBiomass switch rate: ' + str(bio_rate_ref) + \
-                ' starting in ' + str(bio_start_ref) + '\nCoal to gas switch rate: ' + str(c2g_rate_ref) + \
-                    ' starting in ' + str(c2g_start_ref),
+                ', starting in ' + str(bio_start_ref) + '\nCoal to gas switch rate: ' + str(c2g_rate_ref) + \
+                    ', starting in ' + str(c2g_start_ref),
             xlabel = 'Year',
             ylabel = 'Energy (PJ)',
             xlim = (2000, 2070),
@@ -424,8 +424,8 @@ def fuel_switch(economy = '01_AUS',
     
     ax2.set(title = economy + ' ' + sector + ' TGT\n' + 'Electrification rate: ' + str(elec_rate_tgt) + \
             ', starting in ' + str(elec_start_tgt) + '\nBiomass switch rate: ' + str(bio_rate_tgt) + \
-                ' starting in ' + str(bio_start_tgt) + '\nCoal to gas switch rate: ' + str(c2g_rate_tgt) + \
-                    ' starting in ' + str(c2g_start_tgt),
+                ', starting in ' + str(bio_start_tgt) + '\nCoal to gas switch rate: ' + str(c2g_rate_tgt) + \
+                    ', starting in ' + str(c2g_start_tgt),
             xlabel = 'Year',
             ylabel = 'Energy (PJ)',
             xlim = (2000, 2070),
