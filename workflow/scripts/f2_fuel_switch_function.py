@@ -24,6 +24,9 @@ economy_select = economy_list[:-7]
 # Modelled years
 proj_years = list(range(2021, 2101, 1))
 
+# Also grab historical energy data
+hist_egeda = pd.read_csv(latest_EGEDA).loc[:, :'2020']
+
 # don't electrify
 no_elec = ['12_solar', '17_electricity', '18_heat']
 
@@ -37,6 +40,7 @@ to_gas = ['06_crude_oil_and_ngl', '07_petroleum_products', '08_gas', '12_solar',
 def fuel_switch(economy = '01_AUS',
                 sector = ind1[0],
                 base_year = 2021,
+                hist_data = hist_egeda,
                 elec_start_ref = 2021,
                 elec_rate_ref = 0.005,
                 elec_start_tgt = 2021,
@@ -296,6 +300,33 @@ def fuel_switch(economy = '01_AUS',
 
     # Organise the dataframe to be saved
     switched_ref = switched_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year', 'energy']]
+    
+    # Attach historical data
+    if sector in [ind1[0], ind1[1]]:
+        hist_ref = hist_data[(hist_data['economy'] == economy) &
+                              (hist_data['sub1sectors'] == sector) &
+                              (hist_data['sub2sectors'] == 'x') &
+                              (hist_data['sub3sectors'] == 'x') &
+                              (hist_data['sub4sectors'] == 'x') & 
+                              (hist_data['fuels'].isin(data_ref['fuels'].unique())) &
+                              (hist_data['subfuels'] == 'x')]
+        
+    else:
+        hist_ref = hist_data[(hist_data['economy'] == economy) &
+                              (hist_data['sub1sectors'] == '14_03_manufacturing') &
+                              (hist_data['sub2sectors'] == sector) &
+                              (hist_data['sub3sectors'] == 'x') &
+                              (hist_data['sub4sectors'] == 'x') & 
+                              (hist_data['fuels'].isin(data_ref['fuels'].unique())) &
+                              (hist_data['subfuels'] == 'x')]
+        
+    hist_ref = hist_ref.melt(id_vars = hist_ref.columns[:9]).\
+        rename(columns = {'variable': 'year',
+                          'value': 'energy'}).\
+                            drop(labels = ['sub3sectors', 'sub4sectors'], axis = 1)
+    
+    switched_ref = pd.concat([hist_ref, switched_ref]).copy().reset_index(drop = True)
+    switched_ref['year'] = switched_ref['year'].astype(str).astype(int)
 
     switched_ref.to_csv(save_location + economy + '_' + sector + '_switched_ref.csv', index = False)
 
@@ -322,16 +353,51 @@ def fuel_switch(economy = '01_AUS',
     # Organise the dataframe to be saved
     switched_tgt = switched_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year', 'energy']]
 
+    # Attach historical data
+    if sector in [ind1[0], ind1[1]]:
+        hist_tgt = hist_data[(hist_data['economy'] == economy) &
+                              (hist_data['sub1sectors'] == sector) &
+                              (hist_data['sub2sectors'] == 'x') &
+                              (hist_data['sub3sectors'] == 'x') &
+                              (hist_data['sub4sectors'] == 'x') & 
+                              (hist_data['fuels'].isin(data_tgt['fuels'].unique())) &
+                              (hist_data['subfuels'] == 'x')]
+        
+    else:
+        hist_tgt = hist_data[(hist_data['economy'] == economy) &
+                              (hist_data['sub1sectors'] == '14_03_manufacturing') &
+                              (hist_data['sub2sectors'] == sector) &
+                              (hist_data['sub3sectors'] == 'x') &
+                              (hist_data['sub4sectors'] == 'x') & 
+                              (hist_data['fuels'].isin(data_tgt['fuels'].unique())) &
+                              (hist_data['subfuels'] == 'x')]
+        
+    hist_tgt = hist_tgt.melt(id_vars = hist_tgt.columns[:9]).\
+        rename(columns = {'variable': 'year',
+                          'value': 'energy'}).\
+                            drop(labels = ['sub3sectors', 'sub4sectors'], axis = 1)
+    
+    hist_tgt['scenarios'] = 'target'
+
+    switched_tgt = pd.concat([hist_tgt, switched_tgt]).copy().reset_index(drop = True)
+    switched_tgt['year'] = switched_tgt['year'].astype(str).astype(int)
+
     switched_tgt.to_csv(save_location + economy + '_' + sector + '_switched_tgt.csv', index = False)
     
     ##############################################################################################################################
     # Create some charts
     # Pivot the DataFrame
-    chart_df_ref = switched_ref[switched_ref['energy'] != 0]
+    chart_df_ref = switched_ref[(switched_ref['energy'] != 0) &
+                                (switched_ref['year'] <= 2070)]
     chart_pivot_ref = chart_df_ref.pivot(index = 'year', columns = 'fuels', values = 'energy')
     
-    chart_df_tgt = switched_tgt[switched_tgt['energy'] != 0]
+    chart_df_tgt = switched_tgt[(switched_tgt['energy'] != 0) &
+                                (switched_tgt['year'] <= 2070)]
     chart_pivot_tgt = chart_df_tgt.pivot(index = 'year', columns = 'fuels', values = 'energy')
+
+    # Define locations for chart index and custom labels
+    max_y = 1.1 * max(chart_df_ref.groupby('year')['energy'].sum().max(), chart_df_tgt.groupby('year')['energy'].sum().max())
+    proj_location = 0.925 * max_y
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (8, 8))
 
@@ -339,12 +405,12 @@ def fuel_switch(economy = '01_AUS',
 
     chart_pivot_ref.plot.area(ax = ax1,
                                 stacked = True,
-                                alpha = 0.8,
+                                #alpha = 0.8,
                                 color = fuel_palette1)
     
     chart_pivot_tgt.plot.area(ax = ax2,
                                 stacked = True,
-                                alpha = 0.8,
+                                #alpha = 0.8,
                                 color = fuel_palette1)
     
     ax1.set(title = economy + ' ' + sector + ' REF\n' + 'Electrification rate: ' + str(elec_rate_ref) + \
@@ -352,19 +418,48 @@ def fuel_switch(economy = '01_AUS',
                 ' starting in ' + str(bio_start_ref) + '\nCoal to gas switch rate: ' + str(c2g_rate_ref) + \
                     ' starting in ' + str(c2g_start_ref),
             xlabel = 'Year',
-            ylabel = 'Energy (PJ)')
+            ylabel = 'Energy (PJ)',
+            xlim = (2000, 2070),
+            ylim = (0, max_y))
     
     ax2.set(title = economy + ' ' + sector + ' TGT\n' + 'Electrification rate: ' + str(elec_rate_tgt) + \
             ', starting in ' + str(elec_start_tgt) + '\nBiomass switch rate: ' + str(bio_rate_tgt) + \
                 ' starting in ' + str(bio_start_tgt) + '\nCoal to gas switch rate: ' + str(c2g_rate_tgt) + \
                     ' starting in ' + str(c2g_start_tgt),
             xlabel = 'Year',
-            ylabel = 'Energy (PJ)')
+            ylabel = 'Energy (PJ)',
+            xlim = (2000, 2070),
+            ylim = (0, max_y))
+    
+    # Projection demarcation
+    ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+    ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+    
+    # Projection text
+    ax1.annotate('Projection', 
+                 xy = (2030, proj_location),
+                 xytext = (2024, proj_location),
+                 va = 'center',
+                 ha = 'center',
+                 fontsize = 9,
+                 arrowprops = {'arrowstyle': '-|>',
+                               'lw': 0.5,
+                               'ls': '-',
+                               'color': 'black'})
+    
+    ax2.annotate('Projection', 
+                 xy = (2030, proj_location),
+                 xytext = (2024, proj_location),
+                 va = 'center',
+                 ha = 'center',
+                 fontsize = 9,
+                 arrowprops = {'arrowstyle': '-|>',
+                               'lw': 0.5,
+                               'ls': '-',
+                               'color': 'black'})
     
     ax1.legend(title = '', fontsize = 8)
     ax2.legend(title = '', fontsize = 8)
-
-    ax2.set_ylim(ax1.get_ylim())
             
     plt.tight_layout()
     plt.savefig(save_location + economy + '_' + sector + '_elec.png')
