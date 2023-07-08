@@ -9,6 +9,7 @@ dependencies:
   - jupyterlab
   - matplotlib
   - pandas
+  - numpy
   - openpyxl
   - xlsxwriter
   - seaborn = 0.12.2

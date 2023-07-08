@@ -155,13 +155,12 @@ else:
 
 # Colour palettes
 
-pink_foam = ["#54bebe", "#76c8c8", "#98d1d1", "#badbdb", "#dedad2", "#e4bcad", "#df979e", "#d7658b", "#c80064"] + ["#ea5545"]
-salmon_aqua = ["#e27c7c", "#a86464", "#6d4b4b", "#503f3f", "#333333", "#3c4e4b", "#466964", "#599e94", "#6cd4c5"] + ["#ea5545"]
-retro_metro = ["#ea5545", "#f46a9b", "#ef9b20", "#edbf33", "#ede15b", "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"] + ["#ea5545"]
-orange_purple = ["#ffb400", "#d2980d", "#a57c1b", "#786028", "#363445", "#48446e", "#5e569b", "#776bcd", "#9080ff"] + ["#ea5545"]
-dutch_field = ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"] + ["#e60049"]
-blue_red = ["#1984c5", "#22a7f0", "#63bff0", "#a7d5ed", "#e2e2e2", "#e1a692", "#de6e56", "#e14b31", "#c23728"] + ["#e60049"]
-custom1 = ['#167288', '#8cdaec', '#b45248', '#d48c84', '#a89a49', '#d6cfa2', '#3cb464', '#9bddb1', '#643c6a', '#836394']
+pink_foam = ["#54bebe", "#76c8c8", "#98d1d1", "#badbdb", "#dedad2", "#e4bcad", "#df979e", "#d7658b", "#c80064"]
+salmon_aqua = ["#e27c7c", "#a86464", "#6d4b4b", "#503f3f", "#333333", "#3c4e4b", "#466964", "#599e94", "#6cd4c5"]
+retro_metro = ["#ea5545", "#f46a9b", "#ef9b20", "#edbf33", "#ede15b", "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"]
+orange_purple = ["#ffb400", "#d2980d", "#a57c1b", "#786028", "#363445", "#48446e", "#5e569b", "#776bcd", "#9080ff"]
+dutch_field = ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"]
+blue_red = ["#1984c5", "#22a7f0", "#63bff0", "#a7d5ed", "#e2e2e2", "#e1a692", "#de6e56", "#e14b31", "#c23728"]
 san_andreas = ['#000000', '#2a77a1', '#840410', '#263739', '#86446e', '#d78e10', '#4c75b7', '#bdbec6', '#58595a', '#335f3f']
 
 custom_palette = {'reference': salmon_aqua[0],
@@ -173,11 +172,18 @@ custom_palette = {'reference': salmon_aqua[0],
 
 fuel_industry = fuels_list[[0, 1, 5, 6, 7, 11, 14, 15, 16, 17]].reset_index(drop = True)
 
-fuel_palette1 = {fuel_industry[x]: salmon_aqua[x] for x in range(0, len(fuel_industry), 1)}
-fuel_palette2 = {fuel_industry[x]: pink_foam[x] for x in range(0, len(fuel_industry), 1)}
-fuel_palette3 = {fuel_industry[x]: orange_purple[x] for x in range(0, len(fuel_industry), 1)}
-fuel_palette4 = {fuel_industry[x]: dutch_field[x] for x in range(0, len(fuel_industry), 1)}
-fuel_palette5 = {fuel_industry[x]: blue_red[x] for x in range(0, len(fuel_industry), 1)}
-fuel_palette6 = {fuel_industry[x]: custom1[x] for x in range(0, len(fuel_industry), 1)}
-fuel_palette7 = {fuel_industry[x]: san_andreas[x] for x in range(0, len(fuel_industry), 1)}
+fuel_custom = pd.concat([fuel_industry[:-2], pd.Series(list(subfuels_list)[-1]), fuel_industry[-2:]]).values.tolist()
+
+fuel_palette1 = {'01_coal': "#e27c7c",
+                 '02_coal_products': "#a86464",
+                 '06_crude_oil_and_ngl': "#bebebe",
+                 '07_petroleum_products': "#a5cdf0",
+                 '08_gas': "#1e465a",
+                 '12_solar': "#1aa7ec",
+                 '15_solid_biomass': "#28825a",
+                 '16_others': "#C36517",
+                 '16_x_hydrogen': "#fce205",
+                 '17_electricity': "#6cd4c5",
+                 '18_heat': "#ea5545"}
+
 

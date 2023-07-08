@@ -10,7 +10,7 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Import function
-from f2_fuel_switch_function import fuel_switch
+from f2_fuel_switch_function import fuel_switch, hydrogen
 
 # Energy industry subsectors
 industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)\
@@ -47,7 +47,7 @@ fuel_switch(economy = '19_THA', sector = ind1[0])
 fuel_switch(economy = '19_THA', sector = ind1[1])
 
 # Iron and steel
-fuel_switch(economy = '19_THA', sector = ind2[0])
+fuel_switch(economy = '19_THA', sector = ind2[0], hydrogen_ref = True)
 
 # Chemicals
 fuel_switch(economy = '19_THA', sector = ind2[1])
@@ -105,13 +105,20 @@ for economy in [list(economy_select)[-3]]:
     
     # Create some charts
     # Pivot the DataFrame
-    chart_df_ref = economy_df[(economy_df['energy'] != 0) & 
+    chart_df_ref = economy_df[(economy_df['energy'] != 0) &
+                              (economy_df['energy'].isna() == False) &
                               (economy_df['scenarios'] == 'reference') &
-                              (economy_df['year'] <= 2070)].groupby(['fuels', 'year'])['energy'].sum().reset_index()
+                              (economy_df['year'] <= 2070)].copy().reset_index(drop = True)
     
-    chart_pivot_ref = chart_df_ref.pivot(index = 'year', columns = 'fuels', values = 'energy')
+    # Custom chart column
+    chart_df_ref['fuel'] = np.where(chart_df_ref['subfuels'] == 'x', chart_df_ref['fuels'], chart_df_ref['subfuels'])
     
-    chart_df_tgt = economy_df[(economy_df['energy'] != 0) & 
+    chart_df_ref = chart_df_ref.groupby(['fuel', 'year'])['energy'].sum().reset_index()
+    
+    chart_pivot_ref = chart_df_ref.pivot(index = 'year', columns = 'fuel', values = 'energy')
+    
+    chart_df_tgt = economy_df[(economy_df['energy'] != 0) &
+                              (economy_df['energy'].isna() == False) & 
                               (economy_df['scenarios'] == 'target') &
                               (economy_df['year'] <= 2070)].groupby(['fuels', 'year'])['energy'].sum().reset_index()
     
@@ -127,12 +134,14 @@ for economy in [list(economy_select)[-3]]:
     chart_pivot_ref.plot.area(ax = ax1,
                                 stacked = True,
                                 #alpha = 0.8,
-                                color = fuel_palette1)
+                                color = fuel_palette1, 
+                                linewidth = 0)
     
     chart_pivot_tgt.plot.area(ax = ax2,
                                 stacked = True,
                                 #alpha = 0.8,
-                                color = fuel_palette1)
+                                color = fuel_palette1,
+                                linewidth = 0)
     
     ax1.set(title = economy + ' all industry REF',
             xlabel = 'Year',

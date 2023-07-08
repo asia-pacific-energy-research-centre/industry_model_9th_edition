@@ -37,6 +37,26 @@ no_biomass = ['12_solar', '15_solid_biomass', '17_electricity', '18_heat']
 to_gas = ['06_crude_oil_and_ngl', '07_petroleum_products', '08_gas', '12_solar', '15_solid_biomass',
           '16_others', '17_electricity', '18_heat']
 
+# Functions for Hydrogen and CCS
+# Hydrogen
+def hydrogen(fuel_mix = {'16_x_hydrogen': 0.5,
+                         '17_electricity': 0.5},
+             start_year = 2030,
+             increment = 0.01):
+    
+    hyd_df = pd.DataFrame()
+    
+    for j, (fuel, share) in enumerate(fuel_mix.items()):
+        temp_list = [[i, fuel, share, (i - start_year + 1) * increment] for i in range(start_year, proj_years[-1] + 1, 1)] 
+        temp_df = pd.DataFrame(temp_list)
+
+        hyd_df = pd.concat([hyd_df, temp_df]).copy().reset_index(drop = True)
+
+    hyd_df.columns = ['year', 'fuel', 'fuel_ratio', 'share']
+
+    return hyd_df
+
+# Master function for all fuel switching
 def fuel_switch(economy = '01_AUS',
                 sector = ind1[0],
                 base_year = 2021,
@@ -52,13 +72,32 @@ def fuel_switch(economy = '01_AUS',
                 c2g_start_ref = 2025,
                 c2g_rate_ref = 0.0,
                 c2g_start_tgt = 2025,
-                c2g_rate_tgt = 0.0):
+                c2g_rate_tgt = 0.0,
+                hydrogen_ref = False,
+                hydrogen_tgt = False,
+                hyd_fuel_mix = {'16_x_hydrogen': 0.5,
+                                '17_electricity': 0.5},
+                hyd_start_ref = 2040,
+                hyd_start_tgt = 2030,
+                hyd_increment_ref = 0.005,
+                hyd_increment_tgt = 0.01,
+                ccs_ref = False,
+                ccs_tgt = False,
+                ccs_start_ref = 2040,
+                ccs_start_tgt = 2030,
+                ccs_increment_ref = 0.01,
+                ccs_increment_tgt = 0.01):
     
     # Save location for charts and data
     save_location = './results/industry/3_fuel_switch/{}/'.format(economy)
 
     if not os.path.isdir(save_location):
         os.makedirs(save_location)
+
+    hyd_ccs_location = save_location + 'hydrogen_ccs/'
+
+    if not os.path.isdir(hyd_ccs_location):
+        os.makedirs(hyd_ccs_location)
 
     # Grab the relevant data to manipulate the fuel shares
     data_ref = pd.read_csv('./results/industry/2_energy_projections/{}/{}_{}_energy_ref.csv'.format(economy, economy, sector))
@@ -300,7 +339,51 @@ def fuel_switch(economy = '01_AUS',
 
     # Organise the dataframe to be saved
     switched_ref = switched_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year', 'energy']]
-    
+
+    # Define ne data frame copy for calcs that will overwrite current values
+    switched_ref_calcs = switched_ref.copy()
+
+    # Add in hydrogen for REF
+
+    if (sector in ind2[:2]) & (hydrogen_ref):
+        hyd_ref = hydrogen(fuel_mix = hyd_fuel_mix, start_year = hyd_start_ref, increment = hyd_increment_ref)
+        for hyd_year in range(hyd_start_ref, proj_years[-1] + 1, 1):
+            for fuel in switched_ref['fuels'].unique():
+                relevant_year = switched_ref['year'] == hyd_year
+                relevant_fuel = switched_ref['fuels'] == fuel   
+                switched_ref.loc[(relevant_year) & (relevant_fuel), 'energy'] = switched_ref_calcs.loc[(relevant_year) & (relevant_fuel), 'energy'].values[0] *\
+                    (1 - hyd_ref.loc[hyd_ref['year'] == hyd_year, 'share'].values[0])
+
+            hyd_ref['energy'] = hyd_ref['fuel_ratio'] * hyd_ref['share'] * total_ref[hyd_year]
+
+        hyd_ref['fuels'] = np.where(hyd_ref['fuel'] == '17_electricity', '17_electricity', '16_others')
+        hyd_ref['subfuels'] = np.where(hyd_ref['fuels'] == '16_others', '16_x_hydrogen', 'x')
+
+        # Metadata
+        hyd_ref['scenarios'] = 'reference'
+        hyd_ref['economy'] = economy
+        hyd_ref['sectors'] = '14_industry_sector'
+        hyd_ref['sub1sectors'] = '14_03_manufacturing'
+        hyd_ref['sub2sectors'] = sector
+        if sector == ind2[0]:
+            hyd_ref['sub3sectors'] = '14_03_01_05_hydrogen'
+        elif sector == ind2[1]:
+            hyd_ref['sub3sectors'] = '14_03_02_01_fs'
+
+        hyd_ref = hyd_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'energy']]\
+            .sort_values(['year', 'fuels']).reset_index(drop = True)
+        
+        hyd_ref.to_csv(hyd_ccs_location + economy + '_' + sector + '_hydrogen_ref.csv', index = False)
+
+        # Now aggregate hydorgen results with steel
+        switched_ref = switched_ref.merge(hyd_ref.drop(['sub3sectors'], axis = 1), how = 'outer',
+                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+        
+        switched_ref['energy'] = switched_ref['energy_x'].fillna(0) + switched_ref['energy_y'].fillna(0)        
+        switched_ref = switched_ref.drop(['energy_x', 'energy_y'], axis = 1)
+
+        switched_ref = switched_ref.sort_values(['year', 'fuels']).copy().reset_index(drop = True)
+
     # Attach historical data
     if sector in [ind1[0], ind1[1]]:
         hist_ref = hist_data[(hist_data['economy'] == economy) &
@@ -353,6 +436,51 @@ def fuel_switch(economy = '01_AUS',
     # Organise the dataframe to be saved
     switched_tgt = switched_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year', 'energy']]
 
+    # Define ne data frame copy for calcs that will overwrite current values
+    switched_tgt_calcs = switched_tgt.copy()
+
+    # Add in hydrogen for TGT
+
+    if (sector in ind2[:2]) & (hydrogen_tgt):
+        hyd_tgt = hydrogen(fuel_mix = hyd_fuel_mix, start_year = hyd_start_tgt, increment = hyd_increment_tgt)
+        for hyd_year in range(hyd_start_tgt, proj_years[-1] + 1, 1):
+            for fuel in switched_tgt['fuels'].unique():
+                relevant_year = switched_tgt['year'] == hyd_year
+                relevant_fuel = switched_tgt['fuels'] == fuel   
+                switched_tgt.loc[(relevant_year) & (relevant_fuel), 'energy'] = switched_tgt_calcs.loc[(relevant_year) & (relevant_fuel), 'energy'].values[0] *\
+                    (1 - hyd_tgt.loc[hyd_tgt['year'] == hyd_year, 'share'].values[0])
+
+            hyd_tgt['energy'] = hyd_tgt['fuel_ratio'] * hyd_tgt['share'] * total_tgt[hyd_year]
+
+        hyd_tgt['fuels'] = np.where(hyd_tgt['fuel'] == '17_electricity', '17_electricity', '16_others')
+        hyd_tgt['subfuels'] = np.where(hyd_tgt['fuels'] == '16_others', '16_x_hydrogen', 'x')
+
+        # Metadata
+        hyd_tgt['scenarios'] = 'target'
+        hyd_tgt['economy'] = economy
+        hyd_tgt['sectors'] = '14_industry_sector'
+        hyd_tgt['sub1sectors'] = '14_03_manufacturing'
+        hyd_tgt['sub2sectors'] = sector
+        if sector == ind2[0]:
+            hyd_tgt['sub3sectors'] = '14_03_01_05_hydrogen'
+        elif sector == ind2[1]:
+            hyd_tgt['sub3sectors'] = '14_03_02_01_fs'
+
+        hyd_tgt = hyd_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'energy']]\
+            .sort_values(['year', 'fuels']).reset_index(drop = True)
+        
+        hyd_tgt.to_csv(hyd_ccs_location + economy + '_' + sector + '_hydrogen_tgt.csv', index = False)
+
+        # Now aggregate hydorgen results with steel
+        switched_tgt = switched_tgt.merge(hyd_tgt.drop(['sub3sectors'], axis = 1), how = 'outer',
+                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+        
+        switched_tgt['energy'] = switched_tgt['energy_x'].fillna(0) + switched_tgt['energy_y'].fillna(0)        
+        switched_tgt = switched_tgt.drop(['energy_x', 'energy_y'], axis = 1)
+
+        switched_tgt = switched_tgt.sort_values(['year', 'fuels']).copy().reset_index(drop = True)    
+
+
     # Attach historical data
     if sector in [ind1[0], ind1[1]]:
         hist_tgt = hist_data[(hist_data['economy'] == economy) &
@@ -389,11 +517,19 @@ def fuel_switch(economy = '01_AUS',
     # Pivot the DataFrame
     chart_df_ref = switched_ref[(switched_ref['energy'] != 0) &
                                 (switched_ref['year'] <= 2070)]
-    chart_pivot_ref = chart_df_ref.pivot(index = 'year', columns = 'fuels', values = 'energy')
+    
+    # Custom chart column
+    chart_df_ref['fuel'] = np.where(chart_df_ref['subfuels'] == 'x', chart_df_ref['fuels'], chart_df_ref['subfuels'])
+
+    chart_pivot_ref = chart_df_ref.pivot(index = 'year', columns = 'fuel', values = 'energy')
     
     chart_df_tgt = switched_tgt[(switched_tgt['energy'] != 0) &
                                 (switched_tgt['year'] <= 2070)]
-    chart_pivot_tgt = chart_df_tgt.pivot(index = 'year', columns = 'fuels', values = 'energy')
+    
+    # Custom chart column
+    chart_df_tgt['fuel'] = np.where(chart_df_tgt['subfuels'] == 'x', chart_df_tgt['fuels'], chart_df_tgt['subfuels'])
+
+    chart_pivot_tgt = chart_df_tgt.pivot(index = 'year', columns = 'fuel', values = 'energy')
 
     # Define locations for chart index and custom labels
     max_y = 1.1 * max(chart_df_ref.groupby('year')['energy'].sum().max(), chart_df_tgt.groupby('year')['energy'].sum().max())
@@ -406,26 +542,72 @@ def fuel_switch(economy = '01_AUS',
     chart_pivot_ref.plot.area(ax = ax1,
                                 stacked = True,
                                 #alpha = 0.8,
-                                color = fuel_palette1)
+                                color = fuel_palette1,
+                                linewidth = 0)
     
     chart_pivot_tgt.plot.area(ax = ax2,
                                 stacked = True,
                                 #alpha = 0.8,
-                                color = fuel_palette1)
+                                color = fuel_palette1,
+                                linewidth = 0)
     
-    ax1.set(title = economy + ' ' + sector + ' REF\n' + 'Electrification rate: ' + str(elec_rate_ref) + \
+    if hydrogen_ref & ccs_ref:
+        chart_title_ref = economy + ' ' + sector + ' REF\n' + 'Electrification rate: ' + str(elec_rate_ref) + \
             ', starting in ' + str(elec_start_ref) + '\nBiomass switch rate: ' + str(bio_rate_ref) + \
                 ', starting in ' + str(bio_start_ref) + '\nCoal to gas switch rate: ' + str(c2g_rate_ref) + \
-                    ', starting in ' + str(c2g_start_ref),
+                    ', starting in ' + str(c2g_start_ref) + '\nHydrogen production begins ' + str(hyd_start_ref) + \
+                    '\nCCS begins ' + str(ccs_start_ref)
+    
+    elif hydrogen_ref & (ccs_ref == False):
+        chart_title_ref = economy + ' ' + sector + ' REF\n' + 'Electrification rate: ' + str(elec_rate_ref) + \
+            ', starting in ' + str(elec_start_ref) + '\nBiomass switch rate: ' + str(bio_rate_ref) + \
+                ', starting in ' + str(bio_start_ref) + '\nCoal to gas switch rate: ' + str(c2g_rate_ref) + \
+                    ', starting in ' + str(c2g_start_ref) + '\nHydrogen production begins ' + str(hyd_start_ref)
+        
+    elif (hydrogen_ref == False) & ccs_ref:
+        chart_title_ref = economy + ' ' + sector + ' REF\n' + 'Electrification rate: ' + str(elec_rate_ref) + \
+            ', starting in ' + str(elec_start_ref) + '\nBiomass switch rate: ' + str(bio_rate_ref) + \
+                ', starting in ' + str(bio_start_ref) + '\nCoal to gas switch rate: ' + str(c2g_rate_ref) + \
+                    ', starting in ' + str(c2g_start_ref) + '\nCCS begins ' + str(ccs_start_ref)
+        
+    elif ((hydrogen_ref == False) & (ccs_ref == False)) | (sector not in [ind2[0], ind2[1], ind2[3]]):
+        chart_title_ref = economy + ' ' + sector + ' REF\n' + 'Electrification rate: ' + str(elec_rate_ref) + \
+            ', starting in ' + str(elec_start_ref) + '\nBiomass switch rate: ' + str(bio_rate_ref) + \
+                ', starting in ' + str(bio_start_ref) + '\nCoal to gas switch rate: ' + str(c2g_rate_ref) + \
+                    ', starting in ' + str(c2g_start_ref)
+
+    ax1.set(title = chart_title_ref,
             xlabel = 'Year',
             ylabel = 'Energy (PJ)',
             xlim = (2000, 2070),
             ylim = (0, max_y))
     
-    ax2.set(title = economy + ' ' + sector + ' TGT\n' + 'Electrification rate: ' + str(elec_rate_tgt) + \
+    if hydrogen_tgt & ccs_tgt:
+        chart_title_tgt = economy + ' ' + sector + ' TGT\n' + 'Electrification rate: ' + str(elec_rate_tgt) + \
             ', starting in ' + str(elec_start_tgt) + '\nBiomass switch rate: ' + str(bio_rate_tgt) + \
                 ', starting in ' + str(bio_start_tgt) + '\nCoal to gas switch rate: ' + str(c2g_rate_tgt) + \
-                    ', starting in ' + str(c2g_start_tgt),
+                    ', starting in ' + str(c2g_start_tgt) + '\nHydrogen production begins ' + str(hyd_start_tgt) + \
+                    '\nCCS begins ' + str(ccs_start_tgt)
+    
+    elif hydrogen_tgt & (ccs_tgt == False):
+        chart_title_tgt = economy + ' ' + sector + ' TGT\n' + 'Electrification rate: ' + str(elec_rate_tgt) + \
+            ', starting in ' + str(elec_start_tgt) + '\nBiomass switch rate: ' + str(bio_rate_tgt) + \
+                ', starting in ' + str(bio_start_tgt) + '\nCoal to gas switch rate: ' + str(c2g_rate_tgt) + \
+                    ', starting in ' + str(c2g_start_tgt) + '\nHydrogen production begins ' + str(hyd_start_tgt)
+        
+    elif (hydrogen_tgt == False) & ccs_tgt:
+        chart_title_tgt = economy + ' ' + sector + ' TGT\n' + 'Electrification rate: ' + str(elec_rate_tgt) + \
+            ', starting in ' + str(elec_start_tgt) + '\nBiomass switch rate: ' + str(bio_rate_tgt) + \
+                ', starting in ' + str(bio_start_tgt) + '\nCoal to gas switch rate: ' + str(c2g_rate_tgt) + \
+                    ', starting in ' + str(c2g_start_tgt) + '\nCCS begins ' + str(ccs_start_tgt)
+        
+    elif ((hydrogen_tgt == False) & (ccs_tgt == False)) | (sector not in [ind2[0], ind2[1], ind2[3]]):
+        chart_title_tgt = economy + ' ' + sector + ' TGT\n' + 'Electrification rate: ' + str(elec_rate_tgt) + \
+            ', starting in ' + str(elec_start_tgt) + '\nBiomass switch rate: ' + str(bio_rate_tgt) + \
+                ', starting in ' + str(bio_start_tgt) + '\nCoal to gas switch rate: ' + str(c2g_rate_tgt) + \
+                    ', starting in ' + str(c2g_start_tgt)
+
+    ax2.set(title = chart_title_tgt,
             xlabel = 'Year',
             ylabel = 'Energy (PJ)',
             xlim = (2000, 2070),
@@ -465,3 +647,7 @@ def fuel_switch(economy = '01_AUS',
     plt.savefig(save_location + economy + '_' + sector + '_elec.png')
     plt.show()
     plt.close()
+
+
+# Iron and steel
+fuel_switch(economy = '19_THA', sector = ind2[0], hydrogen_ref = True, hydrogen_tgt = True)
