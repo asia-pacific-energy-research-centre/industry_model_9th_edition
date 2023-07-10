@@ -94,12 +94,17 @@ def fuel_switch(economy = '01_AUS',
                 hyd_start_tgt = 2030,
                 hyd_increment_ref = 0.005,
                 hyd_increment_tgt = 0.01,
+                ccs_additional = 0.2,
                 ccs_ref = False,
                 ccs_tgt = False,
                 ccs_start_ref = 2040,
                 ccs_start_tgt = 2030,
                 ccs_increment_ref = 0.005,
-                ccs_increment_tgt = 0.01):
+                ccs_increment_tgt = 0.0075):
+    """Function to layer in different types of fuel switching for all APEC economies and for all inustry subsectors.
+    Electrification, biomass switching, and coal-to-gas are first incorporated by specifying start date and pace of switch.
+    Next hydrogen-based production is chosen, along with a start date and rate. The same is in place for CCS technologies.
+    CCS also require assumption about additional energy required for CCS unit."""
     
     # Save location for charts and data
     save_location = './results/industry/3_fuel_switch/{}/'.format(economy)
@@ -387,62 +392,75 @@ def fuel_switch(economy = '01_AUS',
         
         hyd_ref.to_csv(hyd_ccs_location + economy + '_' + sector + '_hydrogen_ref.csv', index = False)
 
-        # Set-up for CCS (require snapshot of switched_ref for calcs below)
-        switched_ref_calcs2 = switched_ref.copy()
+    # Set-up for CCS (require snapshot of switched_ref for calcs below)
+    switched_ref_calcs2 = switched_ref.copy()
 
-        # Now layer in CCS for REF
-        if (sector in (ind2[:2] + ind2[3:4])) & (ccs_ref):
-            ccs_reference = ccs_tech(start_year = ccs_start_ref, increment = ccs_increment_ref)
-            ccs_ref_df = pd.DataFrame()
-            for ccs_year in range(ccs_start_ref, proj_years[-1] + 1, 1):
-                ccs_df = switched_ref.loc[switched_ref['year'] == ccs_year, ['fuels', 'energy']].copy().reset_index(drop = True)
-                ccs_df = ccs_df[ccs_df['fuels'].isin(ccs_fuels)].copy().reset_index(drop = True)
+    # Now layer in CCS for REF
+    if (sector in (ind2[:2] + ind2[3:4])) & (ccs_ref):
+        ccs_reference = ccs_tech(start_year = ccs_start_ref, increment = ccs_increment_ref)
+        ccs_ref_df = pd.DataFrame()
+        for ccs_year in range(ccs_start_ref, proj_years[-1] + 1, 1):
+            ccs_df = switched_ref.loc[switched_ref['year'] == ccs_year, ['fuels', 'energy']].copy().reset_index(drop = True)
+            ccs_df = ccs_df[ccs_df['fuels'].isin(ccs_fuels)].copy().reset_index(drop = True)
+            
+            ccs_df['share'] = ccs_df['energy'] / total_ref[ccs_year]
+            ccs_df['year'] = ccs_year
+            ccs_df['new_energy'] = ccs_df['energy'] * ccs_reference.loc[ccs_reference['year'] == ccs_year, 'share'].values[0]
+
+            # Amend original data frame
+            for fuel in ccs_df['fuels'].unique():
+                relevant_fuel = (switched_ref['fuels'] == fuel)
+                relevant_year = (switched_ref['year'] == ccs_year)
+                switched_ref.loc[(relevant_fuel) & (relevant_year), 'energy'] = switched_ref_calcs2.loc[(relevant_fuel) & (relevant_year), 'energy'].values[0] *\
+                    (1 - ccs_reference.loc[ccs_reference['year'] == ccs_year, 'share'].values[0])
                 
-                ccs_df['share'] = ccs_df['energy'] / total_ref[ccs_year]
-                ccs_df['year'] = ccs_year
-                ccs_df['new_energy'] = ccs_df['energy'] * ccs_reference.loc[ccs_reference['year'] == ccs_year, 'share'].values[0]
-
-                # Amend original data frame
-                for fuel in ccs_df['fuels'].unique():
-                    relevant_fuel = (switched_ref['fuels'] == fuel)
-                    relevant_year = (switched_ref['year'] == ccs_year)
-                    switched_ref.loc[(relevant_fuel) & (relevant_year), 'energy'] = switched_ref_calcs2.loc[(relevant_fuel) & (relevant_year), 'energy'].values[0] *\
-                        (1 - ccs_reference.loc[ccs_reference['year'] == ccs_year, 'share'].values[0])
-
-                ccs_ref_df = pd.concat([ccs_ref_df, ccs_df]).copy().reset_index(drop = True)
+            ccs_energy = ccs_df[ccs_df['year'] == ccs_year]['energy'].sum()
+                
+            # Now add in additional electricity to run the CCS unit
+            additional_data = ['17_electricity', 0.0, ccs_additional, ccs_year, 
+                              ccs_additional * ccs_energy * ccs_reference.loc[ccs_reference['year'] == ccs_year, 'share'].values[0]]
             
-            # Metadata
-            ccs_ref_df['scenarios'] = 'reference'
-            ccs_ref_df['economy'] = economy
-            ccs_ref_df['sectors'] = '14_industry_sector'
-            ccs_ref_df['sub1sectors'] = '14_03_manufacturing'
-            ccs_ref_df['sub2sectors'] = sector
-            if sector == ind2[0]:
-                ccs_ref_df['sub3sectors'] = '14_03_01_03_ccs'
-            elif sector == ind2[1]:
-                ccs_ref_df['sub3sectors'] = '14_03_02_02_ccs'
-            elif sector == ind2[3]:
-                ccs_ref_df['sub3sectors'] = '14_03_04_01_ccs'
-            ccs_ref_df['subfuels'] = 'x'
+            additional_df = pd.DataFrame(additional_data).transpose()
+            additional_df.columns = ccs_df.columns
 
-            ccs_ref_df = ccs_ref_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'new_energy']].copy()\
-                .rename(columns = {'new_energy': 'energy'}).sort_values(['year', 'fuels']).reset_index(drop = True)
-            
-            ccs_ref_df.to_csv(hyd_ccs_location + economy + '_' + sector + '_ccs_ref.csv', index = False) 
+            ccs_df = pd.concat([ccs_df, additional_df])
 
-        # Now aggregate hydorgen results with steel
-        switched_ref = switched_ref.merge(hyd_ref.drop(['sub3sectors'], axis = 1), how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            ccs_ref_df = pd.concat([ccs_ref_df, ccs_df]).copy().reset_index(drop = True)
         
-        switched_ref['energy'] = switched_ref['energy_x'].fillna(0) + switched_ref['energy_y'].fillna(0)        
-        switched_ref = switched_ref.drop(['energy_x', 'energy_y'], axis = 1)
+        # Metadata
+        ccs_ref_df['scenarios'] = 'reference'
+        ccs_ref_df['economy'] = economy
+        ccs_ref_df['sectors'] = '14_industry_sector'
+        ccs_ref_df['sub1sectors'] = '14_03_manufacturing'
+        ccs_ref_df['sub2sectors'] = sector
+        if sector == ind2[0]:
+            ccs_ref_df['sub3sectors'] = '14_03_01_03_ccs'
+        elif sector == ind2[1]:
+            ccs_ref_df['sub3sectors'] = '14_03_02_02_ccs'
+        elif sector == ind2[3]:
+            ccs_ref_df['sub3sectors'] = '14_03_04_01_ccs'
+        ccs_ref_df['subfuels'] = 'x'
+
+        ccs_ref_df = ccs_ref_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'new_energy']].copy()\
+            .rename(columns = {'new_energy': 'energy'}).sort_values(['year', 'fuels']).reset_index(drop = True)
+        
+        ccs_ref_df.to_csv(hyd_ccs_location + economy + '_' + sector + '_ccs_ref.csv', index = False) 
+
+        # Now aggregate hydorgen-based production results
+        if hydrogen_ref: 
+            switched_ref = switched_ref.merge(hyd_ref.drop(['sub3sectors'], axis = 1), how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            switched_ref['energy'] = switched_ref['energy_x'].fillna(0) + switched_ref['energy_y'].fillna(0)        
+            switched_ref = switched_ref.drop(['energy_x', 'energy_y'], axis = 1)
 
         # Now do the same addition but for the CCS results
-        switched_ref = switched_ref.merge(ccs_ref_df.drop(['sub3sectors'], axis = 1), how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-        
-        switched_ref['energy'] = switched_ref['energy_x'].fillna(0) + switched_ref['energy_y'].fillna(0)
-        switched_ref = switched_ref.drop(['energy_x', 'energy_y'], axis = 1)
+        if ccs_ref:
+            switched_ref = switched_ref.merge(ccs_ref_df.drop(['sub3sectors'], axis = 1), how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            switched_ref['energy'] = switched_ref['energy_x'].fillna(0) + switched_ref['energy_y'].fillna(0)
+            switched_ref = switched_ref.drop(['energy_x', 'energy_y'], axis = 1)
 
         switched_ref = switched_ref.sort_values(['year', 'fuels']).copy().reset_index(drop = True)
 
@@ -533,62 +551,75 @@ def fuel_switch(economy = '01_AUS',
         
         hyd_tgt.to_csv(hyd_ccs_location + economy + '_' + sector + '_hydrogen_tgt.csv', index = False)
 
-        # Set-up for CCS (require snapshot of switched_ref for calcs below)
-        switched_tgt_calcs2 = switched_tgt.copy()
+    # Set-up for CCS (require snapshot of switched_ref for calcs below)
+    switched_tgt_calcs2 = switched_tgt.copy()
 
-        # Now layer in CCS for TGT
-        if (sector in (ind2[:2] + ind2[3:4])) & (ccs_tgt):
-            ccs_target = ccs_tech(start_year = ccs_start_tgt, increment = ccs_increment_tgt)
-            ccs_tgt_df = pd.DataFrame()
-            for ccs_year in range(ccs_start_tgt, proj_years[-1] + 1, 1):
-                ccs_df = switched_tgt.loc[switched_tgt['year'] == ccs_year, ['fuels', 'energy']].copy().reset_index(drop = True)
-                ccs_df = ccs_df[ccs_df['fuels'].isin(ccs_fuels)].copy().reset_index(drop = True)
+    # Now layer in CCS for TGT
+    if (sector in (ind2[:2] + ind2[3:4])) & (ccs_tgt):
+        ccs_target = ccs_tech(start_year = ccs_start_tgt, increment = ccs_increment_tgt)
+        ccs_tgt_df = pd.DataFrame()
+        for ccs_year in range(ccs_start_tgt, proj_years[-1] + 1, 1):
+            ccs_df = switched_tgt.loc[switched_tgt['year'] == ccs_year, ['fuels', 'energy']].copy().reset_index(drop = True)
+            ccs_df = ccs_df[ccs_df['fuels'].isin(ccs_fuels)].copy().reset_index(drop = True)
+            
+            ccs_df['share'] = ccs_df['energy'] / total_tgt[ccs_year]
+            ccs_df['year'] = ccs_year
+            ccs_df['new_energy'] = ccs_df['energy'] * ccs_target.loc[ccs_target['year'] == ccs_year, 'share'].values[0]
+
+            # Amend original data frame
+            for fuel in ccs_df['fuels'].unique():
+                relevant_fuel = (switched_tgt['fuels'] == fuel)
+                relevant_year = (switched_tgt['year'] == ccs_year)
+                switched_tgt.loc[(relevant_fuel) & (relevant_year), 'energy'] = switched_tgt_calcs2.loc[(relevant_fuel) & (relevant_year), 'energy'].values[0] *\
+                    (1 - ccs_target.loc[ccs_target['year'] == ccs_year, 'share'].values[0])
                 
-                ccs_df['share'] = ccs_df['energy'] / total_tgt[ccs_year]
-                ccs_df['year'] = ccs_year
-                ccs_df['new_energy'] = ccs_df['energy'] * ccs_target.loc[ccs_target['year'] == ccs_year, 'share'].values[0]
-
-                # Amend original data frame
-                for fuel in ccs_df['fuels'].unique():
-                    relevant_fuel = (switched_tgt['fuels'] == fuel)
-                    relevant_year = (switched_tgt['year'] == ccs_year)
-                    switched_tgt.loc[(relevant_fuel) & (relevant_year), 'energy'] = switched_tgt_calcs2.loc[(relevant_fuel) & (relevant_year), 'energy'].values[0] *\
-                        (1 - ccs_target.loc[ccs_target['year'] == ccs_year, 'share'].values[0])
-
-                ccs_tgt_df = pd.concat([ccs_tgt_df, ccs_df]).copy().reset_index(drop = True)
+            ccs_energy = ccs_df[ccs_df['year'] == ccs_year]['energy'].sum()
+                
+            # Now add in additional electricity to run the CCS unit
+            additional_data = ['17_electricity', 0.0, ccs_additional, ccs_year, 
+                              ccs_additional * ccs_energy * ccs_target.loc[ccs_target['year'] == ccs_year, 'share'].values[0]]
             
-            # Metadata
-            ccs_tgt_df['scenarios'] = 'target'
-            ccs_tgt_df['economy'] = economy
-            ccs_tgt_df['sectors'] = '14_industry_sector'
-            ccs_tgt_df['sub1sectors'] = '14_03_manufacturing'
-            ccs_tgt_df['sub2sectors'] = sector
-            if sector == ind2[0]:
-                ccs_tgt_df['sub3sectors'] = '14_03_01_03_ccs'
-            elif sector == ind2[1]:
-                ccs_tgt_df['sub3sectors'] = '14_03_02_02_ccs'
-            elif sector == ind2[3]:
-                ccs_tgt_df['sub3sectors'] = '14_03_04_01_ccs'
-            ccs_tgt_df['subfuels'] = 'x'
+            additional_df = pd.DataFrame(additional_data).transpose()
+            additional_df.columns = ccs_df.columns
 
-            ccs_tgt_df = ccs_tgt_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'new_energy']].copy()\
-                .rename(columns = {'new_energy': 'energy'}).sort_values(['year', 'fuels']).reset_index(drop = True)
-            
-            ccs_tgt_df.to_csv(hyd_ccs_location + economy + '_' + sector + '_ccs_tgt.csv', index = False)
+            ccs_df = pd.concat([ccs_df, additional_df])
 
-        # Now aggregate hydorgen results with steel
-        switched_tgt = switched_tgt.merge(hyd_tgt.drop(['sub3sectors'], axis = 1), how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            ccs_tgt_df = pd.concat([ccs_tgt_df, ccs_df]).copy().reset_index(drop = True)
         
-        switched_tgt['energy'] = switched_tgt['energy_x'].fillna(0) + switched_tgt['energy_y'].fillna(0)        
-        switched_tgt = switched_tgt.drop(['energy_x', 'energy_y'], axis = 1)
+        # Metadata
+        ccs_tgt_df['scenarios'] = 'target'
+        ccs_tgt_df['economy'] = economy
+        ccs_tgt_df['sectors'] = '14_industry_sector'
+        ccs_tgt_df['sub1sectors'] = '14_03_manufacturing'
+        ccs_tgt_df['sub2sectors'] = sector
+        if sector == ind2[0]:
+            ccs_tgt_df['sub3sectors'] = '14_03_01_03_ccs'
+        elif sector == ind2[1]:
+            ccs_tgt_df['sub3sectors'] = '14_03_02_02_ccs'
+        elif sector == ind2[3]:
+            ccs_tgt_df['sub3sectors'] = '14_03_04_01_ccs'
+        ccs_tgt_df['subfuels'] = 'x'
+
+        ccs_tgt_df = ccs_tgt_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'new_energy']].copy()\
+            .rename(columns = {'new_energy': 'energy'}).sort_values(['year', 'fuels']).reset_index(drop = True)
+        
+        ccs_tgt_df.to_csv(hyd_ccs_location + economy + '_' + sector + '_ccs_tgt.csv', index = False)
+
+        # Now aggregate hydorgen-based production results
+        if hydrogen_tgt: 
+            switched_tgt = switched_tgt.merge(hyd_tgt.drop(['sub3sectors'], axis = 1), how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            switched_tgt['energy'] = switched_tgt['energy_x'].fillna(0) + switched_tgt['energy_y'].fillna(0)        
+            switched_tgt = switched_tgt.drop(['energy_x', 'energy_y'], axis = 1)
 
         # Now do the same addition but for the CCS results
-        switched_tgt = switched_tgt.merge(ccs_tgt_df.drop(['sub3sectors'], axis = 1), how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-        
-        switched_tgt['energy'] = switched_tgt['energy_x'].fillna(0) + switched_tgt['energy_y'].fillna(0)
-        switched_tgt = switched_tgt.drop(['energy_x', 'energy_y'], axis = 1)
+        if ccs_tgt:
+            switched_tgt = switched_tgt.merge(ccs_tgt_df.drop(['sub3sectors'], axis = 1), how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            switched_tgt['energy'] = switched_tgt['energy_x'].fillna(0) + switched_tgt['energy_y'].fillna(0)
+            switched_tgt = switched_tgt.drop(['energy_x', 'energy_y'], axis = 1)
 
         switched_tgt = switched_tgt.sort_values(['year', 'fuels']).copy().reset_index(drop = True)    
 
@@ -761,4 +792,4 @@ def fuel_switch(economy = '01_AUS',
 
 
 # Iron and steel
-fuel_switch(economy = '19_THA', sector = ind2[3], hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True)
+fuel_switch(economy = '19_THA', sector = ind2[1], hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True)
