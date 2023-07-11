@@ -14,7 +14,7 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Grab functions from the previous script
-from d2_projection_adjust import industry_adj
+from d2_projection_adjust import industry_adj, nonenergy_adj
 
 # Define years list tp adjust later 
 years = [i for i in range(1980, 2101, 1)]
@@ -32,6 +32,7 @@ ind2 = list(industry_sectors.values())[3:]
 # The interim modelled production estimates are located here (pre adjustment and refinement)
 # Interim industry projections
 industry_refine1 = pd.read_csv('./data/industry_production/4_industry_refine1/refined_industry_all.csv')
+nonenergy_refine1 = pd.read_csv('./data/non_energy/2_nonenergy_refine1/refined_nonenergy_all.csv')
 
 #################################################################################################
 # Thailand
@@ -41,6 +42,9 @@ industry_adj(economy = '01_AUS',
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_03_non_ferrous_metals',
              data = industry_refine1)
+
+nonenergy_adj(economy = '19_THA',
+              data = nonenergy_refine1)
 
 
 # Consolidate new results
@@ -66,5 +70,31 @@ industry_refine['value'] = (industry_refine['value_x']).where(industry_refine['v
 
 industry_refine = industry_refine.copy().drop(columns = ['value_x', 'value_y'])
 industry_refine.to_csv('./data/industry_production/5_industry_refine2/refined_industry_all.csv', index = False) 
+
+#########################################################################################################
+
+# Consolidate new results
+traj_overwrite_df = pd.DataFrame()
+
+for economy in list(APEC_economies.keys())[:-7]:
+    filenames = glob.glob('./data/non_energy/3_nonenergy_refine2/{}/*.csv'.format(economy))
+    for i in filenames:
+        temp_df = pd.read_csv(i)
+        traj_overwrite_df = pd.concat([traj_overwrite_df, temp_df]).copy()
+
+traj_overwrite_df.to_csv('./data/non_energy/3_nonenergy_refine2/nonenergy_refine2.csv', index = False)
+
+####################################################################
+
+# Now save an entire data frame with the selected results from above replacing the results from before
+
+nonenergy_refine = nonenergy_refine1.merge(traj_overwrite_df, how = 'left',
+                              on = ['economy', 'economy_code', 'series', 
+                                    'year', 'units', 'sectors', 'sub1sectors'])
+
+nonenergy_refine['value'] = (nonenergy_refine['value_x']).where(nonenergy_refine['value_y'].isna(), nonenergy_refine['value_y'])
+
+nonenergy_refine = nonenergy_refine.copy().drop(columns = ['value_x', 'value_y'])
+nonenergy_refine.to_csv('./data/non_energy/3_nonenergy_refine2/refined_nonenergy_all.csv', index = False) 
 
 

@@ -1,3 +1,5 @@
+# THIS IS EFFECTIVELY REDUNDANT GIVEN THAT THE f2_fuel_switch_function script does everything in here and overlays fuel switching
+
 # Energy projections by fuels
 # Set working directory to be the project folder 
 import os
@@ -161,12 +163,12 @@ for economy in economy_select:
             chart_pivot_ref.plot.area(ax = ax1,
                                       stacked = True,
                                       alpha = 0.8,
-                                      color = fuel_palette4)
+                                      color = fuel_palette1)
             
             chart_pivot_tgt.plot.area(ax = ax2,
                                       stacked = True,
                                       alpha = 0.8,
-                                      color = fuel_palette4)
+                                      color = fuel_palette1)
             
             ax1.set(title = economy + ' ' + sector + ' REF',
                     xlabel = 'Year',

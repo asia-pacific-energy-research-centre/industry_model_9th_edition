@@ -127,6 +127,19 @@ if len(prod_files) > 0:
 else:
     pass
 
+# Path to non-energy production
+path_to_nonenergy = './data/non_energy/4_nonenergy_scenarios/'
+nonenergy_prefix = 'nonenergy_production_'
+
+nonen_files = glob.glob(path_to_nonenergy + nonenergy_prefix + '*.csv')
+
+if len(nonen_files) > 0:
+    latest_nonenergy = max(nonen_files, key = os.path.getctime)
+    nonenergy_date = re.search(r'(\d{4})_(\d{2})_(\d{2})', latest_nonenergy).group(0)
+
+else:
+    pass
+
 # Path to industry energy trajectory
 path_to_inden = './results/industry/1_total_energy_subsector/'
 inden_prefix = 'industry_subsector_energy_trajectories_'

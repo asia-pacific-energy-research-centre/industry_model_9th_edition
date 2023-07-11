@@ -28,7 +28,10 @@ ind2 = list(industry_sectors.values())[3:]
 indprod_df = pd.read_csv(latest_prod)
 print('Industry production data is from:', prod_date)
 
-for economy in list(APEC_economies.keys())[:-7]:
+nonen_prod_df = pd.read_csv(latest_nonenergy)
+print('Non-energy production data is from:', nonenergy_date)
+
+for economy in list(APEC_economies.keys())[-10:-9]:
     # Where to save charts
     industry_charts = './data/industry_production/7_industry_scenarios_charts/{}/'.format(economy)
 
@@ -96,3 +99,37 @@ for economy in list(APEC_economies.keys())[:-7]:
 
         else:
             pass
+
+
+for economy in list(APEC_economies.keys())[-10:-9]:
+    # Where to save charts
+    nonenergy_charts = './data/non_energy/5_nonenergy_scenarios_charts/{}/'.format(economy)
+
+    if not os.path.isdir(nonenergy_charts):
+        os.makedirs(nonenergy_charts)
+
+    
+    chart_df = nonen_prod_df[(nonen_prod_df['economy_code'] == economy)].copy().reset_index(drop = True)
+
+    fig, ax = plt.subplots()
+
+    sns.set_theme(style = 'ticks')
+
+    sns.lineplot(data = chart_df,
+                x = 'year',
+                y = 'value',
+                hue = 'scenario')
+
+    ax.set(title = economy + ' non-energy use',
+        xlabel = 'Year',
+        ylabel = 'Production index (2017 = 100)',
+        ylim = (0, chart_df['value'].max() * 1.1))
+
+    plt.legend(title = '')
+
+    plt.tight_layout()
+    plt.show()
+
+    fig.savefig(nonenergy_charts + economy + '_non_energy.png')
+    
+    plt.close()

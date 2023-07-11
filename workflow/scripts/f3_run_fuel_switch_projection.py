@@ -37,6 +37,9 @@ no_biomass = ['12_solar', '15_solid_biomass', '17_electricity', '18_heat']
 to_gas = ['06_crude_oil_and_ngl', '07_petroleum_products', '08_gas', '12_solar', '15_solid_biomass',
           '16_others', '17_electricity', '18_heat']
 
+# CCS fuels
+ccs_fuels = ['01_coal', '02_coal_products', '08_gas']
+
 # Run the function for the different economies
 ##################################################################################################################
 # Thailand
@@ -47,16 +50,19 @@ fuel_switch(economy = '19_THA', sector = ind1[0])
 fuel_switch(economy = '19_THA', sector = ind1[1])
 
 # Iron and steel
-fuel_switch(economy = '19_THA', sector = ind2[0], hydrogen_ref = True)
+fuel_switch(economy = '19_THA', sector = ind2[0], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005, 
+            hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, ccs_tgt = True)
 
 # Chemicals
-fuel_switch(economy = '19_THA', sector = ind2[1])
+fuel_switch(economy = '19_THA', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
+            hydrogen_ref = True, hydrogen_tgt = True, ccs_ref = False, ccs_tgt = True)
 
 # Non-ferrous metals
 fuel_switch(economy = '19_THA', sector = ind2[2])
 
 # Non-metallic minerals
-fuel_switch(economy = '19_THA', sector = ind2[3])
+fuel_switch(economy = '19_THA', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
+            bio_rate_tgt = 0.005, ccs_tgt = True)
 
 # Transport
 fuel_switch(economy = '19_THA', sector = ind2[4])
@@ -65,19 +71,21 @@ fuel_switch(economy = '19_THA', sector = ind2[4])
 fuel_switch(economy = '19_THA', sector = ind2[5])
 
 # Food and Beverages
-fuel_switch(economy = '19_THA', sector = ind2[6])
+fuel_switch(economy = '19_THA', sector = ind2[6], elec_rate_tgt = 0.01)
 
 # Pulp and paper
-fuel_switch(economy = '19_THA', sector = ind2[7])
+fuel_switch(economy = '19_THA', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.0075, 
+            bio_rate_tgt = 0.015)
 
 # Wood
 fuel_switch(economy = '19_THA', sector = ind2[8])
 
 # Textiles
-fuel_switch(economy = '19_THA', sector = ind2[9])
+fuel_switch(economy = '19_THA', sector = ind2[9], elec_rate_ref = 0.003, elec_rate_tgt = 0.006, 
+            bio_rate_tgt = 0.005)
 
 # Non-specified
-fuel_switch(economy = '19_THA', sector = ind2[10])
+fuel_switch(economy = '19_THA', sector = ind2[10], elec_rate_tgt = 0.01)
 
 #################################################################################################
 
@@ -120,9 +128,14 @@ for economy in [list(economy_select)[-3]]:
     chart_df_tgt = economy_df[(economy_df['energy'] != 0) &
                               (economy_df['energy'].isna() == False) & 
                               (economy_df['scenarios'] == 'target') &
-                              (economy_df['year'] <= 2070)].groupby(['fuels', 'year'])['energy'].sum().reset_index()
+                              (economy_df['year'] <= 2070)].copy().reset_index(drop = True)
     
-    chart_pivot_tgt = chart_df_tgt.pivot(index = 'year', columns = 'fuels', values = 'energy')
+    # Custom chart column
+    chart_df_tgt['fuel'] = np.where(chart_df_tgt['subfuels'] == 'x', chart_df_tgt['fuels'], chart_df_tgt['subfuels'])
+    
+    chart_df_tgt = chart_df_tgt.groupby(['fuel', 'year'])['energy'].sum().reset_index()
+
+    chart_pivot_tgt = chart_df_tgt.pivot(index = 'year', columns = 'fuel', values = 'energy')
 
     max_y = 1.1 * max(chart_df_ref.groupby('year')['energy'].sum().max(), chart_df_tgt.groupby('year')['energy'].sum().max())
     proj_location = 0.925 * max_y

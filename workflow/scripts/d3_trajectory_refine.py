@@ -14,7 +14,7 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Grab functions from the previous script
-from d2_projection_adjust import industry_traj
+from d2_projection_adjust import industry_traj, nonenergy_traj
 
 # Define years list tp adjust later 
 years = [i for i in range(1980, 2101, 1)]
@@ -32,6 +32,9 @@ ind2 = list(industry_sectors.values())[3:]
 # The interim modelled production estimates are located here (pre adjustment and refinement)
 # Interim industry projections
 industry_interim = pd.read_csv('./data/industry_production/3_industry_projections/interim_all_sectors.csv')
+
+# Interim nonenergy projections
+nonenergy_production = pd.read_csv('./data/non_energy/1_nonenergy_projections/interim_all_sectors.csv')
 
 ###################################################################################################
 # Alter trajectory where necesary
@@ -122,19 +125,25 @@ industry_traj(economy = '08_JPN', sub1sectors = ind1[2], sub2sectors = ind2[3], 
 ############################ Thailand ###########################################################
 # Steel
 industry_traj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 3, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
+              shape = 'decrease', magnitude = 3.5, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Non-metallic minerals
 industry_traj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+              shape = 'decrease', magnitude = 1.9, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Textiles
 industry_traj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 2.3, apex_mag = 0.8, apex_loc = 50, data = industry_interim)
+              shape = 'decrease', magnitude = 2.8, apex_mag = 0.8, apex_loc = 50, data = industry_interim)
 
 # Non-specified
 industry_traj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 2.5, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+              shape = 'decrease', magnitude = 3, apex_mag = 1.1, apex_loc = 70, data = industry_interim)
+
+# Non-energy
+nonenergy_traj(economy = '19_THA', proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.5, apex_mag = 1.1, apex_loc = 70, data = nonenergy_production)
+
+
 
 
 ############################ USA ##############################################################
@@ -185,7 +194,7 @@ industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[10],
 
 # VN
 
-
+nonenergy_traj()
 
 
 
@@ -209,4 +218,28 @@ industry_refine = industry_interim.merge(traj_overwrite_df, how = 'left',
 industry_refine['value'] = (industry_refine['value_x']).where(industry_refine['value_y'].isna(), industry_refine['value_y'])
 
 industry_refine = industry_refine.copy().drop(columns = ['value_x', 'value_y'])
-industry_refine.to_csv('./data/industry_production/4_industry_refine1/refined_industry_all.csv', index = False) 
+industry_refine.to_csv('./data/industry_production/4_industry_refine1/refined_industry_all.csv', index = False)
+
+#################################################################################################################
+
+# Consolidate refined trajectories
+traj_overwrite_df = pd.DataFrame()
+
+for economy in list(APEC_economies.keys())[:-7]:
+    filenames = glob.glob('./data/non_energy/2_nonenergy_refine1/{}/*.csv'.format(economy))
+    for i in filenames:
+        temp_df = pd.read_csv(i)
+        traj_overwrite_df = pd.concat([traj_overwrite_df, temp_df]).copy()
+
+traj_overwrite_df.to_csv('./data/non_energy/2_nonenergy_refine1/nonenergy_refine1.csv', index = False)
+
+####################################################################
+
+nonenergy_refine = nonenergy_production.merge(traj_overwrite_df, how = 'left',
+                              on = ['economy', 'economy_code', 'series', 
+                                    'year', 'units', 'sectors', 'sub1sectors'])
+
+nonenergy_refine['value'] = (nonenergy_refine['value_x']).where(nonenergy_refine['value_y'].isna(), nonenergy_refine['value_y'])
+
+nonenergy_refine = nonenergy_refine.copy().drop(columns = ['value_x', 'value_y'])
+nonenergy_refine.to_csv('./data/non_energy/2_nonenergy_refine1/refined_nonenergy_all.csv', index = False)

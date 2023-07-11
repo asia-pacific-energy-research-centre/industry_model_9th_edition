@@ -392,6 +392,14 @@ def fuel_switch(economy = '01_AUS',
         
         hyd_ref.to_csv(hyd_ccs_location + economy + '_' + sector + '_hydrogen_ref.csv', index = False)
 
+        # Now aggregate hydorgen-based production results
+        if hydrogen_ref: 
+            switched_ref = switched_ref.merge(hyd_ref.drop(['sub3sectors'], axis = 1), how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            switched_ref['energy'] = switched_ref['energy_x'].fillna(0) + switched_ref['energy_y'].fillna(0)        
+            switched_ref = switched_ref.drop(['energy_x', 'energy_y'], axis = 1)
+
     # Set-up for CCS (require snapshot of switched_ref for calcs below)
     switched_ref_calcs2 = switched_ref.copy()
 
@@ -445,14 +453,6 @@ def fuel_switch(economy = '01_AUS',
             .rename(columns = {'new_energy': 'energy'}).sort_values(['year', 'fuels']).reset_index(drop = True)
         
         ccs_ref_df.to_csv(hyd_ccs_location + economy + '_' + sector + '_ccs_ref.csv', index = False) 
-
-        # Now aggregate hydorgen-based production results
-        if hydrogen_ref: 
-            switched_ref = switched_ref.merge(hyd_ref.drop(['sub3sectors'], axis = 1), how = 'outer',
-                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-            
-            switched_ref['energy'] = switched_ref['energy_x'].fillna(0) + switched_ref['energy_y'].fillna(0)        
-            switched_ref = switched_ref.drop(['energy_x', 'energy_y'], axis = 1)
 
         # Now do the same addition but for the CCS results
         if ccs_ref:
@@ -551,6 +551,14 @@ def fuel_switch(economy = '01_AUS',
         
         hyd_tgt.to_csv(hyd_ccs_location + economy + '_' + sector + '_hydrogen_tgt.csv', index = False)
 
+        # Now aggregate hydorgen-based production results
+        if hydrogen_tgt: 
+            switched_tgt = switched_tgt.merge(hyd_tgt.drop(['sub3sectors'], axis = 1), how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            switched_tgt['energy'] = switched_tgt['energy_x'].fillna(0) + switched_tgt['energy_y'].fillna(0)        
+            switched_tgt = switched_tgt.drop(['energy_x', 'energy_y'], axis = 1)
+
     # Set-up for CCS (require snapshot of switched_ref for calcs below)
     switched_tgt_calcs2 = switched_tgt.copy()
 
@@ -604,14 +612,6 @@ def fuel_switch(economy = '01_AUS',
             .rename(columns = {'new_energy': 'energy'}).sort_values(['year', 'fuels']).reset_index(drop = True)
         
         ccs_tgt_df.to_csv(hyd_ccs_location + economy + '_' + sector + '_ccs_tgt.csv', index = False)
-
-        # Now aggregate hydorgen-based production results
-        if hydrogen_tgt: 
-            switched_tgt = switched_tgt.merge(hyd_tgt.drop(['sub3sectors'], axis = 1), how = 'outer',
-                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-            
-            switched_tgt['energy'] = switched_tgt['energy_x'].fillna(0) + switched_tgt['energy_y'].fillna(0)        
-            switched_tgt = switched_tgt.drop(['energy_x', 'energy_y'], axis = 1)
 
         # Now do the same addition but for the CCS results
         if ccs_tgt:
@@ -789,7 +789,3 @@ def fuel_switch(economy = '01_AUS',
     plt.savefig(save_location + economy + '_' + sector + '_elec.png')
     plt.show()
     plt.close()
-
-
-# Iron and steel
-fuel_switch(economy = '19_THA', sector = ind2[1], hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True)

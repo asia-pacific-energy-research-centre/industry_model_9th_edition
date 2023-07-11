@@ -87,6 +87,11 @@ vn_ns_df = wdi_subsectors[(wdi_subsectors['series'] == 'NV.IND.MANF.ZS') &
 ns_df = pd.concat([ns_df, vn_ns_df]).copy().reset_index(drop = True)
 ns_df['sub2sectors'] = ind2[10]
 
+################################## NON-ENERGY ####################################################
+nonenergy_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.CHEM.ZS.UN'].copy().reset_index(drop = True)
+nonenergy_df['sectors'] = '17_nonenergy_use'
+nonenergy_df['sub1sectors'] = 'x' 
+
 ################################## All manufacturing #############################################
 all_manf = pd.concat([steel_df, chem_df, alum_df, cement_df, trans_df, mach_df, fb_df, pp_df, ww_df, txt_df, ns_df]).copy().reset_index(drop = True)
 all_manf['sub1sectors'] = ind1[2]
@@ -113,6 +118,8 @@ ind_prod_df = pd.concat([min_df, cons_df, all_manf]).copy().reset_index(drop = T
 ind_prod_df = ind_prod_df[ind_prod_df['year'] < 2101].copy()
 ind_prod_df = ind_prod_df[['economy', 'economy_code', 'series', 'year', 'units', 'sub1sectors', 'sub2sectors', 'value']]\
     .sort_values(by = ['economy_code', 'sub1sectors', 'sub2sectors']).copy().reset_index(drop = True)
+
+# Charts for industry subsectors
 
 economy_list = list(APEC_economies.keys())[:-7]
 for economy in economy_list:
@@ -181,3 +188,48 @@ for economy in economy_list:
             plt.close()
 
 ind_prod_df.to_csv('./data/industry_production/3_industry_projections/interim_all_sectors.csv', index = False)
+
+#############################################################################################################
+
+# NON-ENERGY
+# Non-energy production
+nonenergy_df = nonenergy_df[nonenergy_df['year'] < 2101].copy()
+nonenergy_df = nonenergy_df[['economy', 'economy_code', 'series', 'year', 'units', 'sectors', 'sub1sectors', 'value']]\
+    .sort_values(by = ['economy_code', 'year']).copy().reset_index(drop = True)
+
+economy_list = list(APEC_economies.keys())[:-7]
+for economy in economy_list:
+    # Save data
+    save_data = './data/non_energy/1_nonenergy_projections/{}/'.format(economy)
+
+    if not os.path.isdir(save_data):
+        os.makedirs(save_data)
+
+    chart_df1 = nonenergy_df[(nonenergy_df['economy_code'] == economy) &
+                                (nonenergy_df['year'] <= 2070)].copy().reset_index(drop = True)
+    if chart_df1.empty:
+        pass
+
+    else:
+        fig, ax = plt.subplots()
+
+        sns.set_theme(style = 'ticks')
+
+        sns.lineplot(data = chart_df1,
+                        x = 'year',
+                        y = 'value',
+                        hue = 'sectors')
+
+        ax.set(title = economy + ' 17_nonenergy_use',
+            xlabel = 'Year',
+            ylabel = 'Production index (2017 = 100)',
+            ylim = (0, chart_df1['value'].max() * 1.1))
+        
+        plt.legend(title = '')
+                
+        plt.tight_layout()
+        plt.savefig(save_data + economy + '_17_nonenergy_use.png')
+        plt.show()
+        plt.close()
+
+nonenergy_df.to_csv('./data/non_energy/1_nonenergy_projections/interim_all_sectors.csv', index = False)
