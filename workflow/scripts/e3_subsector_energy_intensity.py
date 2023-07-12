@@ -13,7 +13,7 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Grab functions from the previous script
-from e2_energy_use_function import energy_use
+from e2_energy_use_function import energy_use, nonenergy_use
 
 # Grab insudtrial production trajectories
 indprod_df = pd.read_csv(latest_prod)
@@ -79,6 +79,10 @@ energy_use(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[9],
 energy_use(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[10],
            increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
 
+# Non-energy
+nonenergy_use(economy = '19_THA', increment_ref = 0.003, increment_tgt = 0.006, 
+              end_year = 2100) 
+
 # Save all data in one csv
 # Now package up all the results and save in one combined data frame
 combined_df = pd.DataFrame()
@@ -93,5 +97,19 @@ combined_df = combined_df.drop(['series', 'value'], axis = 1).rename(columns = {
 combined_df['units'] = 'Indexed energy use'
 
 combined_df.to_csv('./results/industry/1_total_energy_subsector/industry_subsector_energy_trajectories_' + timestamp + '.csv', index = False)
+
+# Do the same for non-energy
+combined_df2 = pd.DataFrame()
+
+for economy in economy_list[:-7]:
+    filenames = glob.glob('./results/non_energy/1_total_nonenergy/{}/*.csv'.format(economy))
+    for i in filenames:
+        temp_df = pd.read_csv(i)
+        combined_df2 = pd.concat([combined_df2, temp_df]).copy()
+
+combined_df2 = combined_df2.drop(['series', 'value'], axis = 1).rename(columns = {'energy': 'value'})
+combined_df2['units'] = 'Indexed energy use'
+
+combined_df2.to_csv('./results/non_energy/1_total_nonenergy/non_energy_trajectories_' + timestamp + '.csv', index = False)
 
 

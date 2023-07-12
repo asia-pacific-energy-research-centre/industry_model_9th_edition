@@ -104,6 +104,7 @@ industry_scenarios = pd.concat([industry_ref, industry_tgt]).copy().reset_index(
 
 industry_scenarios.to_csv('./data/industry_production/6_industry_scenarios/industry_production_' + timestamp + '.csv', index = False)
 
+## NON-ENERGY
 # Consolidate new results
 traj_overwrite_df = pd.DataFrame()
 

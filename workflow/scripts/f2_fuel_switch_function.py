@@ -786,6 +786,6 @@ def fuel_switch(economy = '01_AUS',
     ax2.legend(title = '', fontsize = 8)
             
     plt.tight_layout()
-    plt.savefig(save_location + economy + '_' + sector + '_elec.png')
+    plt.savefig(save_location + economy + '_' + sector + '.png')
     plt.show()
     plt.close()

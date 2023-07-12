@@ -13,6 +13,7 @@ with open(config_file) as infile:
 
 # Grab insudtrial production trajectories
 indprod_df = pd.read_csv(latest_prod)
+nonenprod_df = pd.read_csv(latest_nonenergy)
 
 def energy_use(economy = '01_AUS',
                sub1sectors = '14_01_mining_and_quarrying', 
@@ -132,3 +133,107 @@ def energy_use(economy = '01_AUS',
         pass
 
 # energy_use(increment_ref = 0.01, increment_tgt = 0.015, end_year = 2100)
+
+def nonenergy_use(economy = '01_AUS',
+                  increment_ref = 0.01,
+                  increment_tgt = 0.02,
+                  start_year = 2022,
+                  end_year = 2050,
+                  data = nonenprod_df):
+    
+    # Where to save files
+    non_energy = './results/non_energy/1_total_nonenergy/{}/'.format(economy)
+
+    if not os.path.isdir(non_energy):
+        os.makedirs(non_energy)
+
+    # Relevant dataframe grab
+    nonen_prod_df = data[(data['economy_code'] == economy)].copy().reset_index(drop = True)
+    
+    # New column with total energy trajectory
+    nonen_prod_df['energy'] = np.nan
+    nonen_prod_df = nonen_prod_df.set_index('year')
+
+    # Reference data frame
+    ref_df = nonen_prod_df[nonen_prod_df['scenario'] == 'reference'].copy()
+    
+    # Target data frame
+    tgt_df = nonen_prod_df[nonen_prod_df['scenario'] == 'target'].copy()
+
+    ref_dict = {}
+    for year in ref_df.index:
+        if (year >= start_year) & (year <= end_year):
+            ref_dict[year] = (1 - increment_ref) * ref_dict[year - 1]
+
+        elif year > end_year:
+            ref_dict[year] = ref_dict[year - 1]
+
+        elif year < start_year:
+            ref_dict[year] = 1
+
+    tgt_dict = {}
+    for year in tgt_df.index:
+        if (year >= start_year) & (year <= end_year):
+            tgt_dict[year] = (1 - increment_tgt) * tgt_dict[year - 1]
+
+        elif (year > end_year):
+            tgt_dict[year] = tgt_dict[year - 1]
+
+        elif year < start_year:
+            tgt_dict[year] = 1
+
+    for year in ref_df.index:
+        ref_df.loc[year, 'energy'] = ref_df.loc[year, 'value'] * ref_dict[year]
+        tgt_df.loc[year, 'energy'] = tgt_df.loc[year, 'value'] * tgt_dict[year]
+    
+
+    both_sectors = pd.concat([ref_df, tgt_df]).copy().reset_index()
+
+    # Now chart the result
+    chart_df = both_sectors[(both_sectors['year'] <= 2070) &
+                            (both_sectors['year'] >= 2017)].copy()
+    
+    chart_df['scenario_act'] = chart_df['scenario'] + ' activity'
+    chart_df['scenario_en'] = chart_df['scenario'] + ' energy'
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (8, 8))
+
+    sns.set_theme(style = 'ticks')
+
+    sns.lineplot(data = chart_df,
+                 ax = ax1,
+                 x = 'year',
+                 y = 'value',
+                 hue = 'scenario_act',
+                 palette = custom_palette)
+    
+    sns.lineplot(data = chart_df,
+                 ax = ax2,
+                 x = 'year',
+                 y = 'energy',
+                 hue = 'scenario_en',
+                 palette = custom_palette,
+                 linestyle = '-')
+
+    ax1.set(title = economy + ' non-energy activity',
+           xlabel = 'Year',
+           ylabel = 'Activity index (2017 = 100)',
+           ylim = (0, chart_df['value'].max() * 1.1))
+    
+    ax2.set(title = 'REF annual efficiency improvement: ' + str(increment_ref) + '\n' + 'TGT annual efficiency improvement: ' + str(increment_tgt),
+             xlabel = 'Year',
+            ylabel = 'Non-energy use (indexed)',
+            ylim = (0, chart_df['value'].max() * 1.1))
+
+    ax1.legend(title = '')
+    ax2.legend(title = '')
+
+    plt.tight_layout()
+    plt.show()
+    
+    fig.savefig(non_energy + economy + '_non_energy.png')
+ 
+    plt.close()
+    
+    both_sectors.to_csv(non_energy + economy + '_non_energy.csv', index = False)
+    
