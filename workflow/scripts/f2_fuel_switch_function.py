@@ -50,6 +50,7 @@ def hydrogen(fuel_mix = {'16_x_hydrogen': 0.5,
     hyd_df = pd.DataFrame()
     
     for j, (fuel, share) in enumerate(fuel_mix.items()):
+        # Note j is just the zero starting index which we don't need below
         temp_list = [[i, fuel, share, (i - start_year + 1) * increment] for i in range(start_year, proj_years[-1] + 1, 1)] 
         temp_df = pd.DataFrame(temp_list)
 
@@ -124,7 +125,7 @@ def fuel_switch(economy = '01_AUS',
     # Define fuel ratio data frame for base year (base) and save that for use later
     fuel_ratio_ref = data_ref[data_ref['year'] == base_year].copy().reset_index(drop = True)
     fuel_ratio_ref = fuel_ratio_ref.loc[:, ['fuels', 'energy']].copy()
-    base_year_energy = fuel_ratio_ref['energy'].sum()
+    base_year_energy = fuel_ratio_ref['energy'].sum() 
     
     for i in range(len(data_ref['fuels'].unique())): 
         fuel_ratio_ref.iloc[i, 1] = data_ref.iloc[i, -1] / base_year_energy

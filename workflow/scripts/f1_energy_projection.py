@@ -1,4 +1,3 @@
-# THIS IS EFFECTIVELY REDUNDANT GIVEN THAT THE f2_fuel_switch_function script does everything in here and overlays fuel switching
 
 # Energy projections by fuels
 # Set working directory to be the project folder 

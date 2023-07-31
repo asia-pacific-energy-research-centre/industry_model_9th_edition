@@ -42,6 +42,51 @@ ccs_fuels = ['01_coal', '02_coal_products', '08_gas']
 
 # Run the function for the different economies
 ##################################################################################################################
+# Japan
+# Mining
+fuel_switch(economy = '08_JPN', sector = ind1[0])
+
+# Construction
+fuel_switch(economy = '08_JPN', sector = ind1[1])
+
+# Iron and steel
+fuel_switch(economy = '08_JPN', sector = ind2[0], elec_rate_ref = 0.001, elec_rate_tgt = 0.005, 
+            hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, hyd_start_tgt = 2025, ccs_tgt = True)
+
+# Chemicals
+fuel_switch(economy = '08_JPN', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
+            hydrogen_ref = True, hydrogen_tgt = True, ccs_ref = False, ccs_tgt = True)
+
+# Non-ferrous metals
+fuel_switch(economy = '08_JPN', sector = ind2[2])
+
+# Non-metallic minerals
+fuel_switch(economy = '08_JPN', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
+            bio_rate_tgt = 0.001, ccs_tgt = True)
+
+# Transport
+fuel_switch(economy = '08_JPN', sector = ind2[4])
+
+# Machinery
+fuel_switch(economy = '08_JPN', sector = ind2[5])
+
+# Food and Beverages
+fuel_switch(economy = '08_JPN', sector = ind2[6], elec_rate_tgt = 0.0075)
+
+# Pulp and paper
+fuel_switch(economy = '08_JPN', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.008, 
+            bio_rate_tgt = 0.01)
+
+# Wood
+fuel_switch(economy = '08_JPN', sector = ind2[8])
+
+# Textiles
+fuel_switch(economy = '08_JPN', sector = ind2[9], elec_rate_ref = 0.003, elec_rate_tgt = 0.01)
+
+# Non-specified
+fuel_switch(economy = '08_JPN', sector = ind2[10], elec_rate_tgt = 0.01)
+
+#################################################################################################################
 # Thailand
 # Mining
 fuel_switch(economy = '19_THA', sector = ind1[0])
@@ -50,19 +95,19 @@ fuel_switch(economy = '19_THA', sector = ind1[0])
 fuel_switch(economy = '19_THA', sector = ind1[1])
 
 # Iron and steel
-fuel_switch(economy = '19_THA', sector = ind2[0], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005, 
+fuel_switch(economy = '19_THA', sector = ind2[0], elec_rate_ref = 0.001, elec_rate_tgt = 0.0025, 
             hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, ccs_tgt = True)
 
 # Chemicals
 fuel_switch(economy = '19_THA', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
-            hydrogen_ref = True, hydrogen_tgt = True, ccs_ref = False, ccs_tgt = True)
+            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = False, ccs_tgt = True)
 
 # Non-ferrous metals
 fuel_switch(economy = '19_THA', sector = ind2[2])
 
 # Non-metallic minerals
 fuel_switch(economy = '19_THA', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
-            bio_rate_tgt = 0.005, ccs_tgt = True)
+            bio_rate_tgt = 0.001, ccs_tgt = True)
 
 # Transport
 fuel_switch(economy = '19_THA', sector = ind2[4])
@@ -71,18 +116,18 @@ fuel_switch(economy = '19_THA', sector = ind2[4])
 fuel_switch(economy = '19_THA', sector = ind2[5])
 
 # Food and Beverages
-fuel_switch(economy = '19_THA', sector = ind2[6], elec_rate_tgt = 0.01)
+fuel_switch(economy = '19_THA', sector = ind2[6], elec_rate_tgt = 0.0075)
 
 # Pulp and paper
-fuel_switch(economy = '19_THA', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.0075, 
-            bio_rate_tgt = 0.015)
+fuel_switch(economy = '19_THA', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.008, 
+            bio_rate_tgt = 0.006)
 
 # Wood
 fuel_switch(economy = '19_THA', sector = ind2[8])
 
 # Textiles
 fuel_switch(economy = '19_THA', sector = ind2[9], elec_rate_ref = 0.003, elec_rate_tgt = 0.006, 
-            bio_rate_tgt = 0.005)
+            bio_rate_tgt = 0.002)
 
 # Non-specified
 fuel_switch(economy = '19_THA', sector = ind2[10], elec_rate_tgt = 0.01)
