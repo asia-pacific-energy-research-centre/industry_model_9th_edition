@@ -141,7 +141,7 @@ industry_traj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[10],
 
 # Non-energy
 nonenergy_traj(economy = '19_THA', proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.5, apex_mag = 1.1, apex_loc = 70, data = nonenergy_production)
+              shape = 'decrease', magnitude = 2.2, apex_mag = 1.5, apex_loc = 80, data = nonenergy_production)
 
 
 
