@@ -11,7 +11,7 @@ with open(config_file) as infile:
 
 # Import function
 from f2_fuel_switch_function import fuel_switch, hydrogen
-from f4_non_energy_switch_function import fuel_switch_ne
+from f3_non_energy_switch_function import fuel_switch_ne
 
 # Energy industry subsectors
 industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)\
@@ -134,7 +134,7 @@ fuel_switch(economy = '19_THA', sector = ind2[9], elec_rate_ref = 0.003, elec_ra
 fuel_switch(economy = '19_THA', sector = ind2[10], elec_rate_tgt = 0.01)
 
 # Non-energy
-fuel_switch_ne(economy = '19_THA')
+fuel_switch_ne(economy = '19_THA', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005)
 
 #################################################################################################
 
