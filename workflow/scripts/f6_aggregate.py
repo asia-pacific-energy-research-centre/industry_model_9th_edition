@@ -137,15 +137,18 @@ for economy in list(economy_select):
 
         # Now add in the one subfuel: hydrogen for relevant sector aggregations
         hydrogen_rows_ref = ref_df[ref_df['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
-       
+
         hyd_sub3_ref = hydrogen_rows_ref.copy()
-        hyd_sub3_ref.loc[i, 'sub3sectors'] = 'x'
+        for i in hyd_sub3_ref.index:       
+            hyd_sub3_ref.loc[i, 'sub3sectors'] = 'x'
         
         hyd_sub2_ref = hyd_sub3_ref.copy()
-        hyd_sub2_ref.loc[0, 'sub2sectors'] = 'x'
+        for j in hyd_sub2_ref.index:
+            hyd_sub2_ref.loc[j, 'sub2sectors'] = 'x'
 
         hyd_sub1_ref = hyd_sub2_ref.copy()
-        hyd_sub1_ref.loc[0, 'sub1sectors'] = 'x'
+        for z in hyd_sub1_ref.index:
+            hyd_sub1_ref.loc[z, 'sub1sectors'] = 'x'
 
         hyd_ref = pd.concat([hydrogen_rows_ref, hyd_sub3_ref, hyd_sub2_ref, hyd_sub1_ref]).copy().drop_duplicates()
 
@@ -256,13 +259,16 @@ for economy in list(economy_select):
         hydrogen_rows_tgt = tgt_df[tgt_df['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
        
         hyd_sub3_tgt = hydrogen_rows_tgt.copy()
-        hyd_sub3_tgt.loc[i, 'sub3sectors'] = 'x'
+        for i in hyd_sub3_tgt.index:       
+            hyd_sub3_tgt.loc[i, 'sub3sectors'] = 'x'
         
         hyd_sub2_tgt = hyd_sub3_tgt.copy()
-        hyd_sub2_tgt.loc[0, 'sub2sectors'] = 'x'
+        for j in hyd_sub2_tgt.index:
+            hyd_sub2_tgt.loc[j, 'sub2sectors'] = 'x'
 
         hyd_sub1_tgt = hyd_sub2_tgt.copy()
-        hyd_sub1_tgt.loc[0, 'sub1sectors'] = 'x'
+        for z in hyd_sub1_tgt.index:
+            hyd_sub1_tgt.loc[z, 'sub1sectors'] = 'x'
 
         hyd_tgt = pd.concat([hydrogen_rows_tgt, hyd_sub3_tgt, hyd_sub2_tgt, hyd_sub1_tgt]).copy().drop_duplicates()
 
