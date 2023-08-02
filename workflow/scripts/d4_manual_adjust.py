@@ -37,14 +37,71 @@ nonenergy_refine1 = pd.read_csv('./data/non_energy/2_nonenergy_refine1/refined_n
 #################################################################################################
 # Thailand
 
-industry_adj(economy = '01_AUS',
-             adjust = {},  
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_01_mining_and_quarrying', 
+             sub2sectors = 'x',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_03_non_ferrous_metals',
              data = industry_refine1)
 
-nonenergy_adj(economy = '19_THA',
-              data = nonenergy_refine1)
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_01_iron_and_steel',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_02_chemical_incl_petrochemical',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_04_nonmetallic_mineral_products',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_06_machinery',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_07_food_beverages_and_tobacco',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_08_pulp_paper_and_printing',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_09_wood_and_wood_products',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_10_textiles_and_leather',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_11_nonspecified_industry',
+             data = industry_refine1)
 
 
 # Consolidate new results

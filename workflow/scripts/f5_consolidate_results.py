@@ -23,7 +23,7 @@ economy_select = economy_list[:-7]
 proj_years = list(range(2021, 2101, 1))
 
 # Read in steel data
-for economy in [list(economy_select)[-3]]:
+for economy in list(economy_select):
     file_location = './results/industry/3_fuel_switch/{}/'.format(economy)
 
     adj_location = file_location + 'adjustment/'
@@ -245,19 +245,25 @@ for economy in [list(economy_select)[-3]]:
 
     industry_ref['sub3sectors'] = np.where(industry_ref['sub3sectors'].isna(), 'x', industry_ref['sub3sectors'])
 
-    industry_ref = industry_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
-                                    .sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
-                                                  'sub3sectors', 'fuels', 'year']).reset_index(drop = True)
-    
-    industry_ref.to_csv(file_location + 'all_sectors/' + economy + '_industry_long_ref.csv', index = False)
+    industry_ref['sub4sectors'] = 'x'
 
-    industry_ref_wide = industry_ref.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                         'sub2sectors', 'sub3sectors', 'fuels', 'subfuels'], 
-                                                values = 'energy', 
-                                                columns = 'year').reset_index()
-    
-    industry_ref_wide.to_csv(file_location + 'all_sectors/' + economy + '_industry_wide_ref.csv', index = False)
+    if industry_ref.empty:
+        pass
+
+    else:
+        industry_ref = industry_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                    'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
+                                        .sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
+                                                    'sub3sectors', 'fuels', 'year']).reset_index(drop = True)
+        
+        industry_ref.to_csv(file_location + 'all_sectors/' + economy + '_industry_long_ref.csv', index = False)
+
+        industry_ref_wide = industry_ref.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                            'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
+                                                    values = 'energy', 
+                                                    columns = 'year').reset_index()
+        
+        industry_ref_wide.to_csv(file_location + 'all_sectors/' + economy + '_industry_wide_ref.csv', index = False)
     
     #########################################################
     # TGT
@@ -275,16 +281,88 @@ for economy in [list(economy_select)[-3]]:
         
     industry_tgt['sub3sectors'] = np.where(industry_tgt['sub3sectors'].isna(), 'x', industry_tgt['sub3sectors'])
 
-    industry_tgt = industry_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
-                                    .sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
-                                                  'sub3sectors', 'fuels', 'year']).reset_index(drop = True)
-    
-    industry_tgt.to_csv(file_location + 'all_sectors/' + economy + '_industry_long_tgt.csv', index = False)
+    industry_tgt['sub4sectors'] = 'x'
 
-    industry_tgt_wide = industry_tgt.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                         'sub2sectors', 'sub3sectors', 'fuels', 'subfuels'], 
-                                                values = 'energy', 
-                                                columns = 'year').reset_index()
-    
-    industry_tgt_wide.to_csv(file_location + 'all_sectors/' + economy + '_industry_wide_tgt.csv', index = False)
+    if industry_tgt.empty:
+        pass
+
+    else:
+        industry_tgt = industry_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                    'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
+                                        .sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
+                                                    'sub3sectors', 'sub4sectors', 'fuels', 'year']).reset_index(drop = True)
+        
+        industry_tgt.to_csv(file_location + 'all_sectors/' + economy + '_industry_long_tgt.csv', index = False)
+
+        industry_tgt_wide = industry_tgt.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                            'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
+                                                    values = 'energy', 
+                                                    columns = 'year').reset_index()
+        
+        industry_tgt_wide.to_csv(file_location + 'all_sectors/' + economy + '_industry_wide_tgt.csv', index = False)
+
+#################################################################################################
+
+# Non-energy
+
+# Read in non-energy data
+for economy in list(economy_select):
+    file_location = './results/non_energy/3_fuel_switch/{}/'.format(economy)
+
+    save_location = './results/non_energy/4_final/{}/'.format(economy)
+
+    if not os.path.isdir(save_location):
+        os.makedirs(save_location)
+
+    ne_files = glob.glob(file_location + '*.csv')
+
+    ref_ne = [s for s in ne_files if 'ref.csv' in s]
+    tgt_ne = [s for s in ne_files if 'tgt.csv' in s]
+
+    # REF
+    if len(ref_ne) == 1:
+        non_energy_ref = pd.read_csv(ref_ne[0])
+
+        non_energy_ref['sub2sectors'] = 'x'
+        non_energy_ref['sub3sectors'] = 'x'
+        non_energy_ref['sub4sectors'] = 'x'
+
+        non_energy_ref = non_energy_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                        'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
+                                            .reset_index(drop = True)
+        
+        non_energy_ref.to_csv(save_location + economy + '_non_energy_long_ref_' + timestamp + '.csv', index = False)
+
+        non_energy_wide = non_energy_ref.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                            'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
+                                                        values = 'energy', 
+                                                        columns = 'year').reset_index()
+        
+        non_energy_wide.to_csv(save_location + economy + '_non_energy_wide_ref_' + timestamp + '.csv', index = False)
+
+    else:
+        pass
+
+    # TGT
+    if len(tgt_ne) == 1:
+        non_energy_tgt = pd.read_csv(tgt_ne[0])
+
+        non_energy_tgt['sub2sectors'] = 'x'
+        non_energy_tgt['sub3sectors'] = 'x'
+        non_energy_tgt['sub4sectors'] = 'x'
+
+        non_energy_tgt = non_energy_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                        'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
+                                            .reset_index(drop = True)
+        
+        non_energy_tgt.to_csv(save_location + economy + '_non_energy_long_tgt_' + timestamp + '.csv', index = False)
+
+        non_energy_wide = non_energy_tgt.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                            'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
+                                                        values = 'energy', 
+                                                        columns = 'year').reset_index()
+        
+        non_energy_wide.to_csv(save_location + economy + '_non_energy_wide_tgt_' + timestamp + '.csv', index = False)
+
+    else:
+        pass
