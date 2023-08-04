@@ -237,8 +237,10 @@ def fuel_switch_ne(economy = '01_AUS',
     
     # Bring in historical
     # Already exists from REF
-    
-    switched_tgt = pd.concat([hist_ref, switched_tgt]).copy().reset_index(drop = True)
+    hist_tgt = hist_ref.copy()
+    hist_tgt['scenarios'] = 'target'
+     
+    switched_tgt = pd.concat([hist_tgt, switched_tgt]).copy().reset_index(drop = True)
     switched_tgt['year'] = switched_tgt['year'].astype(str).astype(int)
 
     final_tgt = pd.DataFrame()

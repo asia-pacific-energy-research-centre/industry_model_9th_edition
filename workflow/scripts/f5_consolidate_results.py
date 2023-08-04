@@ -309,15 +309,10 @@ for economy in list(economy_select):
 for economy in list(economy_select):
     file_location = './results/non_energy/3_fuel_switch/{}/'.format(economy)
 
-    save_location = './results/non_energy/4_final/{}/'.format(economy)
-
-    if not os.path.isdir(save_location):
-        os.makedirs(save_location)
-
     ne_files = glob.glob(file_location + '*.csv')
 
-    ref_ne = [s for s in ne_files if 'ref.csv' in s]
-    tgt_ne = [s for s in ne_files if 'tgt.csv' in s]
+    ref_ne = [s for s in ne_files if 'switched_ref.csv' in s]
+    tgt_ne = [s for s in ne_files if 'switched_tgt.csv' in s]
 
     # REF
     if len(ref_ne) == 1:
@@ -331,14 +326,14 @@ for economy in list(economy_select):
                                         'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
                                             .reset_index(drop = True)
         
-        non_energy_ref.to_csv(save_location + economy + '_non_energy_long_ref_' + timestamp + '.csv', index = False)
+        non_energy_ref.to_csv(file_location + economy + '_non_energy_long_ref.csv', index = False)
 
         non_energy_wide = non_energy_ref.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
                                                             'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
                                                         values = 'energy', 
                                                         columns = 'year').reset_index()
         
-        non_energy_wide.to_csv(save_location + economy + '_non_energy_wide_ref_' + timestamp + '.csv', index = False)
+        non_energy_wide.to_csv(file_location + economy + '_non_energy_wide_ref.csv', index = False)
 
     else:
         pass
@@ -355,14 +350,14 @@ for economy in list(economy_select):
                                         'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
                                             .reset_index(drop = True)
         
-        non_energy_tgt.to_csv(save_location + economy + '_non_energy_long_tgt_' + timestamp + '.csv', index = False)
+        non_energy_tgt.to_csv(file_location + economy + '_non_energy_long_tgt.csv', index = False)
 
         non_energy_wide = non_energy_tgt.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
                                                             'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
                                                         values = 'energy', 
                                                         columns = 'year').reset_index()
         
-        non_energy_wide.to_csv(save_location + economy + '_non_energy_wide_tgt_' + timestamp + '.csv', index = False)
+        non_energy_wide.to_csv(file_location + economy + '_non_energy_wide_tgt.csv', index = False)
 
     else:
         pass

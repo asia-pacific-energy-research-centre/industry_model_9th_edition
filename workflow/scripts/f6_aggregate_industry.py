@@ -55,7 +55,6 @@ for economy in [list(economy_select)[-3]]:
         # Define new empty dataframe to save results in 
         groundup_df_ref = pd.DataFrame()
 
-        # TGT
         # Start at lowest sector results (for industry: sub3sectors)
         for sector in ref_df['sub3sectors'].unique():
             if sector == 'x':
