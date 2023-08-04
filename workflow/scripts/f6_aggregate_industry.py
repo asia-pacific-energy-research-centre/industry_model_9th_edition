@@ -33,7 +33,7 @@ all_years = list(range(1980, 2101, 1))
 all_years_str = [str(i) for i in all_years]
 
 # Read in steel data
-for economy in [list(economy_select)[-3]]:
+for economy in list(economy_select):
     # Save location for charts and data
     save_location = './results/industry/4_final/{}/'.format(economy)
 
