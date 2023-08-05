@@ -62,7 +62,7 @@ EGEDA_biomass = EGEDA_hist[(EGEDA_hist['sectors'] == '14_industry_sector') &
 EGEDA_others = EGEDA_hist[(EGEDA_hist['sectors'] == '14_industry_sector') &
                            (EGEDA_hist['subfuels'].isin(others_sub))].copy().reset_index(drop = True)
 
-for economy in list(economy_select):
+for economy in [list(economy_select)[-3]]:
     # Save location for charts and data
     file_location = './results/industry/4_final/{}/'.format(economy)
 
@@ -116,7 +116,7 @@ for economy in list(economy_select):
         # New data frame to build in disaggregated results
         groundup_df_ref = pd.DataFrame()
 
-        # # Now forward fill for each sector breakdown, starting with sub3sectors
+        # Now forward fill for each sector breakdown, starting with sub3sectors
         # Sub3sectors
         if len(ref_df['sub3sectors'].unique()) > 1:
             # Define array without 'x'
@@ -134,120 +134,24 @@ for economy in list(economy_select):
                                             (ref_df['sub4sectors'] == 'x') &
                                             (ref_df['subfuels'] == '16_x_hydrogen')].copy().reset_index(drop = True)
                 
-                for fuel in ref_df['fuels'].unique()[:-1]:
-                    if sector in ['14_03_01_01_fs', '14_03_02_01_fs', '14_03_04_02_nonccs']:
-                        temp_sub3 = ref_df[(ref_df['sub3sectors'] == sector) &
-                                                (ref_df['sub4sectors'] == 'x') &
-                                                (ref_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        fuel_total_row = temp_sub3[temp_sub3['subfuels'] == 'x'].copy().reset_index(drop = True)
-
-                        hydrogen_adjust = temp_sub3[temp_sub3['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
-                        
-                        if hydrogen_adjust.empty:
-                            pass
-                        else:
-                            fuel_total_row_copy = fuel_total_row.copy()
-                            hydrogen_adjust.fillna(0, inplace = True)
-                            for year in proj_years_str:
-                                fuel_total_row.loc[0, year] = fuel_total_row_copy.loc[0, year] - hydrogen_adjust.loc[0, year]
-
-                        subfuels_df = temp_sub3[~temp_sub3['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
+                for fuel in ref_df['fuels'].unique()[:-1]:                    
+                    temp_sub3 = ref_df[(ref_df['sub3sectors'] == sector) &
+                                            (ref_df['sub4sectors'] == 'x') &
+                                            (ref_df['fuels'] == fuel)].copy().reset_index(drop = True)
                     
-                    # CCS adjustment
-                    elif sector in ['14_03_01_03_ccs']:
-                        temp_ccs = ref_df[(ref_df['sub2sectors'] == '14_03_01_iron_and_steel') &
-                                          (ref_df['sub3sectors'] == 'x') &
-                                          (ref_df['sub4sectors'] == 'x') &
-                                          (ref_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        fuel_total_row_ccs = temp_ccs[temp_ccs['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_ccs = temp_ccs[~temp_ccs['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
+                    fuel_total_row = temp_sub3[temp_sub3['subfuels'] == 'x'].copy().reset_index(drop = True)
 
-                        # Additional needed temp
-                        temp_ccs2 = ref_df[(ref_df['sub3sectors'] == sector) &
-                                           (ref_df['sub4sectors'] == 'x') &
-                                           (ref_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        if temp_ccs2.empty:
-                            continue
-                        
-                        fuel_total_row = temp_ccs2[temp_ccs2['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_df = temp_ccs2[~temp_ccs2['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        if fuel_total_row.empty:
-                            continue
-                        
-                    elif sector in ['14_03_02_02_ccs']:
-                        temp_ccs = ref_df[(ref_df['sub2sectors'] == '14_03_02_chemical_incl_petrochemical') &
-                                          (ref_df['sub3sectors'] == 'x') &
-                                          (ref_df['sub4sectors'] == 'x') &
-                                          (ref_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        fuel_total_row_ccs = temp_ccs[temp_ccs['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_ccs = temp_ccs[~temp_ccs['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        # Additional needed temp
-                        temp_ccs2 = ref_df[(ref_df['sub3sectors'] == sector) &
-                                           (ref_df['sub4sectors'] == 'x') &
-                                           (ref_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        if temp_ccs2.empty:
-                            continue
-                        
-                        fuel_total_row = temp_ccs2[temp_ccs2['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_df = temp_ccs2[~temp_ccs2['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        if fuel_total_row.empty:
-                            continue
-
-                    elif sector in ['14_03_04_01_ccs']:
-                        temp_ccs = ref_df[(ref_df['sub2sectors'] == '14_03_04_nonmetallic_mineral_products') &
-                                          (ref_df['sub3sectors'] == 'x') &
-                                          (ref_df['sub4sectors'] == 'x') &
-                                          (ref_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        fuel_total_row_ccs = temp_ccs[temp_ccs['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_ccs = temp_ccs[~temp_ccs['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        # Additional needed temp
-                        temp_ccs2 = ref_df[(ref_df['sub3sectors'] == sector) &
-                                           (ref_df['sub4sectors'] == 'x') &
-                                           (ref_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        if temp_ccs2.empty:
-                            continue
-                        
-                        fuel_total_row = temp_ccs2[temp_ccs2['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_df = temp_ccs2[~temp_ccs2['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        if fuel_total_row.empty:
-                            continue
-
-                    # Need the 2020 ratio
-                    if sector in ['14_03_01_01_fs', '14_03_02_01_fs', '14_03_04_02_nonccs']:
-                        fuel_ratio_ref = subfuels_df.loc[:, ['subfuels', '2020']].copy().reset_index(drop = True)
-
-                        fuel_ratio_ref['ratio'] = np.nan
-                        total_for_calc = fuel_total_row.loc[0, '2020']
-
+                    hydrogen_adjust = temp_sub3[temp_sub3['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
+                    
+                    if hydrogen_adjust.empty:
+                        pass
                     else:
-                        fuel_ratio_ref = subfuels_ccs.loc[:, ['subfuels', '2020']].copy().reset_index(drop = True)
+                        fuel_total_row_copy = fuel_total_row.copy()
+                        hydrogen_adjust.fillna(0, inplace = True)
+                        for year in proj_years_str:
+                            fuel_total_row.loc[0, year] = fuel_total_row_copy.loc[0, year] - hydrogen_adjust.loc[0, year]
 
-                        fuel_ratio_ref['ratio'] = np.nan
-                        total_for_calc = fuel_total_row_ccs.loc[0, '2020']
-
-                    for i in range(len(fuel_ratio_ref['subfuels'].unique())):
-                        # To avoid dividng by zero
-                        if total_for_calc == 0:
-                            fuel_ratio_ref.iloc[i, 2] = total_for_calc
-                        else: 
-                            fuel_ratio_ref.iloc[i, 2] = fuel_ratio_ref.iloc[i, 1] / total_for_calc
-
-                    for year in proj_years_str:
-                        for subfuel in subfuels_df['subfuels'].unique():
-                            subfuels_df.loc[subfuels_df['subfuels'] == subfuel, year] = \
-                                fuel_total_row.loc[0, year] * fuel_ratio_ref.loc[fuel_ratio_ref['subfuels'] == subfuel, 'ratio']
+                    subfuels_df = temp_sub3[~temp_sub3['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
                     
                     # Now if hydrogen subtracted from 16_others, add the original 16_others total line in
                     if hydrogen_adjust.empty:
@@ -483,6 +387,69 @@ for economy in list(economy_select):
         
         groundup_df_ref = groundup_df_ref.sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
                                                  'sub3sectors', 'fuels', 'subfuels']).reset_index(drop = True)
+        
+        #############################################################################################################
+        # Final edit for sub3sectors
+        relevant_sectors = np.delete(groundup_df_ref['sub3sectors'].unique(), 
+                                            np.where(groundup_df_ref['sub3sectors'].unique() == 'x'))
+        
+        if len(ref_df['sub3sectors'].unique()) > 0:
+            # Subset data to amend:
+            amend_df = groundup_df_ref[groundup_df_ref['sub3sectors'].isin(relevant_sectors)].copy()
+            everything_else_df = groundup_df_ref[~groundup_df_ref['sub3sectors'].isin(relevant_sectors)].copy()
+
+            post_amend_df = pd.DataFrame()
+
+            for sector in relevant_sectors:
+                temp_df = amend_df[amend_df['sub3sectors'] == sector].copy()
+
+                totals_3sector = temp_df[temp_df['subfuels'] == 'x'].copy().reset_index(drop = True)
+                sub2sector_choice = totals_3sector.loc[0, 'sub2sectors']
+
+                totals_2sector = groundup_df_ref[(groundup_df_ref['sub2sectors'] == sub2sector_choice) &
+                                        (groundup_df_ref['sub3sectors'] == 'x') &
+                                        (groundup_df_ref['subfuels'] == 'x')].copy().reset_index(drop = True)
+                
+                subfuels_2sector = groundup_df_ref[(groundup_df_ref['sub2sectors'] == sub2sector_choice) &
+                                        (groundup_df_ref['sub3sectors'] == 'x') &
+                                        (groundup_df_ref['subfuels'] != 'x')].copy().reset_index(drop = True)
+                
+                totals_2sector.fillna(0, inplace = True)
+                totals_3sector.fillna(0, inplace = True)
+                subfuels_2sector.fillna(0, inplace = True)
+
+                share_df = totals_3sector.copy()
+
+                for year in all_years_str:
+                    for fuel in share_df['fuels'].unique():
+                        # Account for divide by zero issue
+                        if totals_2sector.loc[totals_2sector['fuels'] == fuel, year].values[0] != 0:
+                            share_df.loc[share_df['fuels'] == fuel, year] = totals_3sector.loc[totals_3sector['fuels'] == fuel, year].values[0]\
+                                / totals_2sector.loc[totals_2sector['fuels'] == fuel, year].values[0]
+                        else:
+                            share_df.loc[share_df['fuels'] == fuel, year] = 0
+
+                relevant_subfuels = np.delete(temp_df['subfuels'].unique(),
+                                                np.where(temp_df['subfuels'].unique() == 'x'))
+
+                for subfuel in relevant_subfuels:
+                    for year in all_years_str:
+                        fuel = temp_df.loc[(temp_df['subfuels'] == subfuel), 'fuels'].values[0]
+                        if fuel in share_df['fuels'].unique():                
+                            temp_df.loc[temp_df['subfuels'] == subfuel, year] = subfuels_2sector.loc[subfuels_2sector['subfuels'] == subfuel, year].values[0] \
+                                * share_df.loc[share_df['fuels'] == fuel, year].values[0]
+                        else:
+                            temp_df.loc[temp_df['subfuels'] == subfuel, year] = np.nan
+
+                post_amend_df = pd.concat([post_amend_df, temp_df]).copy().reset_index(drop = True)
+
+            groundup_df_ref = pd.concat([everything_else_df, post_amend_df]).copy().reset_index(drop = True)
+
+            groundup_df_ref = groundup_df_ref.sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
+                                                    'sub3sectors', 'fuels', 'subfuels']).copy().reset_index(drop = True)
+            
+        else:
+            pass
 
         groundup_df_ref.to_csv(file_location + economy + '_industry_ref_' + timestamp + '.csv', index = False)
 
@@ -549,120 +516,24 @@ for economy in list(economy_select):
                                             (tgt_df['sub4sectors'] == 'x') &
                                             (tgt_df['subfuels'] == '16_x_hydrogen')].copy().reset_index(drop = True)
                 
-                for fuel in tgt_df['fuels'].unique()[:-1]:
-                    if sector in ['14_03_01_01_fs', '14_03_02_01_fs', '14_03_04_02_nonccs']:
-                        temp_sub3 = tgt_df[(tgt_df['sub3sectors'] == sector) &
-                                                (tgt_df['sub4sectors'] == 'x') &
-                                                (tgt_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        fuel_total_row = temp_sub3[temp_sub3['subfuels'] == 'x'].copy().reset_index(drop = True)
-
-                        hydrogen_adjust = temp_sub3[temp_sub3['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
-                        
-                        if hydrogen_adjust.empty:
-                            pass
-                        else:
-                            fuel_total_row_copy = fuel_total_row.copy()
-                            hydrogen_adjust.fillna(0, inplace = True)
-                            for year in proj_years_str:
-                                fuel_total_row.loc[0, year] = fuel_total_row_copy.loc[0, year] - hydrogen_adjust.loc[0, year]
-
-                        subfuels_df = temp_sub3[~temp_sub3['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
+                for fuel in tgt_df['fuels'].unique()[:-1]:                    
+                    temp_sub3 = tgt_df[(tgt_df['sub3sectors'] == sector) &
+                                       (tgt_df['sub4sectors'] == 'x') &
+                                       (tgt_df['fuels'] == fuel)].copy().reset_index(drop = True)
                     
-                    # CCS adjustment
-                    elif sector in ['14_03_01_03_ccs']:
-                        temp_ccs = tgt_df[(tgt_df['sub2sectors'] == '14_03_01_iron_and_steel') &
-                                          (tgt_df['sub3sectors'] == 'x') &
-                                          (tgt_df['sub4sectors'] == 'x') &
-                                          (tgt_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        fuel_total_row_ccs = temp_ccs[temp_ccs['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_ccs = temp_ccs[~temp_ccs['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
+                    fuel_total_row = temp_sub3[temp_sub3['subfuels'] == 'x'].copy().reset_index(drop = True)
 
-                        # Additional needed temp
-                        temp_ccs2 = tgt_df[(tgt_df['sub3sectors'] == sector) &
-                                           (tgt_df['sub4sectors'] == 'x') &
-                                           (tgt_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        if temp_ccs2.empty:
-                            continue
-                        
-                        fuel_total_row = temp_ccs2[temp_ccs2['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_df = temp_ccs2[~temp_ccs2['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        if fuel_total_row.empty:
-                            continue
-                        
-                    elif sector in ['14_03_02_02_ccs']:
-                        temp_ccs = tgt_df[(tgt_df['sub2sectors'] == '14_03_02_chemical_incl_petrochemical') &
-                                          (tgt_df['sub3sectors'] == 'x') &
-                                          (tgt_df['sub4sectors'] == 'x') &
-                                          (tgt_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        fuel_total_row_ccs = temp_ccs[temp_ccs['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_ccs = temp_ccs[~temp_ccs['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        # Additional needed temp
-                        temp_ccs2 = tgt_df[(tgt_df['sub3sectors'] == sector) &
-                                           (tgt_df['sub4sectors'] == 'x') &
-                                           (tgt_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        if temp_ccs2.empty:
-                            continue
-                        
-                        fuel_total_row = temp_ccs2[temp_ccs2['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_df = temp_ccs2[~temp_ccs2['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        if fuel_total_row.empty:
-                            continue
-
-                    elif sector in ['14_03_04_01_ccs']:
-                        temp_ccs = tgt_df[(tgt_df['sub2sectors'] == '14_03_04_nonmetallic_mineral_products') &
-                                          (tgt_df['sub3sectors'] == 'x') &
-                                          (tgt_df['sub4sectors'] == 'x') &
-                                          (tgt_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        fuel_total_row_ccs = temp_ccs[temp_ccs['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_ccs = temp_ccs[~temp_ccs['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        # Additional needed temp
-                        temp_ccs2 = tgt_df[(tgt_df['sub3sectors'] == sector) &
-                                           (tgt_df['sub4sectors'] == 'x') &
-                                           (tgt_df['fuels'] == fuel)].copy().reset_index(drop = True)
-                        
-                        if temp_ccs2.empty:
-                            continue
-                        
-                        fuel_total_row = temp_ccs2[temp_ccs2['subfuels'] == 'x'].copy().reset_index(drop = True)
-                        subfuels_df = temp_ccs2[~temp_ccs2['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                        if fuel_total_row.empty:
-                            continue
-
-                    # Need the 2020 ratio
-                    if sector in ['14_03_01_01_fs', '14_03_02_01_fs', '14_03_04_02_nonccs']:
-                        fuel_ratio_tgt = subfuels_df.loc[:, ['subfuels', '2020']].copy().reset_index(drop = True)
-
-                        fuel_ratio_tgt['ratio'] = np.nan
-                        total_for_calc = fuel_total_row.loc[0, '2020']
-
+                    hydrogen_adjust = temp_sub3[temp_sub3['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
+                    
+                    if hydrogen_adjust.empty:
+                        pass
                     else:
-                        fuel_ratio_tgt = subfuels_ccs.loc[:, ['subfuels', '2020']].copy().reset_index(drop = True)
+                        fuel_total_row_copy = fuel_total_row.copy()
+                        hydrogen_adjust.fillna(0, inplace = True)
+                        for year in proj_years_str:
+                            fuel_total_row.loc[0, year] = fuel_total_row_copy.loc[0, year] - hydrogen_adjust.loc[0, year]
 
-                        fuel_ratio_tgt['ratio'] = np.nan
-                        total_for_calc = fuel_total_row_ccs.loc[0, '2020']
-
-                    for i in range(len(fuel_ratio_tgt['subfuels'].unique())):
-                        # To avoid dividng by zero
-                        if total_for_calc == 0:
-                            fuel_ratio_tgt.iloc[i, 2] = total_for_calc
-                        else: 
-                            fuel_ratio_tgt.iloc[i, 2] = fuel_ratio_tgt.iloc[i, 1] / total_for_calc
-
-                    for year in proj_years_str:
-                        for subfuel in subfuels_df['subfuels'].unique():
-                            subfuels_df.loc[subfuels_df['subfuels'] == subfuel, year] = \
-                                fuel_total_row.loc[0, year] * fuel_ratio_tgt.loc[fuel_ratio_tgt['subfuels'] == subfuel, 'ratio']
+                    subfuels_df = temp_sub3[~temp_sub3['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
                     
                     # Now if hydrogen subtracted from 16_others, add the original 16_others total line in
                     if hydrogen_adjust.empty:
@@ -898,5 +769,68 @@ for economy in list(economy_select):
         
         groundup_df_tgt = groundup_df_tgt.sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
                                                  'sub3sectors', 'fuels', 'subfuels']).reset_index(drop = True)
+        
+        #############################################################################################################
+        # Final edit for sub3sectors
+        relevant_sectors = np.delete(groundup_df_tgt['sub3sectors'].unique(), 
+                                            np.where(groundup_df_tgt['sub3sectors'].unique() == 'x'))
+        
+        if len(ref_df['sub3sectors'].unique()) > 0:
+            # Subset data to amend:
+            amend_df = groundup_df_tgt[groundup_df_tgt['sub3sectors'].isin(relevant_sectors)].copy()
+            everything_else_df = groundup_df_tgt[~groundup_df_tgt['sub3sectors'].isin(relevant_sectors)].copy()
+
+            post_amend_df = pd.DataFrame()
+
+            for sector in relevant_sectors:
+                temp_df = amend_df[amend_df['sub3sectors'] == sector].copy()
+
+                totals_3sector = temp_df[temp_df['subfuels'] == 'x'].copy().reset_index(drop = True)
+                sub2sector_choice = totals_3sector.loc[0, 'sub2sectors']
+
+                totals_2sector = groundup_df_tgt[(groundup_df_tgt['sub2sectors'] == sub2sector_choice) &
+                                        (groundup_df_tgt['sub3sectors'] == 'x') &
+                                        (groundup_df_tgt['subfuels'] == 'x')].copy().reset_index(drop = True)
+                
+                subfuels_2sector = groundup_df_tgt[(groundup_df_tgt['sub2sectors'] == sub2sector_choice) &
+                                        (groundup_df_tgt['sub3sectors'] == 'x') &
+                                        (groundup_df_tgt['subfuels'] != 'x')].copy().reset_index(drop = True)
+                
+                totals_2sector.fillna(0, inplace = True)
+                totals_3sector.fillna(0, inplace = True)
+                subfuels_2sector.fillna(0, inplace = True)
+
+                share_df = totals_3sector.copy()
+
+                for year in all_years_str:
+                    for fuel in share_df['fuels'].unique():
+                        # Account for divide by zero issue
+                        if totals_2sector.loc[totals_2sector['fuels'] == fuel, year].values[0] != 0:
+                            share_df.loc[share_df['fuels'] == fuel, year] = totals_3sector.loc[totals_3sector['fuels'] == fuel, year].values[0]\
+                                / totals_2sector.loc[totals_2sector['fuels'] == fuel, year].values[0]
+                        else:
+                            share_df.loc[share_df['fuels'] == fuel, year] = 0
+
+                relevant_subfuels = np.delete(temp_df['subfuels'].unique(),
+                                                np.where(temp_df['subfuels'].unique() == 'x'))
+
+                for subfuel in relevant_subfuels:
+                    for year in all_years_str:
+                        fuel = temp_df.loc[(temp_df['subfuels'] == subfuel), 'fuels'].values[0]
+                        if fuel in share_df['fuels'].unique():                
+                            temp_df.loc[temp_df['subfuels'] == subfuel, year] = subfuels_2sector.loc[subfuels_2sector['subfuels'] == subfuel, year].values[0] \
+                                * share_df.loc[share_df['fuels'] == fuel, year].values[0]
+                        else:
+                            temp_df.loc[temp_df['subfuels'] == subfuel, year] = np.nan
+
+                post_amend_df = pd.concat([post_amend_df, temp_df]).copy().reset_index(drop = True)
+
+            groundup_df_tgt = pd.concat([everything_else_df, post_amend_df]).copy().reset_index(drop = True)
+
+            groundup_df_tgt = groundup_df_tgt.sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
+                                                    'sub3sectors', 'fuels', 'subfuels']).copy().reset_index(drop = True)
+            
+        else:
+            pass
 
         groundup_df_tgt.to_csv(file_location + economy + '_industry_tgt_' + timestamp + '.csv', index = False)

@@ -68,7 +68,7 @@ proj_years = list(range(2021, 2101, 1))
 # Fuels of interest 
 relevant_fuels = EGEDA_df['fuels'].unique()[[0, 1, 5, 6, 7, 11, 14, 15, 16, 17]]
 
-for economy in economy_select:
+for economy in economy_select[7:8]:
     # Save location for charts and data
     save_location = './results/industry/2_energy_projections/{}/'.format(economy)
 
@@ -208,7 +208,7 @@ for economy in economy_select:
     if not os.path.isdir(nonenergy_location):
         os.makedirs(nonenergy_location)
 
-    # Historical nergy data
+    # Historical energy data
     nonenergy_df = EGEDA_ne_2020_df[(EGEDA_ne_2020_df['economy'] == economy)]\
                                     .copy().reset_index(drop = True)
     
@@ -224,7 +224,7 @@ for economy in economy_select:
     nonenergy_proj_tgt = pd.DataFrame(columns = nonenergy_df.columns)
 
     # Fuel ratio in 2020 dataframe
-    fuel_ratio_2020 = energy_df.loc[:, ['fuels', 'energy']]
+    fuel_ratio_2020 = nonenergy_df.loc[:, ['fuels', 'energy']]
 
     # Calculate percentage for each fuel in 2020 and save it in the dataframe    
     for i in range(len(nonenergy_df)):

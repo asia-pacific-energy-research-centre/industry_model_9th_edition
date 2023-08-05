@@ -35,6 +35,13 @@ industry_refine1 = pd.read_csv('./data/industry_production/4_industry_refine1/re
 nonenergy_refine1 = pd.read_csv('./data/non_energy/2_nonenergy_refine1/refined_nonenergy_all.csv')
 
 #################################################################################################
+# Japan
+industry_adj(economy = '08_JPN',
+             adjust = {2023: 0.93},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_01_iron_and_steel',
+             data = industry_refine1)
+
 # Thailand
 
 industry_adj(economy = '19_THA',

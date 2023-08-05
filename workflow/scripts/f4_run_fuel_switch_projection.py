@@ -87,6 +87,9 @@ fuel_switch(economy = '08_JPN', sector = ind2[9], elec_rate_ref = 0.003, elec_ra
 # Non-specified
 fuel_switch(economy = '08_JPN', sector = ind2[10], elec_rate_tgt = 0.01)
 
+# Non-energy
+fuel_switch_ne(economy = '08_JPN', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005)
+
 #################################################################################################################
 # Thailand
 # Mining
