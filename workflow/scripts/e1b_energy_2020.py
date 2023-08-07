@@ -121,7 +121,7 @@ for economy in economy_list:
 
             sns.set_theme(style = 'ticks')
 
-            stacked_df.plot(kind = 'bar', stacked = True, ax = ax, color = fuel_palette4)
+            stacked_df.plot(kind = 'bar', stacked = True, ax = ax, color = fuel_palette1)
 
             max_y = max(energy_df[energy_df['year'] == 2019]['energy'].sum(),
                         energy_df[energy_df['year'] == 2020]['energy'].sum())
