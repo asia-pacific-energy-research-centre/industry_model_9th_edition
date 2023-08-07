@@ -142,7 +142,7 @@ fuel_switch_ne(economy = '19_THA', hyd_increment_ref = 0.002, hyd_increment_tgt 
 #################################################################################################
 
 # Now read in all data for each economy
-for economy in [list(economy_select)[-3]]:
+for economy in list(economy_select):
     data_location = './results/industry/3_fuel_switch/{}/'.format(economy)
 
     if not os.path.isdir(data_location):
@@ -157,102 +157,106 @@ for economy in [list(economy_select)[-3]]:
 
     economy_files = glob.glob(data_location + '*.csv')
 
-    for i in economy_files:
-        temp_df = pd.read_csv(i)
-        economy_df = pd.concat([economy_df, temp_df]).copy().reset_index(drop = True)
+    if len(economy_files) < 2:
+        pass
 
-    economy_df.to_csv(all_sector_save + '{}_all_subsectors.csv'.format(economy), index = False)
-    
-    # Create some charts
-    # Pivot the DataFrame
-    chart_df_ref = economy_df[(economy_df['energy'] != 0) &
-                              (economy_df['energy'].isna() == False) &
-                              (economy_df['scenarios'] == 'reference') &
-                              (economy_df['year'] <= 2070)].copy().reset_index(drop = True)
-    
-    # Custom chart column
-    chart_df_ref['fuel'] = np.where(chart_df_ref['subfuels'] == 'x', chart_df_ref['fuels'], chart_df_ref['subfuels'])
-    
-    chart_df_ref = chart_df_ref.groupby(['fuel', 'year'])['energy'].sum().reset_index()
-    
-    chart_pivot_ref = chart_df_ref.pivot(index = 'year', columns = 'fuel', values = 'energy')
-    
-    chart_df_tgt = economy_df[(economy_df['energy'] != 0) &
-                              (economy_df['energy'].isna() == False) & 
-                              (economy_df['scenarios'] == 'target') &
-                              (economy_df['year'] <= 2070)].copy().reset_index(drop = True)
-    
-    # Custom chart column
-    chart_df_tgt['fuel'] = np.where(chart_df_tgt['subfuels'] == 'x', chart_df_tgt['fuels'], chart_df_tgt['subfuels'])
-    
-    chart_df_tgt = chart_df_tgt.groupby(['fuel', 'year'])['energy'].sum().reset_index()
+    else:
+        for i in economy_files:
+            temp_df = pd.read_csv(i)
+            economy_df = pd.concat([economy_df, temp_df]).copy().reset_index(drop = True)
 
-    chart_pivot_tgt = chart_df_tgt.pivot(index = 'year', columns = 'fuel', values = 'energy')
+        economy_df.to_csv(all_sector_save + '{}_all_subsectors.csv'.format(economy), index = False)
+        
+        # Create some charts
+        # Pivot the DataFrame
+        chart_df_ref = economy_df[(economy_df['energy'] != 0) &
+                                (economy_df['energy'].isna() == False) &
+                                (economy_df['scenarios'] == 'reference') &
+                                (economy_df['year'] <= 2070)].copy().reset_index(drop = True)
+        
+        # Custom chart column
+        chart_df_ref['fuel'] = np.where(chart_df_ref['subfuels'] == 'x', chart_df_ref['fuels'], chart_df_ref['subfuels'])
+        
+        chart_df_ref = chart_df_ref.groupby(['fuel', 'year'])['energy'].sum().reset_index()
+        
+        chart_pivot_ref = chart_df_ref.pivot(index = 'year', columns = 'fuel', values = 'energy')
+        
+        chart_df_tgt = economy_df[(economy_df['energy'] != 0) &
+                                (economy_df['energy'].isna() == False) & 
+                                (economy_df['scenarios'] == 'target') &
+                                (economy_df['year'] <= 2070)].copy().reset_index(drop = True)
+        
+        # Custom chart column
+        chart_df_tgt['fuel'] = np.where(chart_df_tgt['subfuels'] == 'x', chart_df_tgt['fuels'], chart_df_tgt['subfuels'])
+        
+        chart_df_tgt = chart_df_tgt.groupby(['fuel', 'year'])['energy'].sum().reset_index()
 
-    max_y = 1.1 * max(chart_df_ref.groupby('year')['energy'].sum().max(), chart_df_tgt.groupby('year')['energy'].sum().max())
-    proj_location = 0.925 * max_y
+        chart_pivot_tgt = chart_df_tgt.pivot(index = 'year', columns = 'fuel', values = 'energy')
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (8, 8))
+        max_y = 1.1 * max(chart_df_ref.groupby('year')['energy'].sum().max(), chart_df_tgt.groupby('year')['energy'].sum().max())
+        proj_location = 0.925 * max_y
 
-    sns.set_theme(style = 'ticks')
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (8, 8))
 
-    chart_pivot_ref.plot.area(ax = ax1,
-                                stacked = True,
-                                #alpha = 0.8,
-                                color = fuel_palette1, 
-                                linewidth = 0)
-    
-    chart_pivot_tgt.plot.area(ax = ax2,
-                                stacked = True,
-                                #alpha = 0.8,
-                                color = fuel_palette1,
-                                linewidth = 0)
-    
-    ax1.set(title = economy + ' all industry REF',
-            xlabel = 'Year',
-            ylabel = 'Energy (PJ)',
-            xlim = (2000, 2070),
-            ylim = (0, max_y))
-    
-    ax2.set(title = economy + ' all industry TGT',
-            xlabel = 'Year',
-            ylabel = 'Energy (PJ)',
-            xlim = (2000, 2070),
-            ylim = (0, max_y))
-    
-    # Projection demarcation
-    ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
-    ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+        sns.set_theme(style = 'ticks')
 
-    # Projection text
-    ax1.annotate('Projection', 
-                 xy = (2030, proj_location),
-                 xytext = (2024, proj_location),
-                 va = 'center',
-                 ha = 'center',
-                 fontsize = 9,
-                 arrowprops = {'arrowstyle': '-|>',
-                               'lw': 0.5,
-                               'ls': '-',
-                               'color': 'black'})
-    
-    ax2.annotate('Projection', 
-                 xy = (2030, proj_location),
-                 xytext = (2024, proj_location),
-                 va = 'center',
-                 ha = 'center',
-                 fontsize = 9,
-                 arrowprops = {'arrowstyle': '-|>',
-                               'lw': 0.5,
-                               'ls': '-',
-                               'color': 'black'})
-    
-    ax1.legend(title = '', fontsize = 7)
-    ax2.legend(title = '', fontsize = 7)
+        chart_pivot_ref.plot.area(ax = ax1,
+                                    stacked = True,
+                                    #alpha = 0.8,
+                                    color = fuel_palette1, 
+                                    linewidth = 0)
+        
+        chart_pivot_tgt.plot.area(ax = ax2,
+                                    stacked = True,
+                                    #alpha = 0.8,
+                                    color = fuel_palette1,
+                                    linewidth = 0)
+        
+        ax1.set(title = economy + ' all industry REF',
+                xlabel = 'Year',
+                ylabel = 'Energy (PJ)',
+                xlim = (2000, 2070),
+                ylim = (0, max_y))
+        
+        ax2.set(title = economy + ' all industry TGT',
+                xlabel = 'Year',
+                ylabel = 'Energy (PJ)',
+                xlim = (2000, 2070),
+                ylim = (0, max_y))
+        
+        # Projection demarcation
+        ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+        ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
 
-    #ax2.set_ylim(ax1.get_ylim())
-            
-    plt.tight_layout()
-    plt.savefig(all_sector_save + economy + '_industry.png')
-    plt.show()
-    plt.close()
+        # Projection text
+        ax1.annotate('Projection', 
+                    xy = (2030, proj_location),
+                    xytext = (2024, proj_location),
+                    va = 'center',
+                    ha = 'center',
+                    fontsize = 9,
+                    arrowprops = {'arrowstyle': '-|>',
+                                'lw': 0.5,
+                                'ls': '-',
+                                'color': 'black'})
+        
+        ax2.annotate('Projection', 
+                    xy = (2030, proj_location),
+                    xytext = (2024, proj_location),
+                    va = 'center',
+                    ha = 'center',
+                    fontsize = 9,
+                    arrowprops = {'arrowstyle': '-|>',
+                                'lw': 0.5,
+                                'ls': '-',
+                                'color': 'black'})
+        
+        ax1.legend(title = '', fontsize = 7)
+        ax2.legend(title = '', fontsize = 7)
+
+        #ax2.set_ylim(ax1.get_ylim())
+                
+        plt.tight_layout()
+        plt.savefig(all_sector_save + economy + '_industry.png')
+        plt.show()
+        plt.close()
