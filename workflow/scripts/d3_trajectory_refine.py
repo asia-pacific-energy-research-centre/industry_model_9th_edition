@@ -148,8 +148,8 @@ nonenergy_traj(economy = '19_THA', proj_start_year = 2021,
 
 ############################ USA ##############################################################
 # Mining
-industry_traj(economy = '20_USA', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2021,
-              shape = 'increase', magnitude = 3.1, apex_mag = 0.8, apex_loc = 20, data = industry_interim)
+# industry_traj(economy = '20_USA', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2021,
+#               shape = 'increase', magnitude = 3.1, apex_mag = 0.8, apex_loc = 20, data = industry_interim)
 
 # Construction
 industry_traj(economy = '20_USA', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2021,
@@ -164,32 +164,32 @@ industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[2], 
               shape = 'peak', magnitude = 2.2, apex_mag = 0.9, apex_loc = 60, data = industry_interim)
 
 # Transportation equipment
-industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2030,
-              shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+# industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2030,
+#               shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Machinery
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2030,
               shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Food and beverages
-industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+# industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
+#               shape = 'decrease', magnitude = 1.7, apex_mag = 1.4, apex_loc = 60, data = industry_interim)
 
 # Pulp and paper
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.7, apex_mag = 1.1, apex_loc = 40, data = industry_interim)
+              shape = 'decrease', magnitude = 1.3, apex_mag = 1.1, apex_loc = 40, data = industry_interim)
 
 # Wood and wood products
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.7, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+              shape = 'decrease', magnitude = 1.3, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Textiles
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+              shape = 'decrease', magnitude = 0.9, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Non-specified
-industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.9, apex_mag = 0.9, apex_loc = 40, data = industry_interim) 
+# industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2021,
+#               shape = 'decrease', magnitude = 1.9, apex_mag = 0.9, apex_loc = 40, data = industry_interim) 
 
 
 # VN

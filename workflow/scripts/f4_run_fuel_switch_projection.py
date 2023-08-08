@@ -139,6 +139,55 @@ fuel_switch(economy = '19_THA', sector = ind2[10], elec_rate_tgt = 0.01)
 # Non-energy
 fuel_switch_ne(economy = '19_THA', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005)
 
+###########################################################################################################
+# USA
+# Mining
+fuel_switch(economy = '20_USA', sector = ind1[0])
+
+# Construction
+fuel_switch(economy = '20_USA', sector = ind1[1])
+
+# Iron and steel
+fuel_switch(economy = '20_USA', sector = ind2[0], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005, 
+            hydrogen_ref = True, ccs_ref = True, hydrogen_tgt = True, ccs_tgt = True)
+
+# Chemicals
+fuel_switch(economy = '20_USA', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
+            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = False, ccs_tgt = True)
+
+# Non-ferrous metals
+fuel_switch(economy = '20_USA', sector = ind2[2])
+
+# Non-metallic minerals
+fuel_switch(economy = '20_USA', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
+            bio_rate_tgt = 0.001, ccs_ref = True, ccs_tgt = True)
+
+# Transport
+fuel_switch(economy = '20_USA', sector = ind2[4])
+
+# Machinery
+fuel_switch(economy = '20_USA', sector = ind2[5])
+
+# Food and Beverages
+fuel_switch(economy = '20_USA', sector = ind2[6], elec_rate_tgt = 0.0075)
+
+# Pulp and paper
+fuel_switch(economy = '20_USA', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.008, 
+            bio_rate_tgt = 0.006)
+
+# Wood
+fuel_switch(economy = '20_USA', sector = ind2[8])
+
+# Textiles
+fuel_switch(economy = '20_USA', sector = ind2[9], elec_rate_ref = 0.003, elec_rate_tgt = 0.006, 
+            bio_rate_tgt = 0.002)
+
+# Non-specified
+fuel_switch(economy = '20_USA', sector = ind2[10], elec_rate_tgt = 0.01)
+
+# Non-energy
+fuel_switch_ne(economy = '20_USA', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005)
+
 #################################################################################################
 
 # Now read in all data for each economy

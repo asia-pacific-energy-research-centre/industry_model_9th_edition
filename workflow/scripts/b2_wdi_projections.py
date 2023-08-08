@@ -354,21 +354,21 @@ ind_projection(economy = '19_THA', series = 'NV.MNF.TXTL.ZS.UN', high_bound = 6)
 ###############################################################################################
 # 20_USA
 # Industry (including construction) % GDP
-ind_projection(economy = '20_USA', series = 'NV.IND.TOTL.ZS', high_bound = 16, high_change = 0.9997)
+ind_projection(economy = '20_USA', series = 'NV.IND.TOTL.ZS', high_bound = 13, high_change = 0.999)
 # Manufacturing % GDP
-ind_projection(economy = '20_USA', series = 'NV.IND.MANF.ZS', low_bound = 5, high_bound = 8, high_change = 0.9993)
+ind_projection(economy = '20_USA', series = 'NV.IND.MANF.ZS', low_bound = 5, high_bound = 7, high_change = 0.999)
 
 # Subsets of Manufacturing (% of Manufacturing)
 # Chemicals
-ind_projection(economy = '20_USA', series = 'NV.MNF.CHEM.ZS.UN', high_bound = 13, high_change = 0.9993)
+ind_projection(economy = '20_USA', series = 'NV.MNF.CHEM.ZS.UN', high_bound = 17, high_change = 0.9993)
 # Food and beverage
 ind_projection(economy = '20_USA', series = 'NV.MNF.FBTO.ZS.UN')
 # Machinery and Transport
 ind_projection(economy = '20_USA', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 25, high_bound = 30)
 # Other manufacturing
-ind_projection(economy = '20_USA', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 35, high_bound = 40)
+ind_projection(economy = '20_USA', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 26, high_bound = 28)
 # Textiles
-ind_projection(economy = '20_USA', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 1, high_bound = 1.5)
+ind_projection(economy = '20_USA', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 0.5, high_bound = 0.6, high_change = 0.997)
 
 ###############################################################################################
 # 21_VN

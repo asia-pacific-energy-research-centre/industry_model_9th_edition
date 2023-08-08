@@ -68,7 +68,7 @@ proj_years = list(range(2021, 2101, 1))
 # Fuels of interest 
 relevant_fuels = EGEDA_df['fuels'].unique()[[0, 1, 5, 6, 7, 11, 14, 15, 16, 17]]
 
-for economy in economy_select[7:8]:
+for economy in economy_select:
     # Save location for charts and data
     save_location = './results/industry/2_energy_projections/{}/'.format(economy)
 

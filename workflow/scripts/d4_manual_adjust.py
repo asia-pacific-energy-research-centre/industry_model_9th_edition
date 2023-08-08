@@ -152,13 +152,18 @@ traj_overwrite_df.to_csv('./data/non_energy/3_nonenergy_refine2/nonenergy_refine
 
 # Now save an entire data frame with the selected results from above replacing the results from before
 
-nonenergy_refine = nonenergy_refine1.merge(traj_overwrite_df, how = 'left',
-                              on = ['economy', 'economy_code', 'series', 
-                                    'year', 'units', 'sectors', 'sub1sectors'])
+if traj_overwrite_df.empty:
+    nonenergy_refine = nonenergy_refine1.copy()
 
-nonenergy_refine['value'] = (nonenergy_refine['value_x']).where(nonenergy_refine['value_y'].isna(), nonenergy_refine['value_y'])
+else:
+    nonenergy_refine = nonenergy_refine1.merge(traj_overwrite_df, how = 'left',
+                                on = ['economy', 'economy_code', 'series', 
+                                        'year', 'units', 'sectors', 'sub1sectors'])
 
-nonenergy_refine = nonenergy_refine.copy().drop(columns = ['value_x', 'value_y'])
+    nonenergy_refine['value'] = (nonenergy_refine['value_x']).where(nonenergy_refine['value_y'].isna(), nonenergy_refine['value_y'])
+
+    nonenergy_refine = nonenergy_refine.copy().drop(columns = ['value_x', 'value_y'])
+
 nonenergy_refine.to_csv('./data/non_energy/3_nonenergy_refine2/refined_nonenergy_all.csv', index = False) 
 
 

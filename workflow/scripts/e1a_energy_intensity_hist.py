@@ -22,7 +22,7 @@ hist_prod = hist_prod[hist_prod['year'] <= 2020]
 relevant_sectors = hist_prod['sub2sectors'].unique()[[1, 2, 3, 4, 5, 6, 7, 10]]
 
 # Read in energy data
-EGEDA_2020 = pd.read_csv('./data/EGEDA/model_df/model_df_wide_ref_20230630.csv')
+EGEDA_2020 = pd.read_csv(latest_EGEDA)
 
 EGEDA_2020 = EGEDA_2020[(EGEDA_2020['sub1sectors'].str.startswith('14_')) &
                         (EGEDA_2020['fuels'] == '19_total') &

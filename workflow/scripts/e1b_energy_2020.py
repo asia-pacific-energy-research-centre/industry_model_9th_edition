@@ -31,7 +31,7 @@ EGEDA_ind_df['sector'] = EGEDA_ind_df['sub1sectors'].where(EGEDA_ind_df['sub2sec
 # Subset the data so there is only EGEDA industry total energy use
 EGEDA_ind_total = EGEDA_ind_df[EGEDA_ind_df['fuels'] == '19_total'].copy().reset_index(drop = True)
 
-economy_list = list(EGEDA_ind_df['economy'].unique())[:-7]
+economy_list = list(EGEDA_ind_df['economy'].unique())
 
 # Energy by subsector in 2020
 for economy in economy_list:

@@ -22,7 +22,12 @@ industry_production = pd.read_csv('./data/industry_production/3_industry_project
 
 # Interim nonenergy projections
 nonenergy_production = pd.read_csv('./data/non_energy/1_nonenergy_projections/interim_all_sectors.csv')
-nonenergy_refine = pd.read_csv('./data/non_energy/2_nonenergy_refine1/refined_nonenergy_all.csv')
+
+if os.path.isfile('./data/non_energy/2_nonenergy_refine1/refined_nonenergy_all.csv'):
+    nonenergy_refine = pd.read_csv('./data/non_energy/2_nonenergy_refine1/refined_nonenergy_all.csv')
+else:
+    nonenergy_refine = pd.read_csv('./data/non_energy/1_nonenergy_projections/interim_all_sectors.csv')
+
 
 # Define years list tp adjust later 
 years = [i for i in range(1980, 2101, 1)]
