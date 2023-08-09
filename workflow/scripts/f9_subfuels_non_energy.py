@@ -61,183 +61,107 @@ for economy in list(economy_select):
     files_to_disag = glob.glob(file_location + '*interim*.csv')
 
     ref_file = [item for item in files_to_disag if 'ref' in item]
-    tgt_file = [item for item in files_to_disag if 'tgt' in item]  
+    tgt_file = [item for item in files_to_disag if 'tgt' in item]
 
-    if len(ref_file) == 1: 
-        ref_df = pd.read_csv(ref_file[0])
+    if len(ref_file) + len(tgt_file) == 2:
+        both_files = {'ref': ref_file[0],
+                      'tgt': tgt_file[0]}  
 
-        # subfuel historical grab
-        coal_subfuels = EGEDA_coal[(EGEDA_coal['economy'] == economy) &
-                                   (EGEDA_coal['sectors'].isin(ref_df['sectors'].unique()))]\
-                                        .copy().reset_index(drop = True)
+        for file in both_files.keys(): 
+            economy_df = pd.read_csv(both_files[file])
 
-        petrol_subfuels = EGEDA_petrol[(EGEDA_petrol['economy'] == economy) &
-                                       (EGEDA_petrol['sectors'].isin(ref_df['sectors'].unique()))]\
-                                        .copy().reset_index(drop = True)
-        
-        crude_subfuels = EGEDA_crude[(EGEDA_crude['economy'] == economy) &
-                                     (EGEDA_crude['sectors'].isin(ref_df['sectors'].unique()))]\
-                                        .copy().reset_index(drop = True)
-        
-        gas_subfuels = EGEDA_gas[(EGEDA_gas['economy'] == economy) &
-                                 (EGEDA_gas['sectors'].isin(ref_df['sectors'].unique()))]\
-                                        .copy().reset_index(drop = True)
+            # subfuel historical grab
+            coal_subfuels = EGEDA_coal[(EGEDA_coal['economy'] == economy) &
+                                    (EGEDA_coal['sectors'].isin(economy_df['sectors'].unique()))]\
+                                            .copy().reset_index(drop = True)
 
-        ref_df = pd.concat([ref_df, coal_subfuels, petrol_subfuels, crude_subfuels, gas_subfuels]).copy().\
-            sort_values(['sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels']).reset_index(drop = True)
-
-        ref_df = ref_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 
-                         'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'] + all_years_str]\
-                                   .copy().reset_index(drop = True)
-        
-        # New data frame to build in disaggregated results
-        groundup_df_ref = pd.DataFrame()
-
-        # Now sectors
-        if len(ref_df['sectors'].unique()) == 1:
-
-            # Grab the 19_total and 16_x_hydrogen for later
-            agg_totals = ref_df[ref_df['fuels'] == '19_total'].copy().reset_index(drop = True)
+            petrol_subfuels = EGEDA_petrol[(EGEDA_petrol['economy'] == economy) &
+                                        (EGEDA_petrol['sectors'].isin(economy_df['sectors'].unique()))]\
+                                            .copy().reset_index(drop = True)
             
-            hydrogen_grab = ref_df[ref_df['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
+            crude_subfuels = EGEDA_crude[(EGEDA_crude['economy'] == economy) &
+                                        (EGEDA_crude['sectors'].isin(economy_df['sectors'].unique()))]\
+                                            .copy().reset_index(drop = True)
             
-            for fuel in ref_df['fuels'].unique()[:-1]:
-                temp_df = ref_df[ref_df['fuels'] == fuel].copy().reset_index(drop = True)
-                
-                fuel_total_row = temp_df[temp_df['subfuels'] == 'x'].copy().reset_index(drop = True)
+            gas_subfuels = EGEDA_gas[(EGEDA_gas['economy'] == economy) &
+                                    (EGEDA_gas['sectors'].isin(economy_df['sectors'].unique()))]\
+                                            .copy().reset_index(drop = True)
 
-                hydrogen_adjust = temp_df[temp_df['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
+            economy_df = pd.concat([economy_df, coal_subfuels, petrol_subfuels, crude_subfuels, gas_subfuels]).copy().\
+                sort_values(['sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels']).reset_index(drop = True)
+            
+            if file == 'tgt':
+                economy_df['scenarios'] = 'target'
+            else:
+                pass
+
+            economy_df = economy_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 
+                            'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'] + all_years_str]\
+                                    .copy().reset_index(drop = True)
+            
+            # New data frame to build in disaggregated results
+            groundup_df = pd.DataFrame()
+
+            # Now sectors
+            if len(economy_df['sectors'].unique()) == 1:
+
+                # Grab the 19_total and 16_x_hydrogen for later
+                agg_totals = economy_df[economy_df['fuels'] == '19_total'].copy().reset_index(drop = True)
                 
-                if hydrogen_adjust.empty:
-                    pass
-                else:
-                    fuel_total_row_copy = fuel_total_row.copy()
-                    hydrogen_adjust.fillna(0, inplace = True)
+                hydrogen_grab = economy_df[economy_df['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
+                
+                for fuel in economy_df['fuels'].unique()[:-1]:
+                    temp_df = economy_df[economy_df['fuels'] == fuel].copy().reset_index(drop = True)
+                    
+                    fuel_total_row = temp_df[temp_df['subfuels'] == 'x'].copy().reset_index(drop = True)
+
+                    hydrogen_adjust = temp_df[temp_df['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
+                    
+                    if hydrogen_adjust.empty:
+                        pass
+                    else:
+                        fuel_total_row_copy = fuel_total_row.copy()
+                        hydrogen_adjust.fillna(0, inplace = True)
+                        for year in proj_years_str:
+                            fuel_total_row.loc[0, year] = fuel_total_row_copy.loc[0, year] - hydrogen_adjust.loc[0, year]
+
+                    subfuels_df = temp_df[~temp_df['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
+
+                    # Need the 2020 ratio
+                    fuel_ratio = subfuels_df.loc[:, ['subfuels', '2020']].copy().reset_index(drop = True)
+
+                    fuel_ratio['ratio'] = np.nan
+                    total_for_calc = fuel_total_row.loc[0, '2020']
+
+                    for i in range(len(fuel_ratio['subfuels'].unique())):
+                        # To avoid dividng by zero
+                        if total_for_calc == 0:
+                            fuel_ratio.iloc[i, 2] = total_for_calc
+                        else: 
+                            fuel_ratio.iloc[i, 2] = fuel_ratio.iloc[i, 1] / total_for_calc
+
                     for year in proj_years_str:
-                        fuel_total_row.loc[0, year] = fuel_total_row_copy.loc[0, year] - hydrogen_adjust.loc[0, year]
+                        for fuel in fuel_ratio['subfuels'].unique():
+                            subfuels_df.loc[subfuels_df['subfuels'] == fuel, year] = \
+                                fuel_total_row.loc[0, year] * fuel_ratio.loc[fuel_ratio['subfuels'] == fuel, 'ratio']
 
-                subfuels_df = temp_df[~temp_df['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
+                    # Now if hydrogen subtracted from 16_others, add the original 16_others total line in        
+                    if hydrogen_adjust.empty:
+                        pass
+                    else:
+                        fuel_total_row = fuel_total_row_copy.copy()
+                            
+                    groundup_df = pd.concat([groundup_df, fuel_total_row, subfuels_df]).copy().reset_index(drop = True)
+                    
+                groundup_df = pd.concat([groundup_df, agg_totals, hydrogen_grab]).copy().reset_index(drop = True)
 
-                # Need the 2020 ratio
-                fuel_ratio_ref = subfuels_df.loc[:, ['subfuels', '2020']].copy().reset_index(drop = True)
+            else:
+                pass
+            
+            groundup_df = groundup_df.sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
+                                                    'sub3sectors', 'fuels', 'subfuels']).reset_index(drop = True)
 
-                fuel_ratio_ref['ratio'] = np.nan
-                total_for_calc = fuel_total_row.loc[0, '2020']
-
-                for i in range(len(fuel_ratio_ref['subfuels'].unique())):
-                    # To avoid dividng by zero
-                    if total_for_calc == 0:
-                        fuel_ratio_ref.iloc[i, 2] = total_for_calc
-                    else: 
-                        fuel_ratio_ref.iloc[i, 2] = fuel_ratio_ref.iloc[i, 1] / total_for_calc
-
-                for year in proj_years_str:
-                    for fuel in fuel_ratio_ref['subfuels'].unique():
-                        subfuels_df.loc[subfuels_df['subfuels'] == fuel, year] = \
-                            fuel_total_row.loc[0, year] * fuel_ratio_ref.loc[fuel_ratio_ref['subfuels'] == fuel, 'ratio']
-
-                # Now if hydrogen subtracted from 16_others, add the original 16_others total line in        
-                if hydrogen_adjust.empty:
-                    pass
-                else:
-                    fuel_total_row = fuel_total_row_copy.copy()
-                        
-                groundup_df_ref = pd.concat([groundup_df_ref, fuel_total_row, subfuels_df]).copy().reset_index(drop = True)
-                
-            groundup_df_ref = pd.concat([groundup_df_ref, agg_totals, hydrogen_grab]).copy().reset_index(drop = True)
+            groundup_df.to_csv(file_location + economy + '_nonenergy_' + file + '_' + timestamp + '.csv', index = False)
 
         else:
             pass
-        
-        groundup_df_ref = groundup_df_ref.sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
-                                                 'sub3sectors', 'fuels', 'subfuels']).reset_index(drop = True)
-
-        groundup_df_ref.to_csv(file_location + economy + '_nonenergy_ref_' + timestamp + '.csv', index = False)
-
-    else:
-        pass
-    
-    ###################################################################################################################
-    # TGT
-    if len(tgt_file) == 1: 
-        tgt_df = pd.read_csv(tgt_file[0])
-
-        # subfuel historical grab
-        coal_subfuels['scenarios'] = 'target'
-        petrol_subfuels['scenarios'] = 'target'
-        crude_subfuels['scenarios'] = 'target'
-        gas_subfuels['scenarios'] = 'target'
-
-        tgt_df = pd.concat([tgt_df, coal_subfuels, petrol_subfuels, crude_subfuels, gas_subfuels]).copy().\
-            sort_values(['sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels']).reset_index(drop = True)
-
-        tgt_df = tgt_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 
-                         'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'] + all_years_str]\
-                                   .copy().reset_index(drop = True)
-        
-        # New data frame to build in disaggregated results
-        groundup_df_tgt = pd.DataFrame()
-
-        # Now sectors
-        if len(tgt_df['sectors'].unique()) == 1:
-
-            # Grab the 19_total and 16_x_hydrogen for later
-            agg_totals = tgt_df[tgt_df['fuels'] == '19_total'].copy().reset_index(drop = True)
-            
-            hydrogen_grab = tgt_df[tgt_df['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
-            
-            for fuel in tgt_df['fuels'].unique()[:-1]:
-                temp_df = tgt_df[tgt_df['fuels'] == fuel].copy().reset_index(drop = True)
-                
-                fuel_total_row = temp_df[temp_df['subfuels'] == 'x'].copy().reset_index(drop = True)
-
-                hydrogen_adjust = temp_df[temp_df['subfuels'] == '16_x_hydrogen'].copy().reset_index(drop = True)
-                
-                if hydrogen_adjust.empty:
-                    pass
-                else:
-                    fuel_total_row_copy = fuel_total_row.copy()
-                    hydrogen_adjust.fillna(0, inplace = True)
-                    for year in proj_years_str:
-                        fuel_total_row.loc[0, year] = fuel_total_row_copy.loc[0, year] - hydrogen_adjust.loc[0, year]
-
-                subfuels_df = temp_df[~temp_df['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
-
-                # Need the 2020 ratio
-                fuel_ratio_tgt = subfuels_df.loc[:, ['subfuels', '2020']].copy().reset_index(drop = True)
-
-                fuel_ratio_tgt['ratio'] = np.nan
-                total_for_calc = fuel_total_row.loc[0, '2020']
-
-                for i in range(len(fuel_ratio_tgt['subfuels'].unique())):
-                    # To avoid dividng by zero
-                    if total_for_calc == 0:
-                        fuel_ratio_tgt.iloc[i, 2] = total_for_calc
-                    else: 
-                        fuel_ratio_tgt.iloc[i, 2] = fuel_ratio_tgt.iloc[i, 1] / total_for_calc
-
-                for year in proj_years_str:
-                    for fuel in fuel_ratio_tgt['subfuels'].unique():
-                        subfuels_df.loc[subfuels_df['subfuels'] == fuel, year] = \
-                            fuel_total_row.loc[0, year] * fuel_ratio_tgt.loc[fuel_ratio_tgt['subfuels'] == fuel, 'ratio']
-
-                # Now if hydrogen subtracted from 16_others, add the original 16_others total line in        
-                if hydrogen_adjust.empty:
-                    pass
-                else:
-                    fuel_total_row = fuel_total_row_copy.copy()
-                        
-                groundup_df_tgt = pd.concat([groundup_df_tgt, fuel_total_row, subfuels_df]).copy().reset_index(drop = True)
-                
-            groundup_df_tgt = pd.concat([groundup_df_tgt, agg_totals, hydrogen_grab]).copy().reset_index(drop = True)
-
-        else:
-            pass
-        
-        groundup_df_tgt = groundup_df_tgt.sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
-                                                 'sub3sectors', 'fuels', 'subfuels']).reset_index(drop = True)
-
-        groundup_df_tgt.to_csv(file_location + economy + '_nonenergy_tgt_' + timestamp + '.csv', index = False)
-
-    else:
-        pass

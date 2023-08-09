@@ -40,53 +40,30 @@ for economy in list(economy_select):
     ref_file = [item for item in files_to_agg if 'ref' in item]
     tgt_file = [item for item in files_to_agg if 'tgt' in item]
 
-    # Begin aggregation process
-    # REF
-    if len(ref_file) == 1: 
-        ref_df = pd.read_csv(ref_file[0])
-    
-        # Define new empty dataframe to save results in 
-        groundup_df_ref = pd.DataFrame()
+    if len(ref_file) + len(tgt_file) == 2:
+        both_files = {'ref': ref_file[0],
+                      'tgt': tgt_file[0]}
 
-        fuel_level_df = ref_df[ref_df['subfuels'] == 'x'].copy().reset_index(drop = True)
-
-        total_row = fuel_level_df[fuel_level_df['fuels'].isin(nonenergy_fuels)]\
-                    .groupby(['scenarios', 'economy', 'sectors','sub1sectors', 'sub2sectors', 'sub3sectors',
-                            'sub4sectors', 'subfuels']).sum()\
-                    .assign(fuels = '19_total').reset_index()
+        # Begin aggregation process
+        for file in both_files.keys(): 
+            economy_df = pd.read_csv(both_files[file])
         
-        groundup_df_ref = pd.concat([ref_df, total_row]).copy().reset_index(drop = True)
+            # Define new empty dataframe to save results in 
+            groundup_df = pd.DataFrame()
 
-        groundup_df_ref = groundup_df_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors',
-                            'sub4sectors', 'fuels', 'subfuels'] + all_years_str].copy()
-        
-        groundup_df_ref.to_csv(save_location + economy + '_nonenergy_interim_ref.csv', index = False)
+            fuel_level_df = economy_df[economy_df['subfuels'] == 'x'].copy().reset_index(drop = True)
+
+            total_row = fuel_level_df[fuel_level_df['fuels'].isin(nonenergy_fuels)]\
+                        .groupby(['scenarios', 'economy', 'sectors','sub1sectors', 'sub2sectors', 'sub3sectors',
+                                'sub4sectors', 'subfuels']).sum()\
+                        .assign(fuels = '19_total').reset_index()
+            
+            groundup_df = pd.concat([economy_df, total_row]).copy().reset_index(drop = True)
+
+            groundup_df = groundup_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors',
+                                'sub4sectors', 'fuels', 'subfuels'] + all_years_str].copy()
+            
+            groundup_df.to_csv(save_location + economy + '_nonenergy_interim_' + file + '.csv', index = False)
 
     else:
         pass
-
-    # TGT
-    if len(tgt_file) == 1: 
-        tgt_df = pd.read_csv(tgt_file[0])
-    
-        # Define new empty dataframe to save results in 
-        groundup_df_tgt = pd.DataFrame()
-
-        fuel_level_df = tgt_df[tgt_df['subfuels'] == 'x'].copy().reset_index(drop = True)
-
-        total_row = fuel_level_df[fuel_level_df['fuels'].isin(nonenergy_fuels)]\
-                    .groupby(['scenarios', 'economy', 'sectors','sub1sectors', 'sub2sectors', 'sub3sectors',
-                            'sub4sectors', 'subfuels']).sum()\
-                    .assign(fuels = '19_total').reset_index()
-        
-        groundup_df_tgt = pd.concat([tgt_df, total_row]).copy().reset_index(drop = True)
-
-        groundup_df_tgt = groundup_df_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors',
-                            'sub4sectors', 'fuels', 'subfuels'] + all_years_str].copy()
-        
-        groundup_df_tgt.to_csv(save_location + economy + '_nonenergy_interim_tgt.csv', index = False)
-
-    else:
-        pass
-
-

@@ -32,274 +32,154 @@ for economy in list(economy_select):
         os.makedirs(adj_location)
 
     steel_files = glob.glob(file_location + '*steel*.csv')
+    chem_files = glob.glob(file_location + '*chemical*.csv')
+    cement_files = glob.glob(file_location + '*nonmetallic*.csv')  
 
-    ref_steel = [s for s in steel_files if 'ref.csv' in s]
-    tgt_steel = [s for s in steel_files if 'tgt.csv' in s]
+    for scenario in ['ref', 'tgt']:
 
-    if len(ref_steel) == 1:
-        steel_df_ref = pd.read_csv(ref_steel[0])
+        steel_file = [s for s in steel_files if scenario + '.csv' in s]
 
-        adjust_df = steel_df_ref[steel_df_ref['subfuels'] == '16_x_hydrogen']
-        adjust_df['subfuels'] = 'x'
+        if len(steel_file) == 1:
+            steel_df = pd.read_csv(steel_file[0])
 
-        steel_df_ref = steel_df_ref.merge(adjust_df, how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            adjust_df = steel_df[steel_df['subfuels'] == '16_x_hydrogen']
+            adjust_df['subfuels'] = 'x'
+
+            steel_df = steel_df.merge(adjust_df, how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                    'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            steel_df['energy'] = steel_df['energy_x'].fillna(0) + steel_df['energy_y'].fillna(0)        
+            steel_df = steel_df.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
+
+            steel_df.to_csv(adj_location + economy + '_14_03_01_iron_and_steel_' + scenario + '.csv', index = False)
+
+        else:
+            pass
+
+        chem_file = [s for s in chem_files if scenario + '.csv' in s]
+        cem_file = [s for s in cement_files if scenario + '.csv' in s]
+
+        if len(chem_file) == 1:    
+            chem_df = pd.read_csv(chem_file[0])
+            chem_df.to_csv(adj_location + economy + '_14_03_02_chemical_incl_petrochemical_' + scenario + '.csv', index = False)
+        else:
+            pass
+
+        if len(cem_file) == 1:    
+            cement_df = pd.read_csv(cem_file[0])
+            cement_df.to_csv(adj_location + economy + '_14_03_04_nonmetallic_mineral_products_' + scenario + '.csv', index = False)
+        else:
+            pass
+
+        # CCS files for adjutsment
+        CCS_files = glob.glob(file_location + 'hydrogen_ccs/' + '*_ccs_*')
+
+        ccs_steel = [s for s in CCS_files if 'steel_ccs_' + scenario in s]
+        ccs_chem = [s for s in CCS_files if 'chemical_ccs_' + scenario in s]
+        ccs_cem = [s for s in CCS_files if 'products_ccs_' + scenario in s]
         
-        steel_df_ref['energy'] = steel_df_ref['energy_x'].fillna(0) + steel_df_ref['energy_y'].fillna(0)        
-        steel_df_ref = steel_df_ref.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
+        # Adjust for CCS
+        # Steel 
+        if len(ccs_steel) == 1:
+            adj_df = pd.read_csv(ccs_steel[0])
+            steel_df = steel_df.merge(adj_df, how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                    'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            steel_df['energy'] = steel_df['energy_x'].fillna(0) - steel_df['energy_y'].fillna(0)        
+            steel_df = steel_df.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
 
-        steel_df_ref.to_csv(adj_location + economy + '_14_03_01_iron_and_steel_ref.csv', index = False)
+            steel_df['sub3sectors'] = '14_03_01_01_fs'
 
-    else:
-        pass
+            steel_df = pd.concat([steel_df, adj_df]).copy().reset_index(drop = True)
 
-    if len(tgt_steel) == 1:
-        steel_df_tgt = pd.read_csv(tgt_steel[0])
+            steel_df.to_csv(adj_location + economy + '_14_03_01_iron_and_steel_' + scenario + '.csv', index = False)
 
-        adjust_df = steel_df_tgt[steel_df_tgt['subfuels'] == '16_x_hydrogen']
-        adjust_df['subfuels'] = 'x'
+        else:
+            pass
 
-        steel_df_tgt = steel_df_tgt.merge(adjust_df, how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-        
-        steel_df_tgt['energy'] = steel_df_tgt['energy_x'].fillna(0) + steel_df_tgt['energy_y'].fillna(0)        
-        steel_df_tgt = steel_df_tgt.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
+        # Chemicals 
+        if len(ccs_chem) == 1:
+            adj_df = pd.read_csv(ccs_chem[0])
+            chem_df = chem_df.merge(adj_df, how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                    'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            chem_df['energy'] = chem_df['energy_x'].fillna(0) - chem_df['energy_y'].fillna(0)        
+            chem_df = chem_df.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
 
-        steel_df_tgt.to_csv(adj_location + economy + '_14_03_01_iron_and_steel_tgt.csv', index = False)
+            chem_df['sub3sectors'] = '14_03_02_01_fs'
 
-    else:
-        pass
+            chem_df = pd.concat([chem_df, adj_df]).copy().reset_index(drop = True)
 
-    # CCS adjustment
-    chem_files_ref = glob.glob(file_location + '*chemical*ref.csv')
-    cement_files_ref = glob.glob(file_location + '*nonmetallic*ref.csv')
-    chem_files_tgt = glob.glob(file_location + '*chemical*tgt.csv')
-    cement_files_tgt = glob.glob(file_location + '*nonmetallic*tgt.csv')
+            chem_df.to_csv(adj_location + economy + '_14_03_02_chemical_incl_petrochemical_' + scenario + '.csv', index = False)
 
-    for file in chem_files_ref:
-        chem_ref = pd.read_csv(file)
-        chem_ref.to_csv(adj_location + economy + '_14_03_02_chemical_incl_petrochemical_ref.csv', index = False)
+        else:
+            pass
 
-    for file in cement_files_ref:
-        cem_ref = pd.read_csv(file)
-        cem_ref.to_csv(adj_location + economy + '_14_03_04_nonmetallic_mineral_products_ref.csv', index = False)
+        # Cement 
+        if len(ccs_cem) == 1:
+            adj_df = pd.read_csv(ccs_cem[0])
+            cement_df = cement_df.merge(adj_df, how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                    'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            cement_df['energy'] = cement_df['energy_x'].fillna(0) - cement_df['energy_y'].fillna(0)        
+            cement_df = cement_df.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
 
-    for file in chem_files_tgt:
-        chem_tgt = pd.read_csv(file)
-        chem_tgt.to_csv(adj_location + economy + '_14_03_02_chemical_incl_petrochemical_tgt.csv', index = False)
+            cement_df['sub3sectors'] = '14_03_02_01_fs'
 
-    for file in cement_files_tgt:
-        cem_tgt = pd.read_csv(file)
-        cem_tgt.to_csv(adj_location + economy + '_14_03_04_nonmetallic_mineral_products_tgt.csv', index = False)
+            cement_df = pd.concat([cement_df, adj_df]).copy().reset_index(drop = True)
 
-    # CCS files for adjutsment
-    CCS_files = glob.glob(file_location + 'hydrogen_ccs/' + '*_ccs_*')
+            cement_df.to_csv(adj_location + economy + '_14_03_04_nonmetallic_mineral_products_' + scenario + '.csv', index = False)
 
-    ccs_steel_ref = [s for s in CCS_files if 'steel_ccs_ref' in s]
-    ccs_steel_tgt = [s for s in CCS_files if 'steel_ccs_tgt' in s]
-    ccs_chem_ref = [s for s in CCS_files if 'chemical_ccs_ref' in s]
-    ccs_chem_tgt = [s for s in CCS_files if 'chemical_ccs_tgt' in s]
-    ccs_cem_ref = [s for s in CCS_files if 'products_ccs_ref' in s]
-    ccs_cem_tgt = [s for s in CCS_files if 'products_ccs_tgt' in s]
-
-    # Adjust for CCS
-    # Steel REF
-    if len(ccs_steel_ref) == 1:
-        adj_df = pd.read_csv(ccs_steel_ref[0])
-        steel_df_ref = steel_df_ref.merge(adj_df, how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-        
-        steel_df_ref['energy'] = steel_df_ref['energy_x'].fillna(0) - steel_df_ref['energy_y'].fillna(0)        
-        steel_df_ref = steel_df_ref.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
-
-        steel_df_ref['sub3sectors'] = '14_03_01_01_fs'
-
-        steel_df_ref = pd.concat([steel_df_ref, adj_df]).copy().reset_index(drop = True)
-
-        steel_df_ref.to_csv(adj_location + economy + '_14_03_01_iron_and_steel_ref.csv', index = False)
-
-    else:
-        pass
-
-    # Steel TGT
-    if len(ccs_steel_tgt) == 1:
-        adj_df = pd.read_csv(ccs_steel_tgt[0])
-        steel_df_tgt = steel_df_tgt.merge(adj_df, how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-        
-        steel_df_tgt['energy'] = steel_df_tgt['energy_x'].fillna(0) - steel_df_tgt['energy_y'].fillna(0)        
-        steel_df_tgt = steel_df_tgt.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
-
-        steel_df_tgt['sub3sectors'] = '14_03_01_01_fs'
-
-        steel_df_tgt = pd.concat([steel_df_tgt, adj_df]).copy().reset_index(drop = True)
-
-        steel_df_tgt.to_csv(adj_location + economy + '_14_03_01_iron_and_steel_tgt.csv', index = False)
-
-    else:
-        pass
-
-    # Chemicals REF
-    if len(ccs_chem_ref) == 1:
-        adj_df = pd.read_csv(ccs_chem_ref[0])
-        chem_ref = chem_ref.merge(adj_df, how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-        
-        chem_ref['energy'] = chem_ref['energy_x'].fillna(0) - chem_ref['energy_y'].fillna(0)        
-        chem_ref = chem_ref.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
-
-        chem_ref['sub3sectors'] = '14_03_02_01_fs'
-
-        chem_ref = pd.concat([chem_ref, adj_df]).copy().reset_index(drop = True)
-
-        chem_ref.to_csv(adj_location + economy + '_14_03_02_chemical_incl_petrochemical_ref.csv', index = False)
-
-    else:
-        pass
-
-    # Chemicals TGT
-    if len(ccs_chem_tgt) == 1:
-        adj_df = pd.read_csv(ccs_chem_tgt[0])
-        chem_tgt = chem_tgt.merge(adj_df, how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-        
-        chem_tgt['energy'] = chem_tgt['energy_x'].fillna(0) - chem_tgt['energy_y'].fillna(0)        
-        chem_tgt = chem_tgt.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
-
-        chem_tgt['sub3sectors'] = '14_03_02_01_fs'
-
-        chem_tgt = pd.concat([chem_tgt, adj_df]).copy().reset_index(drop = True)
-
-        chem_tgt.to_csv(adj_location + economy + '_14_03_02_chemical_incl_petrochemical_tgt.csv', index = False)
-
-    else:
-        pass
-
-    # Cement REF
-    if len(ccs_cem_ref) == 1:
-        adj_df = pd.read_csv(ccs_cem_ref[0])
-        cem_ref = cem_ref.merge(adj_df, how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-        
-        cem_ref['energy'] = cem_ref['energy_x'].fillna(0) - cem_ref['energy_y'].fillna(0)        
-        cem_ref = cem_ref.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
-
-        cem_ref['sub3sectors'] = '14_03_02_01_fs'
-
-        cem_ref = pd.concat([cem_ref, adj_df]).copy().reset_index(drop = True)
-
-        cem_ref.to_csv(adj_location + economy + '_14_03_04_nonmetallic_mineral_products_ref.csv', index = False)
-
-    else:
-        pass
-
-    # Cement TGT
-    if len(ccs_cem_tgt) == 1:
-        adj_df = pd.read_csv(ccs_cem_tgt[0])
-        cem_tgt = cem_tgt.merge(adj_df, how = 'outer',
-                                          on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
-        
-        cem_tgt['energy'] = cem_tgt['energy_x'].fillna(0) - cem_tgt['energy_y'].fillna(0)        
-        cem_tgt = cem_tgt.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
-
-        cem_tgt['sub3sectors'] = '14_03_04_02_nonccs'
-
-        cem_tgt = pd.concat([cem_tgt, adj_df]).copy().reset_index(drop = True)
-
-        cem_tgt.to_csv(adj_location + economy + '_14_03_04_nonmetallic_mineral_products_tgt.csv', index = False)
-
-    else:
-        pass
+        else:
+            pass
     
-    adjusted_files = glob.glob(adj_location + '*.csv')
+        adjusted_files = glob.glob(adj_location + '*.csv')
 
-    other_files = glob.glob(file_location + '*.csv') 
-    other_files = [x for x in other_files if ('14_03_01' not in x) & ('14_03_02' not in x) & ('14_03_04' not in x)]
-    
-    all_files = adjusted_files + other_files
-
-    files_ref = [x for x in all_files if '_ref' in x]
-    files_tgt = [x for x in all_files if '_tgt' in x]
-
-    #######################################################
-    # REF
-    industry_ref = pd.DataFrame()
-
-    for file in files_ref:
-        temp_df = pd.read_csv(file)
-        industry_ref = pd.concat([industry_ref, temp_df]).copy().reset_index(drop = True)
-
-    if 'sub3sectors' in industry_ref.columns:
-        pass
-
-    else:
-        industry_ref['sub3sectors'] = np.nan
-
-    industry_ref['sub3sectors'] = np.where(industry_ref['sub3sectors'].isna(), 'x', industry_ref['sub3sectors'])
-
-    industry_ref['sub4sectors'] = 'x'
-
-    if industry_ref.empty:
-        pass
-
-    else:
-        industry_ref = industry_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                    'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
-                                        .sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
-                                                    'sub3sectors', 'fuels', 'year']).reset_index(drop = True)
+        other_files = glob.glob(file_location + '*.csv') 
+        other_files = [x for x in other_files if ('14_03_01' not in x) & ('14_03_02' not in x) & ('14_03_04' not in x)]
         
-        industry_ref.to_csv(file_location + 'all_sectors/' + economy + '_industry_long_ref.csv', index = False)
+        all_files = adjusted_files + other_files
 
-        industry_ref_wide = industry_ref.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                            'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
-                                                    values = 'energy', 
-                                                    columns = 'year').reset_index()
-        
-        industry_ref_wide.to_csv(file_location + 'all_sectors/' + economy + '_industry_wide_ref.csv', index = False)
-    
-    #########################################################
-    # TGT
-    industry_tgt = pd.DataFrame()
+        relevant_files = [x for x in all_files if '_' + scenario in x]
 
-    for file in files_tgt:
-        temp_df = pd.read_csv(file)
-        industry_tgt = pd.concat([industry_tgt, temp_df]).copy().reset_index(drop = True)
+        #######################################################
+        industry_df = pd.DataFrame()
 
-    if 'sub3sectors' in industry_tgt.columns:
-        pass
+        for file in relevant_files:
+            temp_df = pd.read_csv(file)
+            industry_df = pd.concat([industry_df, temp_df]).copy().reset_index(drop = True)
 
-    else:
-        industry_tgt['sub3sectors'] = np.nan
-        
-    industry_tgt['sub3sectors'] = np.where(industry_tgt['sub3sectors'].isna(), 'x', industry_tgt['sub3sectors'])
+        if 'sub3sectors' in industry_df.columns:
+            pass
 
-    industry_tgt['sub4sectors'] = 'x'
+        else:
+            industry_df['sub3sectors'] = np.nan
 
-    if industry_tgt.empty:
-        pass
+        industry_df['sub3sectors'] = np.where(industry_df['sub3sectors'].isna(), 'x', industry_df['sub3sectors'])
 
-    else:
-        industry_tgt = industry_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                    'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
-                                        .sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
-                                                    'sub3sectors', 'sub4sectors', 'fuels', 'year']).reset_index(drop = True)
-        
-        industry_tgt.to_csv(file_location + 'all_sectors/' + economy + '_industry_long_tgt.csv', index = False)
+        industry_df['sub4sectors'] = 'x'
 
-        industry_tgt_wide = industry_tgt.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                            'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
-                                                    values = 'energy', 
-                                                    columns = 'year').reset_index()
-        
-        industry_tgt_wide.to_csv(file_location + 'all_sectors/' + economy + '_industry_wide_tgt.csv', index = False)
+        if industry_df.empty:
+            pass
+
+        else:
+            industry_df = industry_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                        'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
+                                            .sort_values(['sectors', 'sub1sectors', 'sub2sectors', 
+                                                        'sub3sectors', 'fuels', 'year']).reset_index(drop = True)
+            
+            industry_df.to_csv(file_location + 'all_sectors/' + economy + '_industry_long_' + scenario + '.csv', index = False)
+
+            industry_df_wide = industry_df.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                                'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
+                                                        values = 'energy', 
+                                                        columns = 'year').reset_index()
+            
+            industry_df_wide.to_csv(file_location + 'all_sectors/' + economy + '_industry_wide_' + scenario + '.csv', index = False)
 
 #################################################################################################
 
@@ -314,50 +194,30 @@ for economy in list(economy_select):
     ref_ne = [s for s in ne_files if 'switched_ref.csv' in s]
     tgt_ne = [s for s in ne_files if 'switched_tgt.csv' in s]
 
-    # REF
-    if len(ref_ne) == 1:
-        non_energy_ref = pd.read_csv(ref_ne[0])
-
-        non_energy_ref['sub2sectors'] = 'x'
-        non_energy_ref['sub3sectors'] = 'x'
-        non_energy_ref['sub4sectors'] = 'x'
-
-        non_energy_ref = non_energy_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                        'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
-                                            .reset_index(drop = True)
+    if len(ref_ne) + len(tgt_ne) == 2:
+        both_files = {'ref': ref_ne[0],
+                      'tgt': tgt_ne[0]}
         
-        non_energy_ref.to_csv(file_location + economy + '_non_energy_long_ref.csv', index = False)
+        # Consolidate
+        for file in both_files.keys():
+            non_energy_df = pd.read_csv(both_files[file])
 
-        non_energy_wide = non_energy_ref.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                            'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
-                                                        values = 'energy', 
-                                                        columns = 'year').reset_index()
-        
-        non_energy_wide.to_csv(file_location + economy + '_non_energy_wide_ref.csv', index = False)
+            non_energy_df['sub2sectors'] = 'x'
+            non_energy_df['sub3sectors'] = 'x'
+            non_energy_df['sub4sectors'] = 'x'
 
-    else:
-        pass
+            non_energy_df = non_energy_df[['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                            'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
+                                                .reset_index(drop = True)
+            
+            non_energy_df.to_csv(file_location + economy + '_non_energy_long_' + file + '.csv', index = False)
 
-    # TGT
-    if len(tgt_ne) == 1:
-        non_energy_tgt = pd.read_csv(tgt_ne[0])
-
-        non_energy_tgt['sub2sectors'] = 'x'
-        non_energy_tgt['sub3sectors'] = 'x'
-        non_energy_tgt['sub4sectors'] = 'x'
-
-        non_energy_tgt = non_energy_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                        'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels', 'year', 'energy']].copy()\
-                                            .reset_index(drop = True)
-        
-        non_energy_tgt.to_csv(file_location + economy + '_non_energy_long_tgt.csv', index = False)
-
-        non_energy_wide = non_energy_tgt.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
-                                                            'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
-                                                        values = 'energy', 
-                                                        columns = 'year').reset_index()
-        
-        non_energy_wide.to_csv(file_location + economy + '_non_energy_wide_tgt.csv', index = False)
+            non_energy_wide = non_energy_df.pivot_table(index = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                                'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], 
+                                                            values = 'energy', 
+                                                            columns = 'year').reset_index()
+            
+            non_energy_wide.to_csv(file_location + economy + '_non_energy_wide_' + file + '.csv', index = False)
 
     else:
         pass
