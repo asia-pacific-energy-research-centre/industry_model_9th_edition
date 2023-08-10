@@ -66,6 +66,8 @@ def biogas_switch(economy = '01_AUS',
 
         # Start at lowest sector level
         for sector in relevant_sectors:
+            sector_df = ref_df[ref_df['sub3sectors'] == sector].copy().reset_index(drop = True)     
+
             gas_data = ref_df[(ref_df['sub3sectors'] == sector) &
                               (ref_df['subfuels'] == '08_01_natural_gas')].copy().reset_index(drop = True)
             
@@ -83,7 +85,7 @@ def biogas_switch(economy = '01_AUS',
             subset_frames = [gas_data, biogas_data, gas_fuel, others_fuel]
             subset_data = pd.concat(subset_frames, ignore_index = True).copy().reset_index(drop = True)            
 
-            filtered_data = ref_df.merge(subset_data, on = id + all_years_str, how = 'left', indicator = True)
+            filtered_data = sector_df.merge(subset_data, on = id + all_years_str, how = 'left', indicator = True)
             filtered_data = filtered_data[filtered_data['_merge'] == 'left_only']
 
             filtered_data = filtered_data.drop('_merge', axis = 1)
