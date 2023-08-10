@@ -1,3 +1,6 @@
+# NB: Good idea to delete folder in data >> industry_production >> 4_industry_refine1 >> economy 
+# Before running this for each economy's refined trajectory
+
 # Alter trajectory for chosen subsectors for each economy 
 # This adjustment is only for subsectors where adjustment is deemed necessary (qualitative determination)
 

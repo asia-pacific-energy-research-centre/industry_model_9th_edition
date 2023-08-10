@@ -186,7 +186,8 @@ fuel_switch(economy = '20_USA', sector = ind2[9], elec_rate_ref = 0.003, elec_ra
 fuel_switch(economy = '20_USA', sector = ind2[10], elec_rate_tgt = 0.01)
 
 # Non-energy
-fuel_switch_ne(economy = '20_USA', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005)
+fuel_switch_ne(economy = '20_USA', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005, 
+               gas_switch_ref = False, gas_switch_tgt = False)
 
 #################################################################################################
 

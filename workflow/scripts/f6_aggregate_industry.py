@@ -172,3 +172,222 @@ for economy in list(economy_select):
         
     else:
         pass
+
+###############################################################################################################################
+
+# CCS charts
+steel_sub3 = ['14_03_01_01_fs', '14_03_01_03_ccs']
+chem_sub3 = ['14_03_02_01_fs', '14_03_02_02_ccs']
+cement_sub3 = ['14_03_04_01_ccs', '14_03_04_02_nonccs']
+id = ['scenarios', 'economy', 'sectors', 'sub1sectors',	'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels']
+
+# Now read in all data for each economy
+for economy in list(economy_select):
+    chart_save = './results/industry/3_fuel_switch/{}/ccs_charts/'.format(economy)
+
+    if not os.path.isdir(chart_save):
+        os.makedirs(chart_save)
+
+    file_location = './results/industry/4_final/{}/'.format(economy)
+
+    interim_files = glob.glob(file_location + '*interim*.csv')
+
+    ref_file = [item for item in interim_files if 'ref' in item]
+    tgt_file = [item for item in interim_files if 'tgt' in item]
+
+    if len(ref_file) + len(tgt_file) == 2:
+        ccs_files = {'ref': ref_file[0],
+                     'tgt': tgt_file[0]}
+        
+        ccs_ref = pd.read_csv(ccs_files['ref'])
+        ccs_tgt = pd.read_csv(ccs_files['tgt'])
+
+        # Steel
+        if steel_sub3[1] in ccs_ref['sub3sectors'].unique():
+            steel_ref = ccs_ref[(ccs_ref['sub3sectors'].isin(steel_sub3)) &
+                                (ccs_ref['fuels'] == '19_total')].copy().reset_index(drop = True)
+        
+        else:
+            steel_ref = ccs_ref[(ccs_ref['sub2sectors'] == '14_03_01_iron_and_steel') &
+                                (ccs_ref['fuels'] == '19_total')].copy().reset_index(drop = True)
+
+        if steel_sub3[1] in ccs_tgt['sub3sectors'].unique():
+            steel_tgt = ccs_tgt[(ccs_tgt['sub3sectors'].isin(steel_sub3)) &
+                                (ccs_tgt['fuels'] == '19_total')].copy().reset_index(drop = True)
+        
+        else:
+            steel_tgt = ccs_tgt[(ccs_tgt['sub2sectors'] == '14_03_01_iron_and_steel') &
+                                (ccs_tgt['fuels'] == '19_total')].copy().reset_index(drop = True)
+
+        # Chemicals
+        if chem_sub3[1] in ccs_ref['sub3sectors'].unique():
+            chem_ref = ccs_ref[(ccs_ref['sub3sectors'].isin(chem_sub3)) &
+                                (ccs_ref['fuels'] == '19_total')].copy().reset_index(drop = True)
+        
+        else:
+            chem_ref = ccs_ref[(ccs_ref['sub2sectors'] == '14_03_02_chemical_incl_petrochemical') &
+                               (ccs_ref['fuels'] == '19_total')].copy().reset_index(drop = True)
+
+        if chem_sub3[1] in ccs_tgt['sub3sectors'].unique():
+            chem_tgt = ccs_tgt[(ccs_tgt['sub3sectors'].isin(chem_sub3)) &
+                                (ccs_tgt['fuels'] == '19_total')].copy().reset_index(drop = True)
+        
+        else:
+            chem_tgt = ccs_tgt[(ccs_tgt['sub2sectors'] == '14_03_02_chemical_incl_petrochemical') &
+                               (ccs_tgt['fuels'] == '19_total')].copy().reset_index(drop = True)
+
+        # Cement
+        if cement_sub3[0] in ccs_ref['sub3sectors'].unique():
+            cement_ref = ccs_ref[(ccs_ref['sub3sectors'].isin(cement_sub3)) &
+                                (ccs_ref['fuels'] == '19_total')].copy().reset_index(drop = True)
+        
+        else:
+            cement_ref = ccs_ref[(ccs_ref['sub2sectors'] == '14_03_04_nonmetallic_mineral_products') &
+                                 (ccs_ref['fuels'] == '19_total')].copy().reset_index(drop = True)
+
+        if cement_sub3[0] in ccs_tgt['sub3sectors'].unique():
+            cement_tgt = ccs_tgt[(ccs_tgt['sub3sectors'].isin(cement_sub3)) &
+                                (ccs_tgt['fuels'] == '19_total')].copy().reset_index(drop = True)
+        
+        else:
+            cement_tgt = ccs_tgt[(ccs_tgt['sub2sectors'] == '14_03_04_nonmetallic_mineral_products') &
+                                 (ccs_tgt['fuels'] == '19_total')].copy().reset_index(drop = True)
+
+        steel_ref = steel_ref.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
+        steel_ref = steel_ref.astype({'year': 'int'})
+        steel_ref = steel_ref[(steel_ref['year'] <= 2070) & (steel_ref['year'] >= 2020)]
+
+        steel_tgt = steel_tgt.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
+        steel_tgt = steel_tgt.astype({'year': 'int'})
+        steel_tgt = steel_tgt[(steel_tgt['year'] <= 2070) & (steel_tgt['year'] >= 2020)]
+
+        chem_ref = chem_ref.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
+        chem_ref = chem_ref.astype({'year': 'int'})
+        chem_ref = chem_ref[(chem_ref['year'] <= 2070) & (chem_ref['year'] >= 2020)]
+
+        chem_tgt = chem_tgt.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
+        chem_tgt = chem_tgt.astype({'year': 'int'})
+        chem_tgt = chem_tgt[(chem_tgt['year'] <= 2070) & (chem_tgt['year'] >= 2020)]
+
+        cement_ref = cement_ref.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
+        cement_ref = cement_ref.astype({'year': 'int'})
+        cement_ref = cement_ref[(cement_ref['year'] <= 2070) & (cement_ref['year'] >= 2020)] 
+
+        cement_tgt = cement_tgt.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
+        cement_tgt = cement_tgt.astype({'year': 'int'})
+        cement_tgt = cement_tgt[(cement_tgt['year'] <= 2070) & (cement_tgt['year'] >= 2020)]    
+
+        # Change steel variable names 
+        steel_ref.replace({'14_03_01_01_fs': 'Non-CCS capacity',
+                           '14_03_01_03_ccs': 'CCS capacity',
+                           'x': 'Non-CCS capacity'}, inplace = True)
+        steel_tgt.replace({'14_03_01_01_fs': 'Non-CCS capacity',
+                           '14_03_01_03_ccs': 'CCS capacity',
+                           'x': 'Non-CCS capacity'}, inplace = True)
+        
+        chem_ref.replace({'14_03_02_01_fs': 'Non-CCS capacity',
+                           '14_03_02_02_ccs': 'CCS capacity',
+                           'x': 'Non-CCS capacity'}, inplace = True)
+        chem_tgt.replace({'14_03_02_01_fs': 'Non-CCS capacity',
+                           '14_03_02_02_ccs': 'CCS capacity',
+                           'x': 'Non-CCS capacity'}, inplace = True)
+        
+        cement_ref.replace({'14_03_04_02_nonccs': 'Non-CCS capacity',
+                           '14_03_04_01_ccs': 'CCS capacity',
+                           'x': 'Non-CCS capacity'}, inplace = True)
+        cement_tgt.replace({'14_03_04_02_nonccs': 'Non-CCS capacity',
+                           '14_03_04_01_ccs': 'CCS capacity',
+                           'x': 'Non-CCS capacity'}, inplace = True)
+
+        max_steel = 1.1 * np.nanmax([steel_ref.groupby('year')['value'].sum().max(), steel_tgt.groupby('year')['value'].sum().max()])
+        max_chem = 1.1 * np.nanmax([chem_ref.groupby('year')['value'].sum().max(), chem_tgt.groupby('year')['value'].sum().max()])
+        max_cement = 1.1 * np.nanmax([cement_ref.groupby('year')['value'].sum().max(), cement_tgt.groupby('year')['value'].sum().max()])
+
+        steel_ref = steel_ref.pivot(columns = ['sub3sectors'], index = 'year', values = 'value').reset_index()
+        steel_tgt = steel_tgt.pivot(columns = ['sub3sectors'], index = 'year', values = 'value').reset_index()
+
+        chem_ref = chem_ref.pivot(columns = ['sub3sectors'], index = 'year', values = 'value').reset_index()
+        chem_tgt = chem_tgt.pivot(columns = ['sub3sectors'], index = 'year', values = 'value').reset_index()
+
+        cement_ref = cement_ref.pivot(columns = ['sub3sectors'], index = 'year', values = 'value').reset_index()
+        cement_tgt = cement_tgt.pivot(columns = ['sub3sectors'], index = 'year', values = 'value').reset_index()
+
+        fig, axs = plt.subplots(3, 2, figsize = (8, 8))
+
+        sns.set_theme(style = 'ticks')
+
+        steel_ref.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[0, 0], color = fuel_palette_CCS, 
+                       linewidth = 0, width = 0.7)
+
+        axs[0, 0].set(title = economy + ' steel consumption REF',
+            xlabel = 'Year',
+            ylabel = 'Energy (PJ)',
+            ylim = (0, max_steel))
+        
+        axs[0, 0].legend(title = '', fontsize = 8)
+
+        steel_tgt.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[0, 1], color = fuel_palette_CCS, 
+                       linewidth = 0, width = 0.7)
+
+        axs[0, 1].set(title = economy + ' steel consumption TGT',
+            xlabel = 'Year',
+            ylabel = 'Energy (PJ)',
+            ylim = (0, max_steel))
+        
+        axs[0, 1].legend(title = '', fontsize = 8)
+
+        chem_ref.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[1, 0], color = fuel_palette_CCS, 
+                      linewidth = 0, width = 0.7)
+
+        axs[1, 0].set(title = economy + ' chemicals consumption REF',
+            xlabel = 'Year',
+            ylabel = 'Energy (PJ)',
+            ylim = (0, max_chem))
+        
+        axs[1, 0].legend(title = '', fontsize = 8)
+    
+        chem_tgt.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[1, 1], color = fuel_palette_CCS, 
+                      linewidth = 0, width = 0.7)
+
+        axs[1, 1].set(title = economy + ' chemicals consumption TGT',
+            xlabel = 'Year',
+            ylabel = 'Energy (PJ)',
+            ylim = (0, max_chem))
+        
+        axs[1, 1].legend(title = '', fontsize = 8)
+
+        cement_ref.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[2, 0], color = fuel_palette_CCS, 
+                        linewidth = 0, width = 0.7)
+
+        axs[2, 0].set(title = economy + ' cement consumption REF',
+            xlabel = 'Year',
+            ylabel = 'Energy (PJ)',
+            ylim = (0, max_cement))
+        
+        axs[2, 0].legend(title = '', fontsize = 8)
+    
+
+        cement_tgt.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[2, 1], color = fuel_palette_CCS, 
+                        linewidth = 0, width = 0.7)
+
+        axs[2, 1].set(title = economy + ' cement consumption TGT',
+            xlabel = 'Year',
+            ylabel = 'Energy (PJ)',
+            ylim = (0, max_cement))
+        
+        axs[2, 1].legend(title = '', fontsize = 8)
+
+        for axis_to_change in [axs[0, 0], axs[0, 1], axs[1, 0], axs[1, 1], axs[2, 0], axs[2, 1]]:
+            axis_to_change.xaxis.set_tick_params(rotation = 0)
+            xticks = axis_to_change.xaxis.get_major_ticks()
+            for i, tick in enumerate(xticks):
+                if i % 10 != 0:
+                    tick.label1.set_visible(False)
+                
+        plt.tight_layout()
+        plt.savefig(chart_save + economy + '_ccs_results.png')
+        plt.show()
+        plt.close()
+
+
+

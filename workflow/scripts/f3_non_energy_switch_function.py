@@ -43,7 +43,9 @@ def fuel_switch_ne(economy = '01_AUS',
                    hyd_start_ref = 2040,
                    hyd_start_tgt = 2030,
                    hyd_increment_ref = 0.005,
-                   hyd_increment_tgt = 0.01):
+                   hyd_increment_tgt = 0.01,
+                   gas_switch_ref = False,
+                   gas_switch_tgt = False):
     """Function to layer in hydrogen for all APEC economies for non-energy."""
 
     # Save location for charts and data
@@ -85,6 +87,11 @@ def fuel_switch_ne(economy = '01_AUS',
             non_zero_ref = list(ratio_nextyear[(ratio_nextyear['energy'] != 0) &
                                                (ratio_nextyear['year'] == year)]['fuels'])
             non_zero_ne_ref = [i for i in non_zero_ref]
+
+            if gas_switch_ref == False:
+                non_zero_ne_ref = [i for i in non_zero_ne_ref if i != '08_gas']
+            else:
+                pass
     
             for fuel in non_zero_ne_ref:
                 if (hyd_increment_ref / (len(non_zero_ne_ref)) >= ratio_thisyear.loc[ratio_thisyear['fuels'] == fuel, 'energy'].values[0]):
@@ -96,7 +103,7 @@ def fuel_switch_ne(economy = '01_AUS',
                     ratio_nextyear.loc[ratio_nextyear['fuels'] == fuel, 'energy'] = ratio_thisyear.loc[ratio_thisyear['fuels'] == fuel, 'energy'].values[0] - \
                         (hyd_increment_ref / (len(non_zero_ne_ref)))
                 
-            # New value for electricity
+            # New value for hydrogen
             if (1 - ratio_thisyear.loc[ratio_thisyear['fuels'] == '16_others', 'energy'].values[0]) < hyd_increment_ref:
                 ratio_nextyear.loc[ratio_nextyear['fuels'] == '16_others', 'energy'] = 1.0 
 
@@ -116,7 +123,7 @@ def fuel_switch_ne(economy = '01_AUS',
 
         ne_ratio_ref.loc[group.index] = group
 
-    # Now use the updated fuel share dataframe to deliver new energy results, that have been electrified
+    # Now use the updated fuel share dataframe to deliver new energy results, that have been hydrogen'd
     # Grab total energy by year
     # REF
     total_ref = data_ref.copy().groupby('year').sum()['energy']
@@ -184,6 +191,11 @@ def fuel_switch_ne(economy = '01_AUS',
             non_zero_tgt = list(ratio_nextyear[(ratio_nextyear['energy'] != 0) &
                                                (ratio_nextyear['year'] == year)]['fuels'])
             non_zero_ne_tgt = [i for i in non_zero_tgt]
+
+            if gas_switch_tgt == False:
+                non_zero_ne_tgt = [i for i in non_zero_ne_tgt if i != '08_gas']
+            else:
+                pass
     
             for fuel in non_zero_ne_tgt:
                 if (hyd_increment_tgt / (len(non_zero_ne_tgt)) >= ratio_thisyear.loc[ratio_thisyear['fuels'] == fuel, 'energy'].values[0]):

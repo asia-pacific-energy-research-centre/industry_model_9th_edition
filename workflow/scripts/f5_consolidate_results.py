@@ -128,7 +128,7 @@ for economy in list(economy_select):
             cement_df['energy'] = cement_df['energy_x'].fillna(0) - cement_df['energy_y'].fillna(0)        
             cement_df = cement_df.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
 
-            cement_df['sub3sectors'] = '14_03_02_01_fs'
+            cement_df['sub3sectors'] = '14_03_04_02_nonccs'
 
             cement_df = pd.concat([cement_df, adj_df]).copy().reset_index(drop = True)
 

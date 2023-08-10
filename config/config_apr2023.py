@@ -181,7 +181,9 @@ custom_palette = {'reference': salmon_aqua[0],
                   'reference activity': salmon_aqua[0],
                   'target activity': salmon_aqua[-1],
                   'reference energy': salmon_aqua[0],
-                  'target energy': salmon_aqua[-1]}
+                  'target energy': salmon_aqua[-1],
+                  'CCS capacity': salmon_aqua[0],
+                  'Non-CCS capacity': salmon_aqua[-1]}
 
 fuel_industry = fuels_list[[0, 1, 5, 6, 7, 11, 14, 15, 16, 17]].reset_index(drop = True)
 
@@ -199,5 +201,8 @@ fuel_palette1 = {'01_coal': "#e27c7c",
                  '16_x_hydrogen': "#fce205",
                  '17_electricity': "#6cd4c5",
                  '18_heat': "#ea5545"}
+
+fuel_palette_CCS = {'CCS capacity': "#ea5545",
+                    'Non-CCS capacity': "#bebebe"}
 
 
