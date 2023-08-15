@@ -198,11 +198,11 @@ fuel_palette1 = {'01_coal': "#e27c7c",
                  '12_solar': "#1aa7ec",
                  '15_solid_biomass': "#28825a",
                  '16_others': "#C36517",
+                 '16_x_others': "#C36517",
+                 '16_01_biogas': "#98FB98",
                  '16_x_hydrogen': "#fce205",
                  '17_electricity': "#6cd4c5",
                  '18_heat': "#ea5545"}
 
 fuel_palette_CCS = {'CCS capacity': "#ea5545",
                     'Non-CCS capacity': "#bebebe"}
-
-

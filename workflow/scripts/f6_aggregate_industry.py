@@ -35,7 +35,7 @@ all_years_str = [str(i) for i in all_years]
 # Read in steel data
 for economy in list(economy_select):
     # Save location for charts and data
-    save_location = './results/industry/4_final/{}/'.format(economy)
+    save_location = './results/industry/4_consolidation/{}/'.format(economy)
 
     if not os.path.isdir(save_location):
         os.makedirs(save_location)
@@ -188,7 +188,7 @@ for economy in list(economy_select):
     if not os.path.isdir(chart_save):
         os.makedirs(chart_save)
 
-    file_location = './results/industry/4_final/{}/'.format(economy)
+    file_location = './results/industry/4_consolidation/{}/'.format(economy)
 
     interim_files = glob.glob(file_location + '*interim*.csv')
 
@@ -388,6 +388,3 @@ for economy in list(economy_select):
         plt.savefig(chart_save + economy + '_ccs_results.png')
         plt.show()
         plt.close()
-
-
-

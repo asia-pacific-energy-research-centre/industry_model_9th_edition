@@ -62,9 +62,9 @@ EGEDA_biomass = EGEDA_hist[(EGEDA_hist['sectors'] == '14_industry_sector') &
 EGEDA_others = EGEDA_hist[(EGEDA_hist['sectors'] == '14_industry_sector') &
                            (EGEDA_hist['subfuels'].isin(others_sub))].copy().reset_index(drop = True)
 
-for economy in [list(economy_select)[-2]]:
+for economy in list(economy_select):
     # Save location for charts and data
-    file_location = './results/industry/4_final/{}/'.format(economy)
+    file_location = './results/industry/4_consolidation/{}/'.format(economy)
 
     if not os.path.isdir(file_location):
         os.makedirs(file_location)

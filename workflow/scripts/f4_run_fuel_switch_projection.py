@@ -153,7 +153,7 @@ fuel_switch(economy = '20_USA', sector = ind2[0], elec_rate_ref = 0.0025, elec_r
 
 # Chemicals
 fuel_switch(economy = '20_USA', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
-            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = False, ccs_tgt = True)
+            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True)
 
 # Non-ferrous metals
 fuel_switch(economy = '20_USA', sector = ind2[2])
