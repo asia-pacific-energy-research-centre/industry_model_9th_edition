@@ -24,4 +24,14 @@ all_years_str = [str(i) for i in all_years]
 id = ['scenarios', 'economy', 'sectors', 'sub1sectors',	'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels']
 
 # Run biogas switch function for relevant economies
+# Canada
+biogas_switch(economy = '03_CDA', biogas_ref = True, biogas_tgt = True, biogas_rate_ref = 0.001, biogas_rate_tgt = 0.002)
+
+# Japan
+biogas_switch(economy = '08_JPN', biogas_ref = False, biogas_tgt = False)
+
+# Thailand
+biogas_switch(economy = '19_THA', biogas_ref = False, biogas_tgt = False)
+
+# USA
 biogas_switch(economy = '20_USA', biogas_ref = False, biogas_tgt = False)

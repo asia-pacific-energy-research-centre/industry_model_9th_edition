@@ -148,75 +148,79 @@ for economy in list(economy_select):
 
             sns.set_theme(style = 'ticks')
 
-            new_ref_df.plot.area(ax = ax1,
-                                 stacked = True,
-                                 #alpha = 0.8,
-                                 color = fuel_palette1,
-                                 linewidth = 0)
+            if new_ref_df.empty | new_tgt_df.empty:
+                pass
             
-            new_tgt_df.plot.area(ax = ax2,
-                                 stacked = True,
-                                 #alpha = 0.8,
-                                 color = fuel_palette1,
-                                 linewidth = 0)
-            
-            if sector == 'x':
-                chart_title_ref = economy + ' industrial energy consumption REF'
             else:
-                chart_title_ref = economy + ' ' + sector + ' energy consumption REF'
+                new_ref_df.plot.area(ax = ax1,
+                                    stacked = True,
+                                    #alpha = 0.8,
+                                    color = fuel_palette1,
+                                    linewidth = 0)
+                
+                new_tgt_df.plot.area(ax = ax2,
+                                    stacked = True,
+                                    #alpha = 0.8,
+                                    color = fuel_palette1,
+                                    linewidth = 0)
+                
+                if sector == 'x':
+                    chart_title_ref = economy + ' industrial energy consumption REF'
+                else:
+                    chart_title_ref = economy + ' ' + sector + ' energy consumption REF'
 
-            if sector == 'x':
-                chart_title_tgt = economy + ' industrial energy consumption TGT'
-            else:
-                chart_title_tgt = economy + ' ' + sector + ' energy consumption TGT'
+                if sector == 'x':
+                    chart_title_tgt = economy + ' industrial energy consumption TGT'
+                else:
+                    chart_title_tgt = economy + ' ' + sector + ' energy consumption TGT'
 
-            ax1.set(title = chart_title_ref,
-                    xlabel = 'Year',
-                    ylabel = 'Energy (PJ)',
-                    xlim = (2000, 2070),
-                    ylim = (0, max_y))
-            
-            ax2.set(title = chart_title_tgt,
-                    xlabel = 'Year',
-                    ylabel = 'Energy (PJ)',
-                    xlim = (2000, 2070),
-                    ylim = (0, max_y))
-            
-            # Projection demarcation
-            ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
-            ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+                ax1.set(title = chart_title_ref,
+                        xlabel = 'Year',
+                        ylabel = 'Energy (PJ)',
+                        xlim = (2000, 2070),
+                        ylim = (0, max_y))
+                
+                ax2.set(title = chart_title_tgt,
+                        xlabel = 'Year',
+                        ylabel = 'Energy (PJ)',
+                        xlim = (2000, 2070),
+                        ylim = (0, max_y))
+                
+                # Projection demarcation
+                ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+                ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
 
-            # Projection text
-            ax1.annotate('Projection', 
-                        xy = (2030, proj_location),
-                        xytext = (2024, proj_location),
-                        va = 'center',
-                        ha = 'center',
-                        fontsize = 9,
-                        arrowprops = {'arrowstyle': '-|>',
-                                    'lw': 0.5,
-                                    'ls': '-',
-                                    'color': 'black'})
-            
-            ax2.annotate('Projection', 
-                        xy = (2030, proj_location),
-                        xytext = (2024, proj_location),
-                        va = 'center',
-                        ha = 'center',
-                        fontsize = 9,
-                        arrowprops = {'arrowstyle': '-|>',
-                                    'lw': 0.5,
-                                    'ls': '-',
-                                    'color': 'black'})
-            
-            ax1.legend(title = '', fontsize = 8)
-            ax2.legend(title = '', fontsize = 8)
+                # Projection text
+                ax1.annotate('Projection', 
+                            xy = (2030, proj_location),
+                            xytext = (2024, proj_location),
+                            va = 'center',
+                            ha = 'center',
+                            fontsize = 9,
+                            arrowprops = {'arrowstyle': '-|>',
+                                        'lw': 0.5,
+                                        'ls': '-',
+                                        'color': 'black'})
+                
+                ax2.annotate('Projection', 
+                            xy = (2030, proj_location),
+                            xytext = (2024, proj_location),
+                            va = 'center',
+                            ha = 'center',
+                            fontsize = 9,
+                            arrowprops = {'arrowstyle': '-|>',
+                                        'lw': 0.5,
+                                        'ls': '-',
+                                        'color': 'black'})
+                
+                ax1.legend(title = '', fontsize = 8)
+                ax2.legend(title = '', fontsize = 8)
 
-            plt.tight_layout()
-            if sector == 'x':
-                plt.savefig(save_location + economy + '_14_industry_sector.png')
-            else:
-                plt.savefig(save_location + economy + '_' + sector + '.png')
-            plt.show()
-            plt.close()
+                plt.tight_layout()
+                if sector == 'x':
+                    plt.savefig(save_location + economy + '_14_industry_sector.png')
+                else:
+                    plt.savefig(save_location + economy + '_' + sector + '.png')
+                plt.show()
+                plt.close()
             

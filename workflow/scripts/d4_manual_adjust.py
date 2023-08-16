@@ -164,6 +164,4 @@ else:
 
     nonenergy_refine = nonenergy_refine.copy().drop(columns = ['value_x', 'value_y'])
 
-nonenergy_refine.to_csv('./data/non_energy/3_nonenergy_refine2/refined_nonenergy_all.csv', index = False) 
-
-
+nonenergy_refine.to_csv('./data/non_energy/3_nonenergy_refine2/refined_nonenergy_all.csv', index = False)

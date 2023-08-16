@@ -1,4 +1,3 @@
-
 # Energy projections by fuels
 # Set working directory to be the project folder 
 import os

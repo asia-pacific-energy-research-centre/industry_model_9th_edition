@@ -34,9 +34,36 @@ ind2 = list(industry_sectors.values())[3:]
 industry_refine2 = pd.read_csv('./data/industry_production/5_industry_refine2/refined_industry_all.csv')
 nonenergy_refine2 = pd.read_csv('./data/non_energy/3_nonenergy_refine2/refined_nonenergy_all.csv')
 
+##########################################################################################
 # Australia
 
+##########################################################################################
+# Canada
+# Mining
+scenario_adj(economy = '03_CDA', sub1sectors = ind1[0], sub2sectors = 'x', 
+             increment = 0.02, start_year = 2023, end_year = 2040, data = industry_refine2)
 
+# Steel: Material efficiency
+scenario_adj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[0], 
+             increment = -0.004, start_year = 2023, end_year = 2100, data = industry_refine2) 
+
+# Chemicals: Material efficiency
+scenario_adj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[1], 
+             increment = -0.003, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-ferrous metals
+scenario_adj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[2], 
+             increment = 0.025, start_year = 2023, end_year = 2040, data = industry_refine2)
+
+# Cement (non-metallic minerals): Material efficiency
+scenario_adj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[3], 
+             increment = -0.004, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-energy
+scenario_adj_ne(economy = '03_CDA', 
+                increment = -0.003, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
+
+##############################################################################################
 # Japan
 # Mining
 scenario_adj(economy = '08_JPN', sub1sectors = ind1[0], sub2sectors = 'x', 
@@ -176,5 +203,3 @@ nonenergy_tgt = nonenergy_tgt.copy().drop(columns = ['value_x', 'value_y'])
 nonenergy_scenarios = pd.concat([nonenergy_ref, nonenergy_tgt]).copy().reset_index(drop = True)
 
 nonenergy_scenarios.to_csv('./data/non_energy/4_nonenergy_scenarios/nonenergy_production_' + timestamp + '.csv', index = False)
-
-

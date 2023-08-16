@@ -517,8 +517,6 @@ def fuel_switch(economy = '01_AUS',
     # Organise the dataframe to be saved
     switched_tgt = switched_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', 'year', 'energy']]
     
-    switched_tgt.to_csv(hyd_ccs_location + economy + 'test.csv', index = False)
-    
     # Define ne data frame copy for calcs that will overwrite current values
     switched_tgt_calcs = switched_tgt.copy()
 
