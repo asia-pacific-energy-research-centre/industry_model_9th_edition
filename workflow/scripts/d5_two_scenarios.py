@@ -93,7 +93,7 @@ scenario_adj_ne(economy = '08_JPN',
 # Thailand
 # Mining
 scenario_adj(economy = '19_THA', sub1sectors = ind1[0], sub2sectors = 'x', 
-             increment = 0.02, start_year = 2023, end_year = 2040, data = industry_refine2)
+             increment = 0.02, start_year = 2023, end_year = 2100, data = industry_refine2)
 
 # Steel: Material efficiency
 scenario_adj(economy = '19_THA', sub1sectors = ind1[2], sub2sectors = ind2[0], 
