@@ -213,3 +213,13 @@ fuel_palette1 = {'01_coal': "#e27c7c",
 
 fuel_palette_CCS = {'CCS capacity': "#ea5545",
                     'Non-CCS capacity': "#bebebe"}
+
+tpes_palette = {'01_production': "#1e465a",
+                '02_imports': "#6cd4c5",
+                '03_exports': "#e27c7c",
+                '06_stock_changes': "#a5cdf0"}
+
+coal_palette = {'01_01_coking_coal': "#1e465a",
+                '01_05_lignite': "#C36517",
+                '01_x_thermal_coal': "#fce205",
+                '02_coal_products': "#a86464"}
