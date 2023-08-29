@@ -15,6 +15,9 @@ with open(config_file) as infile:
 EGEDA_df = pd.read_csv(latest_EGEDA).loc[:,['economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', '2019', '2020']]\
     .reset_index(drop = True)
 
+EGEDA_coaltrans = pd.read_csv(latest_EGEDA).loc[:,:'2020']
+
+# Vectors to subset
 coal_vector = ['01_coal', '02_coal_products']
 
 sector_vector = ['01_production', '02_imports', '03_exports', '06_stock_changes', '09_total_transformation_sector', 
@@ -31,6 +34,11 @@ column_vector = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels']
 coal_df = coal_df[(coal_df['sub1sectors'].isin(sub1sector_vector)) & 
                   (coal_df['sub2sectors'] == 'x')][column_vector + ['2019', '2020']]\
     .melt(id_vars = column_vector, var_name = 'year').copy().reset_index(drop = True)
+
+# Coal transformation historical 
+EGEDA_coaltrans = EGEDA_coaltrans[(EGEDA_coaltrans['sub1sectors'] == '09_08_coal_transformation') &
+                                  (EGEDA_coaltrans['sub2sectors'] == 'x') &
+                                  (EGEDA_coaltrans['fuels'].isin(coal_vector))].copy().reset_index(drop = True)
 
 # Grab APEC economies
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
@@ -64,16 +72,15 @@ for economy in APEC_economies:
     hist_coal_df = coal_df[coal_df['economy'] == economy].copy().reset_index(drop = True)
 
     hist_coal_df['year'] = hist_coal_df['year'].astype(str).astype(int)
-    hist_coal_df = hist_coal_df[(hist_coal_df['year'] >= 2000) &
-                                (hist_coal_df['year'] <= 2070)].copy().reset_index(drop = True)
+    hist_coal_df = hist_coal_df.copy().reset_index(drop = True)
 
     # Coal TPES
     coaltpes_df = hist_coal_df[(hist_coal_df['fuels'] == '01_coal') &
                                (hist_coal_df['subfuels'] != 'x') &
                                (hist_coal_df['sectors'].isin(['01_production', '02_imports', '03_exports', '06_stock_changes']))].copy().reset_index(drop = True)
     
-    min_y2 = coaltpes_df['value'].min() * 1.4
-    max_y2 = coaltpes_df['value'].max() * 1.4
+    min_y2 = coaltpes_df['value'].min() * 1.1
+    max_y2 = coaltpes_df['value'].max() * 1.1
 
     coking_df = coaltpes_df[coaltpes_df['subfuels'] == '01_01_coking_coal'].copy().reset_index(drop = True)
     thermal_df = coaltpes_df[coaltpes_df['subfuels'] == '01_x_thermal_coal'].copy().reset_index(drop = True)
@@ -90,8 +97,8 @@ for economy in APEC_economies:
 
     coaltrans_df['fuel'] = np.where(coaltrans_df['subfuels'] == 'x', coaltrans_df['fuels'], coaltrans_df['subfuels'])
 
-    min_y3 = coaltrans_df['value'].min() * 1.4
-    max_y3 = coaltrans_df['value'].max() * 1.4
+    min_y3 = coaltrans_df['value'].min() * 1.1
+    max_y3 = coaltrans_df['value'].max() * 1.1
 
     if (len(ref_files) > 0) & (len(tgt_files) > 0): 
 
@@ -106,24 +113,91 @@ for economy in APEC_economies:
                             .melt(id_vars = ['scenarios', 'economy', 'sectors', 'fuels'],
                                 var_name = 'year').copy().reset_index(drop = True)
         
+        coalp_ref['year'] = coalp_ref['year'].astype(str).astype(int)
+        
         coalp_tgt = tgt_df[(tgt_df['fuels'] == '02_coal_products') &
                         (tgt_df['sub1sectors'] == 'x')][['scenarios', 'economy', 'sectors', 'fuels'] + all_years_str]\
                             .melt(id_vars = ['scenarios', 'economy', 'sectors', 'fuels'],
                                 var_name = 'year').copy().reset_index(drop = True)
         
         coalp_tgt = coalp_tgt[coalp_tgt['year'].isin(proj_years_str)].copy().reset_index(drop = True)
+
+        coalp_tgt['year'] = coalp_tgt['year'].astype(str).astype(int)
         
         coalp_df = pd.concat([coalp_ref, coalp_tgt]).copy().reset_index(drop = True)
 
-        coalp_df['year'] = coalp_df['year'].astype(str).astype(int)
         coalp_df = coalp_df[(coalp_df['year'] >= 2000) &
                             (coalp_df['year'] <= 2070)].copy().reset_index(drop = True)
+        
+        # Now build in growth for coal transformation (add 2020 data as a beginning to loop through)
+        coaltrans_ref = hist_coal_df[(hist_coal_df['sub1sectors'] == '09_08_coal_transformation') &
+                                     (hist_coal_df['year'] == 2020)].copy().reset_index(drop = True)
+
+        coaltrans_tgt = hist_coal_df[(hist_coal_df['sub1sectors'] == '09_08_coal_transformation') &
+                                     (hist_coal_df['year'] == 2020)].copy().reset_index(drop = True)
+
+        for year in proj_years[1:]:
+            # REF
+            if coalp_ref.loc[coalp_ref['year'] == (year - 1), 'value'].values[0] == 0:
+                ratio_ref = 0
+            else:
+                ratio_ref = coalp_ref.loc[coalp_ref['year'] == year, 'value'].values[0] / coalp_ref.loc[coalp_ref['year'] == (year - 1), 'value'].values[0]
+
+            addyear_ref = coaltrans_ref[coaltrans_ref['year'] == (year - 1)].copy()
+            addyear_ref['value'] = addyear_ref['value'] * ratio_ref
+            addyear_ref['year'] = year
+
+            coaltrans_ref = pd.concat([coaltrans_ref, addyear_ref]).copy().reset_index(drop = True)
+
+            # TGT
+            if coalp_tgt.loc[coalp_tgt['year'] == (year - 1), 'value'].values[0] == 0:
+                ratio_tgt = 0
+            else:
+                ratio_tgt = coalp_tgt.loc[coalp_tgt['year'] == year, 'value'].values[0] / coalp_tgt.loc[coalp_tgt['year'] == (year - 1), 'value'].values[0]
+
+            addyear_tgt = coaltrans_tgt[coaltrans_tgt['year'] == (year - 1)].copy()
+            addyear_tgt['value'] = addyear_tgt['value'] * ratio_tgt
+            addyear_tgt['year'] = year
+
+            coaltrans_tgt = pd.concat([coaltrans_tgt, addyear_tgt]).copy().reset_index(drop = True)
+
+        # Now pivot so years are across the top
+        coaltrans_wide_ref = coaltrans_ref.pivot(index = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels'], 
+                                            columns = 'year', values = 'value').reset_index()
+        
+        coaltrans_wide_tgt = coaltrans_tgt.pivot(index = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels'], 
+                                            columns = 'year', values = 'value').reset_index()
+        
+        # Historical 
+        EGEDA_hist_ref = EGEDA_coaltrans[EGEDA_coaltrans['economy'] == economy].iloc[:,:-1].copy().reset_index(drop = True)
+        EGEDA_hist_tgt = EGEDA_hist_ref.copy()
+        EGEDA_hist_tgt['scenarios'] = 'target'
+
+        # Final results
+        coaltrans_wide_ref = EGEDA_hist_ref.merge(coaltrans_wide_ref, on = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels'], how = 'left')
+        coaltrans_wide_tgt = EGEDA_hist_tgt.merge(coaltrans_wide_tgt, on = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels'], how = 'left')
+
+        coaltrans_wide_ref.to_csv(save_location + economy + '_coal_transformation_ref.csv', index = False)
+        coaltrans_wide_tgt.to_csv(save_location + economy + '_coal_transformation_tgt.csv', index = False)
+
+        # Add custom fuel column for charting
+        ct_chart_ref = coaltrans_wide_ref.melt(id_vars = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 
+                                                           'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], var_name = 'year')
+
+        ct_chart_tgt = coaltrans_wide_tgt.melt(id_vars = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 
+                                                           'sub3sectors', 'sub4sectors', 'fuels', 'subfuels'], var_name = 'year')
+        
+        ct_chart_ref['fuel'] = np.where(ct_chart_ref['subfuels'] == 'x', ct_chart_ref['fuels'], ct_chart_ref['subfuels'])
+        ct_chart_tgt['fuel'] = np.where(ct_chart_tgt['subfuels'] == 'x', ct_chart_tgt['fuels'], ct_chart_tgt['subfuels'])
+
+        ct_chart_ref['year'] = ct_chart_ref['year'].astype(str).astype(int)
+        ct_chart_tgt['year'] = ct_chart_tgt['year'].astype(str).astype(int)
 
         #######################################################################################################
+        # Charts
         max_y1 = coalp_df['value'].max() * 1.1
-        proj_location = 0.925 * max_y1
         
-        fig, ((ax1, ax2), (ax3, ax4), (ax5, ax6)) = plt.subplots(3, 2, figsize = (8, 8))
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (8, 8))
 
         sns.set_theme(style = 'ticks')
 
@@ -140,27 +214,6 @@ for economy in APEC_economies:
                     hue = 'fuel',
                     ax = ax2,
                     palette = coal_palette)
-        
-        sns.barplot(data = coking_df,
-                    x = 'year',
-                    y = 'value',
-                    hue = 'sectors',
-                    ax = ax4,
-                    palette = tpes_palette)
-        
-        sns.barplot(data = thermal_df,
-                    x = 'year',
-                    y = 'value',
-                    hue = 'sectors',
-                    ax = ax5, 
-                    palette = tpes_palette)
-        
-        sns.barplot(data = lignite_df,
-                    x = 'year',
-                    y = 'value',
-                    hue = 'sectors',
-                    ax = ax6,
-                    palette = tpes_palette)
 
         ax1.set(title = economy + ' coal products industry consumption',
                 xlabel = 'Year',
@@ -173,26 +226,8 @@ for economy in APEC_economies:
                 ylabel = 'Petajoules',
                 ylim = (min_y3, max_y3))
         
-        ax4.set(title = economy + ' coking coal production and trade',
-                xlabel = 'Year',
-                ylabel = 'Petajoules',
-                ylim = (min_y2, max_y2))
-        
-        ax5.set(title = economy + ' thermal coal production and trade',
-                xlabel = 'Year',
-                ylabel = 'Petajoules',
-                ylim = (min_y2, max_y2))
-        
-        ax6.set(title = economy + ' lignite production and trade',
-                xlabel = 'Year',
-                ylabel = 'Petajoules',
-                ylim = (min_y2, max_y2))
-
         ax1.legend(title = '')
         ax2.legend(title = '', fontsize = 8)
-        ax4.legend(title = '', fontsize = 8)
-        ax5.legend(title = '', fontsize = 8)
-        ax6.legend(title = '', fontsize = 8)
 
         # Projection demarcation
         ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
@@ -200,6 +235,99 @@ for economy in APEC_economies:
         plt.tight_layout()
         plt.show()
 
-        # fig.savefig(industry_charts + economy + '_' + ind + '.png')
-        
+        fig.savefig(save_location + economy + '_coal_products_transformation.png')
         plt.close()
+        
+        # Next plot of different coal production
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize = (8, 8))
+
+        sns.set_theme(style = 'ticks')
+
+        sns.barplot(data = coking_df,
+                    x = 'year',
+                    y = 'value',
+                    hue = 'sectors',
+                    ax = ax1,
+                    palette = tpes_palette)
+        
+        sns.barplot(data = thermal_df,
+                    x = 'year',
+                    y = 'value',
+                    hue = 'sectors',
+                    ax = ax2, 
+                    palette = tpes_palette)
+        
+        sns.barplot(data = lignite_df,
+                    x = 'year',
+                    y = 'value',
+                    hue = 'sectors',
+                    ax = ax3,
+                    palette = tpes_palette)
+
+        ax1.set(title = economy + ' coking coal production and trade',
+                xlabel = 'Year',
+                ylabel = 'Petajoules',
+                ylim = (min_y2, max_y2))
+        
+        ax2.set(title = economy + ' thermal coal production and trade',
+                xlabel = 'Year',
+                ylabel = 'Petajoules',
+                ylim = (min_y2, max_y2))
+        
+        ax3.set(title = economy + ' lignite production and trade',
+                xlabel = 'Year',
+                ylabel = 'Petajoules',
+                ylim = (min_y2, max_y2))
+        
+        ax1.legend(title = '', fontsize = 8)
+        ax2.legend(title = '', fontsize = 8)
+        ax3.legend(title = '', fontsize = 8)
+
+        plt.tight_layout()
+        plt.show()
+
+        fig.savefig(save_location + economy + '_coal_production_and_trade.png')
+        plt.close()
+
+        # Coal transformation charts
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (8, 8))
+
+        sns.set_theme(style = 'ticks')
+
+        sns.lineplot(data = ct_chart_ref,
+                     x = 'year',
+                     y = 'value',
+                     hue = 'fuel',
+                     ax = ax1, 
+                     palette = coal_palette)
+        
+        sns.lineplot(data = ct_chart_tgt,
+                     x = 'year',
+                     y = 'value',
+                     hue = 'fuel',
+                     ax = ax2,
+                     palette = coal_palette)
+        
+        ax1.set(title = economy + ' coal transformation REF',
+                xlabel = 'Year',
+                ylabel = 'Petajoules',
+                xlim = (2000, 2070))
+        
+        ax2.set(title = economy + ' coal transformation TGT',
+                xlabel = 'Year',
+                ylabel = 'Petajoules',
+                xlim = (2000, 2070))
+        
+        ax1.legend(title = '')
+        ax2.legend(title = '', fontsize = 8)
+
+        # Projection demarcation
+        ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+        ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+
+        plt.tight_layout()
+        plt.show()
+
+        fig.savefig(save_location + economy + '_coal_transformation.png')
+        plt.close()
+
