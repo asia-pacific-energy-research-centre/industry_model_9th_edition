@@ -221,6 +221,6 @@ tpes_palette = {'01_production': "#1e465a",
 
 coal_palette = {'01_coal': "#e27c7c",
                 '01_01_coking_coal': "#1e465a",
-                '01_05_lignite': "#C36517",
-                '01_x_thermal_coal': "#fce205",
+                '01_05_lignite': "#a5cdf0",
+                '01_x_thermal_coal': "#6cd4c5",
                 '02_coal_products': "#a86464"}

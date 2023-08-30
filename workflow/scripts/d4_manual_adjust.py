@@ -53,12 +53,6 @@ industry_adj(economy = '19_THA',
 industry_adj(economy = '19_THA',
              adjust = {2021: 0.968, 2022: 0.983},  
              sub1sectors = '14_03_manufacturing', 
-             sub2sectors = '14_03_03_non_ferrous_metals',
-             data = industry_refine1)
-
-industry_adj(economy = '19_THA',
-             adjust = {2021: 0.968, 2022: 0.983},  
-             sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_01_iron_and_steel',
              data = industry_refine1)
 
@@ -66,6 +60,12 @@ industry_adj(economy = '19_THA',
              adjust = {2021: 0.968, 2022: 0.983},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_02_chemical_incl_petrochemical',
+             data = industry_refine1)
+
+industry_adj(economy = '19_THA',
+             adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_03_non_ferrous_metals',
              data = industry_refine1)
 
 industry_adj(economy = '19_THA',
@@ -106,6 +106,85 @@ industry_adj(economy = '19_THA',
 
 industry_adj(economy = '19_THA',
              adjust = {2021: 0.968, 2022: 0.983},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_11_nonspecified_industry',
+             data = industry_refine1)
+
+# United States
+
+# Steel
+industry_adj(economy = '20_USA',
+             adjust = {2022: 0.924},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_01_iron_and_steel',
+             data = industry_refine1)
+
+# Chemicals
+industry_adj(economy = '20_USA',
+             adjust = {2021: 0.978, 2022: 0.992},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_02_chemical_incl_petrochemical',
+             data = industry_refine1)
+
+# Non-ferrous metals
+industry_adj(economy = '20_USA',
+             adjust = {2021: 1.056, 2022: 0.974},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_03_non_ferrous_metals',
+             data = industry_refine1)
+
+# Cement
+industry_adj(economy = '20_USA',
+             adjust = {2021: 0.967},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_04_nonmetallic_mineral_products',
+             data = industry_refine1)
+
+# Transportation equip
+industry_adj(economy = '20_USA',
+             adjust = {2021: 0.978, 2022: 0.992},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_05_transportation_equipment',
+             data = industry_refine1)
+
+# Machinery
+industry_adj(economy = '20_USA',
+             adjust = {2021: 0.978, 2022: 0.992},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_06_machinery',
+             data = industry_refine1)
+
+# Food and beverages
+industry_adj(economy = '20_USA',
+             adjust = {2021: 0.978, 2022: 0.992},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_07_food_beverages_and_tobacco',
+             data = industry_refine1)
+
+# Pulp paper
+industry_adj(economy = '20_USA',
+             adjust = {2021: 0.979},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_08_pulp_paper_and_printing',
+             data = industry_refine1)
+
+# Wood
+industry_adj(economy = '20_USA',
+             adjust = {2021: 0.98},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_09_wood_and_wood_products',
+             data = industry_refine1)
+
+# Textiles
+industry_adj(economy = '20_USA',
+             adjust = {2021: 0.981},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_10_textiles_and_leather',
+             data = industry_refine1)
+
+# Non-specified
+industry_adj(economy = '20_USA',
+             adjust = {2021: 0.978, 2022: 0.993},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_11_nonspecified_industry',
              data = industry_refine1)

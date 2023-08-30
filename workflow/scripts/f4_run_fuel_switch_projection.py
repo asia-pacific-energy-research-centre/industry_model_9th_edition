@@ -208,20 +208,20 @@ fuel_switch(economy = '20_USA', sector = ind2[0], elec_rate_ref = 0.0025, elec_r
 
 # Chemicals
 fuel_switch(economy = '20_USA', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
-            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True)
+            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True, ccs_increment_tgt = 0.008)
 
 # Non-ferrous metals
 fuel_switch(economy = '20_USA', sector = ind2[2], elec_rate_tgt = 0.006)
 
 # Non-metallic minerals
 fuel_switch(economy = '20_USA', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
-            bio_rate_tgt = 0.001, ccs_ref = True, ccs_tgt = True)
+            bio_rate_tgt = 0.001, ccs_ref = True, ccs_tgt = True, ccs_increment_tgt = 0.008)
 
 # Transport
-fuel_switch(economy = '20_USA', sector = ind2[4], elec_rate_ref = 0.003, elec_rate_tgt = 0.005)
+fuel_switch(economy = '20_USA', sector = ind2[4], elec_rate_ref = 0.003, elec_rate_tgt = 0.0075)
 
 # Machinery
-fuel_switch(economy = '20_USA', sector = ind2[5], elec_rate_ref = 0.003, elec_rate_tgt = 0.005)
+fuel_switch(economy = '20_USA', sector = ind2[5], elec_rate_ref = 0.003, elec_rate_tgt = 0.0075)
 
 # Food and Beverages
 fuel_switch(economy = '20_USA', sector = ind2[6], elec_rate_tgt = 0.0075)
@@ -234,8 +234,7 @@ fuel_switch(economy = '20_USA', sector = ind2[7], elec_rate_ref = 0.0025, elec_r
 fuel_switch(economy = '20_USA', sector = ind2[8])
 
 # Textiles
-fuel_switch(economy = '20_USA', sector = ind2[9], elec_rate_ref = 0.003, elec_rate_tgt = 0.006, 
-            bio_rate_tgt = 0.002)
+fuel_switch(economy = '20_USA', sector = ind2[9], elec_rate_ref = 0.003, elec_rate_tgt = 0.006)
 
 # Non-specified
 fuel_switch(economy = '20_USA', sector = ind2[10], elec_rate_tgt = 0.01)
