@@ -41,7 +41,7 @@ nonenergy_refine2 = pd.read_csv('./data/non_energy/3_nonenergy_refine2/refined_n
 # Canada
 # Mining
 scenario_adj(economy = '03_CDA', sub1sectors = ind1[0], sub2sectors = 'x', 
-             increment = 0.02, start_year = 2023, end_year = 2040, data = industry_refine2)
+             increment = 0.02, start_year = 2024, end_year = 2040, data = industry_refine2)
 
 # Steel: Material efficiency
 scenario_adj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[0], 
@@ -53,7 +53,7 @@ scenario_adj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[1],
 
 # Non-ferrous metals
 scenario_adj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[2], 
-             increment = 0.025, start_year = 2023, end_year = 2040, data = industry_refine2)
+             increment = 0.025, start_year = 2024, end_year = 2040, data = industry_refine2)
 
 # Cement (non-metallic minerals): Material efficiency
 scenario_adj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[3], 

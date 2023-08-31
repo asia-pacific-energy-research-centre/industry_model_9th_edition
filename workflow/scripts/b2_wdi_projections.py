@@ -58,11 +58,11 @@ ind_projection(economy = '03_CDA', series = 'NV.IND.MANF.ZS', low_bound = 6, hig
 # Chemicals
 ind_projection(economy = '03_CDA', series = 'NV.MNF.CHEM.ZS.UN', low_bound = 7, high_bound = 7.5)
 # Food and beverage
-ind_projection(economy = '03_CDA', series = 'NV.MNF.FBTO.ZS.UN')
+ind_projection(economy = '03_CDA', series = 'NV.MNF.FBTO.ZS.UN', low_bound = 12, high_bound = 15, high_change = 0.9995)
 # Machinery and Transport
-ind_projection(economy = '03_CDA', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 20, high_bound = 30)
+ind_projection(economy = '03_CDA', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 15, high_bound = 20)
 # Other manufacturing
-ind_projection(economy = '03_CDA', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 40, high_bound = 50)
+ind_projection(economy = '03_CDA', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 30, high_bound = 35)
 # Textiles
 ind_projection(economy = '03_CDA', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 0.5, high_bound = 1)
 

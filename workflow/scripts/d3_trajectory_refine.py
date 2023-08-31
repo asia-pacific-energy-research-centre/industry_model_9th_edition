@@ -100,11 +100,11 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[10],
 
 #################################### Canada #################################################################
 # Mining
-industry_traj(economy = '03_CDA', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2070,
-              shape = 'decrease', magnitude = 1.25, data = industry_interim)
+industry_traj(economy = '03_CDA', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2060,
+              shape = 'decrease', magnitude = 1.3, data = industry_interim)
 
 # Construction
-industry_traj(economy = '03_CDA', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2070,
+industry_traj(economy = '03_CDA', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2060,
               shape = 'decrease', magnitude = 1.25, data = industry_interim)
 
 # Steel: no adjustment
@@ -126,20 +126,20 @@ industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[5], 
               shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Food and beverages
-industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2023,
+industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2030,
               shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Pulp and paper
-industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 0.9, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2023,
+              shape = 'decrease', magnitude = 1.2, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Wood and wood products
 industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2030,
               shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Textiles
-industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 0.9, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2023,
+              shape = 'decrease', magnitude = 1.2, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
 
 # Non-specified
 industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2023,

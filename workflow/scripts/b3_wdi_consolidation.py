@@ -21,7 +21,7 @@ APEC_indshare = pd.read_csv('./data/industry_production/1_industry_interim1/wdi_
 
 #############################################################################################
 # Generate production trajectories for industry (incl construction), manufacturing, and subsectors of manu
-for economy in APEC_gdp['economy_code'].unique()[19:20]:
+for economy in APEC_gdp['economy_code'].unique():
     # Industry and manufacturing
     for hl_sector in APEC_indshare['series_code'].unique()[:2]:
         gdp_data = APEC_gdp[APEC_gdp['economy_code'] == economy].copy().reset_index(drop = True)

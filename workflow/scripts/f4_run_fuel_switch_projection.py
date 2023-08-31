@@ -49,7 +49,8 @@ ccs_fuels = ['01_coal', '02_coal_products', '08_gas']
 fuel_switch(economy = '03_CDA', sector = ind1[0], c2g_rate_ref = 0.001, c2g_rate_tgt = 0.002)
 
 # Construction
-fuel_switch(economy = '03_CDA', sector = ind1[1], c2g_rate_ref = 0.001, c2g_rate_tgt = 0.0025)
+fuel_switch(economy = '03_CDA', sector = ind1[1], c2g_rate_ref = 0.001, c2g_rate_tgt = 0.0025, 
+            elec_start_ref = 2024, elec_start_tgt = 2024)
 
 # Iron and steel
 fuel_switch(economy = '03_CDA', sector = ind2[0], elec_rate_ref = 0.005, elec_rate_tgt = 0.0075, 
@@ -67,6 +68,7 @@ fuel_switch(economy = '03_CDA', sector = ind2[2], elec_rate_tgt = 0.006, c2g_rat
 # Non-metallic minerals
 fuel_switch(economy = '03_CDA', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
             ccs_ref = True, ccs_tgt = True, c2g_rate_tgt = 0.004)
+
 # Transport
 fuel_switch(economy = '03_CDA', sector = ind2[4], elec_rate_ref = 0.003, elec_rate_tgt = 0.006)
 

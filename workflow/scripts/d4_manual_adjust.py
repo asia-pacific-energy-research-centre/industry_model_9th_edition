@@ -35,6 +35,86 @@ industry_refine1 = pd.read_csv('./data/industry_production/4_industry_refine1/re
 nonenergy_refine1 = pd.read_csv('./data/non_energy/2_nonenergy_refine1/refined_nonenergy_all.csv')
 
 #################################################################################################
+
+##################################################################
+# Canada
+# Mining
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.95, 2022: 1.019},  
+             sub1sectors = '14_01_mining_and_quarrying', 
+             sub2sectors = 'x',
+             data = industry_refine1)
+
+# Construction
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.951, 2022: 1.021},  
+             sub1sectors = '14_02_construction', 
+             sub2sectors = 'x',
+             data = industry_refine1)
+
+# Steel: no adjustment
+
+# Chemicals
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.951, 2022: 1.021},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_02_chemical_incl_petrochemical',
+             data = industry_refine1)
+
+# Non-ferrous metals: no adjustment
+
+# Cement: no adjustment
+
+# Transportation equip
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.951, 2022: 1.021},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_05_transportation_equipment',
+             data = industry_refine1)
+
+# Machinery
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.951, 2022: 1.021},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_06_machinery',
+             data = industry_refine1)
+
+# Food and beverages
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.951, 2022: 1.021},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_07_food_beverages_and_tobacco',
+             data = industry_refine1)
+
+# Pulp paper
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.951, 2022: 1.021},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_08_pulp_paper_and_printing',
+             data = industry_refine1)
+
+# Wood
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.951, 2022: 1.021},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_09_wood_and_wood_products',
+             data = industry_refine1)
+
+# Textiles
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.951, 2022: 1.021},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_10_textiles_and_leather',
+             data = industry_refine1)
+
+# Non-specified
+industry_adj(economy = '03_CDA',
+             adjust = {2021: 0.95, 2022: 1.02},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_11_nonspecified_industry',
+             data = industry_refine1)
+
+##################################################################
 # Japan
 industry_adj(economy = '08_JPN',
              adjust = {2023: 0.93},  
@@ -110,8 +190,8 @@ industry_adj(economy = '19_THA',
              sub2sectors = '14_03_11_nonspecified_industry',
              data = industry_refine1)
 
+##################################################################
 # United States
-
 # Steel
 industry_adj(economy = '20_USA',
              adjust = {2022: 0.924},  
