@@ -37,7 +37,7 @@ energy_use(economy = '03_CDA', sub1sectors = ind1[1], sub2sectors = 'x',
 
 # Steel
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[0],
-           increment_ref = 0.002, increment_tgt = 0.004, end_year = 2100)
+           increment_ref = 0.002, increment_tgt = 0.0025, end_year = 2100)
 
 # Chemicals
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[1],
@@ -49,35 +49,35 @@ energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[2],
 
 # Non-metallic mineral products
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[3],
-           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+           increment_ref = 0.003, increment_tgt = 0.005, end_year = 2100)
 
 # Transportation equipment
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[4],
-           increment_ref = 0.005, increment_tgt = 0.0075, end_year = 2100)
+           increment_ref = 0.006, increment_tgt = 0.009, end_year = 2100)
 
 # Machinery
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[5],
-           increment_ref = 0.005, increment_tgt = 0.0075, end_year = 2100)
+           increment_ref = 0.006, increment_tgt = 0.009, end_year = 2100)
 
 # Food and beverage
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[6],
-           increment_ref = 0.005, increment_tgt = 0.0075, end_year = 2100)
+           increment_ref = 0.006, increment_tgt = 0.009, end_year = 2100)
 
 # Pulp and paper
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[7],
-           increment_ref = 0.005, increment_tgt = 0.01, end_year = 2100)
+           increment_ref = 0.006, increment_tgt = 0.01, end_year = 2100)
 
 # Wood and wood products
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[8],
-           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+           increment_ref = 0.005, increment_tgt = 0.008, end_year = 2100)
 
 # Textiles
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[9],
-           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+           increment_ref = 0.005, increment_tgt = 0.008, end_year = 2100)
 
 # Non-specified
 energy_use(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[10],
-           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+           increment_ref = 0.004, increment_tgt = 0.008, end_year = 2100)
 
 # Non-energy
 nonenergy_use(economy = '03_CDA', increment_ref = 0.003, increment_tgt = 0.006, 

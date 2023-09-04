@@ -52,19 +52,19 @@ ind_projection(economy = '02_BD', series = 'NV.IND.MANF.ZS', low_bound = 10, hig
 # Industry (including construction) % GDP
 ind_projection(economy = '03_CDA', series = 'NV.IND.TOTL.ZS', low_bound = 15, high_bound = 18)
 # Manufacturing % GDP
-ind_projection(economy = '03_CDA', series = 'NV.IND.MANF.ZS', low_bound = 6, high_bound = 7)
+ind_projection(economy = '03_CDA', series = 'NV.IND.MANF.ZS', low_bound = 4, high_bound = 5, high_change = 0.9985)
 
 # Subsets of Manufacturing (% of Manufacturing)
 # Chemicals
-ind_projection(economy = '03_CDA', series = 'NV.MNF.CHEM.ZS.UN', low_bound = 7, high_bound = 7.5)
+ind_projection(economy = '03_CDA', series = 'NV.MNF.CHEM.ZS.UN', low_bound = 7, high_bound = 7.5, high_change = 0.9998)
 # Food and beverage
-ind_projection(economy = '03_CDA', series = 'NV.MNF.FBTO.ZS.UN', low_bound = 12, high_bound = 15, high_change = 0.9995)
+ind_projection(economy = '03_CDA', series = 'NV.MNF.FBTO.ZS.UN', low_bound = 12, high_bound = 13, high_change = 0.999)
 # Machinery and Transport
-ind_projection(economy = '03_CDA', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 15, high_bound = 20)
+ind_projection(economy = '03_CDA', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 15, high_bound = 16, high_change = 0.9985)
 # Other manufacturing
-ind_projection(economy = '03_CDA', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 30, high_bound = 35)
+ind_projection(economy = '03_CDA', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 30, high_bound = 35, high_change = 0.999)
 # Textiles
-ind_projection(economy = '03_CDA', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 0.5, high_bound = 1)
+ind_projection(economy = '03_CDA', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 0.25, high_bound = 0.5, high_change = 0.998)
 
 ###############################################################################################
 # 04_CHL
