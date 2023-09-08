@@ -30,6 +30,9 @@ biogas_switch(economy = '03_CDA', biogas_ref = True, biogas_tgt = True, biogas_r
 # Japan
 biogas_switch(economy = '08_JPN', biogas_ref = False, biogas_tgt = False)
 
+# Chinese Taipei
+biogas_switch(economy = '18_CT', biogas_ref = False, biogas_tgt = False)
+
 # Thailand
 biogas_switch(economy = '19_THA', biogas_ref = False, biogas_tgt = False)
 

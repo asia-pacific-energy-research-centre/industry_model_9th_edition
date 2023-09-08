@@ -146,6 +146,57 @@ fuel_switch(economy = '08_JPN', sector = ind2[10], elec_rate_tgt = 0.01)
 fuel_switch_ne(economy = '08_JPN', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005,
                gas_switch_ref = False, gas_switch_tgt = False)
 
+##################################################################################################################
+# Chinese Taipei
+# Mining
+fuel_switch(economy = '18_CT', sector = ind1[0])
+
+# Construction
+fuel_switch(economy = '18_CT', sector = ind1[1])
+
+# Iron and steel
+fuel_switch(economy = '18_CT', sector = ind2[0], elec_rate_ref = 0.003, elec_rate_tgt = 0.0075, 
+            hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, hyd_start_tgt = 2030, ccs_tgt = False, 
+            c2g_rate_tgt = 0.003) 
+
+# Chemicals
+fuel_switch(economy = '18_CT', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
+            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = False, ccs_tgt = False,
+            c2g_rate_tgt = 0.002)
+
+# Non-ferrous metals
+fuel_switch(economy = '18_CT', sector = ind2[2])
+
+# Non-metallic minerals
+fuel_switch(economy = '18_CT', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.005, c2g_rate_tgt = 0.002)
+
+# Transport
+fuel_switch(economy = '18_CT', sector = ind2[4])
+
+# Machinery
+fuel_switch(economy = '18_CT', sector = ind2[5])
+
+# Food and Beverages
+fuel_switch(economy = '18_CT', sector = ind2[6], elec_rate_tgt = 0.008)
+
+# Pulp and paper
+fuel_switch(economy = '18_CT', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.008, 
+            bio_rate_ref = 0.001, bio_rate_tgt = 0.005)
+
+# Wood
+fuel_switch(economy = '18_CT', sector = ind2[8])
+
+# Textiles
+fuel_switch(economy = '18_CT', sector = ind2[9], elec_rate_ref = 0.0075, elec_rate_tgt = 0.01, 
+            c2g_rate_ref = 0.0015, c2g_start_tgt = 0.001)
+
+# Non-specified
+fuel_switch(economy = '18_CT', sector = ind2[10], elec_rate_tgt = 0.0125)
+
+# Non-energy
+fuel_switch_ne(economy = '18_CT', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005,
+               gas_switch_ref = False, gas_switch_tgt = False)
+
 #################################################################################################################
 # Thailand
 # Mining

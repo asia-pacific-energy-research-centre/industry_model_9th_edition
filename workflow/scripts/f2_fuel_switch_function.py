@@ -492,6 +492,8 @@ def fuel_switch(economy = '01_AUS',
     switched_ref = pd.concat([hist_ref, switched_ref]).copy().reset_index(drop = True)
     switched_ref['year'] = switched_ref['year'].astype(str).astype(int)
 
+    switched_ref['energy'] = switched_ref['energy'].clip(lower = 0)
+
     switched_ref.to_csv(save_location + economy + '_' + sector + '_switched_ref.csv', index = False)
 
     # TGT
@@ -652,6 +654,9 @@ def fuel_switch(economy = '01_AUS',
 
     switched_tgt = pd.concat([hist_tgt, switched_tgt]).copy().reset_index(drop = True)
     switched_tgt['year'] = switched_tgt['year'].astype(str).astype(int)
+
+    # Remove negative values
+    switched_tgt['energy'] = switched_tgt['energy'].clip(lower = 0)
 
     switched_tgt.to_csv(save_location + economy + '_' + sector + '_switched_tgt.csv', index = False)
     

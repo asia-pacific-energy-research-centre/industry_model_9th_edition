@@ -177,8 +177,8 @@ for economy in APEC_economies:
         coaltrans_wide_ref = EGEDA_hist_ref.merge(coaltrans_wide_ref, on = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels'], how = 'left')
         coaltrans_wide_tgt = EGEDA_hist_tgt.merge(coaltrans_wide_tgt, on = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels'], how = 'left')
 
-        coaltrans_wide_ref.to_csv(save_location + economy + '_coal_transformation_ref.csv', index = False)
-        coaltrans_wide_tgt.to_csv(save_location + economy + '_coal_transformation_tgt.csv', index = False)
+        coaltrans_wide_ref.to_csv(save_location + economy + '_coal_transformation_ref_' + timestamp + '.csv', index = False)
+        coaltrans_wide_tgt.to_csv(save_location + economy + '_coal_transformation_tgt_' + timestamp + '.csv', index = False)
 
         # Add custom fuel column for charting
         ct_chart_ref = coaltrans_wide_ref.melt(id_vars = ['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 

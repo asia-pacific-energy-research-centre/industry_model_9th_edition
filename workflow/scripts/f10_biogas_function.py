@@ -56,6 +56,9 @@ def biogas_switch(economy = '01_AUS',
 
         scenario_df = pd.read_csv(latest_data)
 
+        numeric_df = scenario_df.iloc[:,9:].clip(lower = 0)
+        scenario_df.iloc[:, 9:] = numeric_df
+
         if (len(files) > 0) & (switch_flag):
 
             adjust_ref = pd.DataFrame(index = proj_years)

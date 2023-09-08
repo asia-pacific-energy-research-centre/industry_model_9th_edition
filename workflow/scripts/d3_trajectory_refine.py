@@ -211,7 +211,55 @@ nonenergy_traj(economy = '08_JPN', proj_start_year = 2023,
 # Philippines
 # Russia
 # Singapore
-# Chinese Taipei
+
+##################### Chinese Taipei ######################################################################
+# Mining: no adjustment
+
+# Construction: no adjustment
+industry_traj(economy = '18_CT', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2022,
+              shape = 'decrease', magnitude = 0.95, data = industry_interim)
+
+# Steel: no adjustment
+
+# Chemicals
+industry_traj(economy = '18_CT', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.1, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+
+# Non-ferrous metals: no adjustment
+
+# Non-metallic minerals: no adjustment
+
+# Transportation equipment
+industry_traj(economy = '18_CT', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.1, data = industry_interim)
+
+# Machinery
+industry_traj(economy = '18_CT', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2021,
+              shape = 'peak', magnitude = 1.1, apex_mag = 1.1, apex_loc = 30, data = industry_interim)
+
+# Food and beverages
+industry_traj(economy = '18_CT', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.1, data = industry_interim)
+
+# Pulp and paper
+industry_traj(economy = '18_CT', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
+              shape = 'increase', magnitude = 0.9, data = industry_interim)
+
+# Wood and wood products
+industry_traj(economy = '18_CT', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 0.9, data = industry_interim)
+
+# Textiles
+industry_traj(economy = '18_CT', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 0.7, data = industry_interim)
+
+# Non-specified
+industry_traj(economy = '18_CT', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.1, data = industry_interim)
+
+# Non-energy
+nonenergy_traj(economy = '18_CT', proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.1, data = nonenergy_production)
 
 
 ############################ Thailand ###########################################################
@@ -246,6 +294,8 @@ industry_traj(economy = '20_USA', sub1sectors = ind1[1], sub2sectors = 'x', proj
 # Steel
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2021,
               shape = 'decrease', magnitude = 1.5, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
+
+# Chemicals: no adjustment
 
 # Non-ferrous metals
 industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[2], proj_start_year = 2021,

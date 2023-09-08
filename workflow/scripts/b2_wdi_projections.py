@@ -401,4 +401,13 @@ for economy in wdi_df['economy_code'].unique():
         temp_df = pd.read_csv(i)
         combined_df = pd.concat([combined_df, temp_df]).copy()
 
+# Chinese Taipei inclusion/edit (no WDI data)
+CT_df = combined_df[combined_df['economy_code'] == '09_ROK'].copy().reset_index(drop = True)
+
+CT_df['economy'] = 'Chinese Taipei'
+CT_df['economy_code'] = '18_CT'
+
+combined_df = pd.concat([combined_df, CT_df]).copy()
+combined_df = combined_df.sort_values(['economy_code', 'series_code', 'year']).copy().reset_index(drop = True)
+
 combined_df.to_csv('./data/industry_production/1_industry_interim1/wdi_projections.csv', index = False)
