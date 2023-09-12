@@ -4,6 +4,7 @@ This repository houses input data, and builds a model that projects industrial e
 
 #### The model (scripts in working development in the workflow folder)
 ###### Note: input data and results data (csv's, xlsx, etc) is not pushed to git repository. These file types are defined in the .gitignore file. 
+###### GDP and population projections to 2100, that form the basis of much of the modelling, are projected and/or packaged here: https://github.com/asia-pacific-energy-research-centre/macro_variables_9th
 
 ##### Input data (CPB)
 - a1_cpb_input_data.py: Open data from CPB Netherlands Bureau for Economic Policy Analysis.
