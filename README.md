@@ -22,7 +22,7 @@ This repository houses input data, and builds a model that projects industrial e
 - c2c_alum_projections_ml.py
 
 At present, builds OLS, ridge regression, and lasso models using GDP and population projections to 2100. 
-The feature variables include combinations of lagged target variables, lagged feature variables, and transformations of these variables (all variables are in log form). Out of the hundreds of models that are built, the models are ranked based on minimising the mean squared error on the test set using k-fold validation.
+The feature variables include combinations of lagged target variables, lagged feature variables, and transformations of these variables (all variables are in log form). Out of the hundreds of models that are built, the models are ranked based on minimising the mean squared error on the test set using k-fold validation (optimal lambda's for RR and Lasso are also selected via k-fold cross validation grid search techniques).
 The choice of 'best' model is then a qualitative assessment by the researcher.
 
 - c3_sca_consolidation.py: Consoildates results and outputs various charts.
