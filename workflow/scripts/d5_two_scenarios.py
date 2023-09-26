@@ -63,6 +63,32 @@ scenario_adj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[3],
 scenario_adj_ne(economy = '03_CDA', 
                 increment = -0.003, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
 
+##########################################################################################
+# China
+# Mining
+scenario_adj(economy = '05_PRC', sub1sectors = ind1[0], sub2sectors = 'x', 
+             increment = 0.02, start_year = 2024, end_year = 2040, data = industry_refine2)
+
+# Steel: Material efficiency
+scenario_adj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[0], 
+             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2) 
+
+# Chemicals: Material efficiency
+scenario_adj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[1], 
+             increment = -0.003, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-ferrous metals
+scenario_adj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[2], 
+             increment = 0.025, start_year = 2024, end_year = 2040, data = industry_refine2)
+
+# Cement (non-metallic minerals): Material efficiency
+scenario_adj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[3], 
+             increment = -0.004, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-energy
+scenario_adj_ne(economy = '05_PRC', 
+                increment = -0.003, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
+
 ##############################################################################################
 # Japan
 # Mining
@@ -87,6 +113,32 @@ scenario_adj(economy = '08_JPN', sub1sectors = ind1[2], sub2sectors = ind2[3],
 
 # Non-energy
 scenario_adj_ne(economy = '08_JPN', 
+                increment = -0.0025, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
+
+##########################################################################################
+# Mexico
+# Mining
+scenario_adj(economy = '11_MEX', sub1sectors = ind1[0], sub2sectors = 'x', 
+             increment = 0.02, start_year = 2024, end_year = 2040, data = industry_refine2)
+
+# Steel: Material efficiency
+scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[0], 
+             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2) 
+
+# Chemicals: Material efficiency
+scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[1], 
+             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-ferrous metals
+scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[2], 
+             increment = 0.025, start_year = 2024, end_year = 2040, data = industry_refine2)
+
+# Cement (non-metallic minerals): Material efficiency
+scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[3], 
+             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-energy
+scenario_adj_ne(economy = '11_MEX', 
                 increment = -0.0025, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
 
 ##############################################################################################

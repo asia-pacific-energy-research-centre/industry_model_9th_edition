@@ -95,6 +95,58 @@ fuel_switch(economy = '03_CDA', sector = ind2[10], elec_rate_tgt = 0.01)
 fuel_switch_ne(economy = '03_CDA', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005, 
                gas_switch_ref = False, gas_switch_tgt = False)
 
+###########################################################################################################
+# China
+# Mining
+fuel_switch(economy = '05_PRC', sector = ind1[0], c2g_rate_ref = 0.001, c2g_rate_tgt = 0.002)
+
+# Construction
+fuel_switch(economy = '05_PRC', sector = ind1[1], c2g_rate_ref = 0.001, c2g_rate_tgt = 0.0025, 
+            elec_start_ref = 2024, elec_start_tgt = 2024)
+
+# Iron and steel
+fuel_switch(economy = '05_PRC', sector = ind2[0], elec_rate_ref = 0.005, elec_rate_tgt = 0.0075, 
+            hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, ccs_tgt = True, 
+            hyd_increment_tgt = 0.02, c2g_rate_ref = 0.001, c2g_rate_tgt = 0.005)
+
+# Chemicals
+fuel_switch(economy = '05_PRC', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
+            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True)
+
+# Non-ferrous metals
+fuel_switch(economy = '05_PRC', sector = ind2[2], elec_rate_tgt = 0.006, c2g_rate_ref = 0.001, 
+            c2g_rate_tgt = 0.0005)
+
+# Non-metallic minerals
+fuel_switch(economy = '05_PRC', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
+            ccs_ref = True, ccs_tgt = True, c2g_rate_tgt = 0.004)
+
+# Transport
+fuel_switch(economy = '05_PRC', sector = ind2[4], elec_rate_ref = 0.003, elec_rate_tgt = 0.006)
+
+# Machinery
+fuel_switch(economy = '05_PRC', sector = ind2[5], elec_rate_ref = 0.003, elec_rate_tgt = 0.005)
+
+# Food and Beverages
+fuel_switch(economy = '05_PRC', sector = ind2[6], elec_rate_tgt = 0.0075)
+
+# Pulp and paper
+fuel_switch(economy = '05_PRC', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.008, 
+            bio_rate_tgt = 0.001)
+
+# Wood
+fuel_switch(economy = '05_PRC', sector = ind2[8], bio_rate_tgt = 0.002)
+
+# Textiles
+fuel_switch(economy = '05_PRC', sector = ind2[9], elec_rate_ref = 0.003, elec_rate_tgt = 0.0075)
+
+# Non-specified
+fuel_switch(economy = '05_PRC', sector = ind2[10], elec_rate_tgt = 0.01)
+
+# Non-energy
+fuel_switch_ne(economy = '05_PRC', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005, 
+               gas_switch_ref = False, gas_switch_tgt = False)
+
 ##################################################################################################################
 # Japan
 # Mining
@@ -144,6 +196,58 @@ fuel_switch(economy = '08_JPN', sector = ind2[10], elec_rate_tgt = 0.01)
 
 # Non-energy
 fuel_switch_ne(economy = '08_JPN', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005,
+               gas_switch_ref = False, gas_switch_tgt = False)
+
+###########################################################################################################
+# Mexico
+# Mining
+fuel_switch(economy = '11_MEX', sector = ind1[0], c2g_rate_ref = 0.001, c2g_rate_tgt = 0.002)
+
+# Construction
+fuel_switch(economy = '11_MEX', sector = ind1[1], 
+            elec_start_ref = 2024, elec_start_tgt = 2024)
+
+# Iron and steel
+fuel_switch(economy = '11_MEX', sector = ind2[0], elec_rate_ref = 0.003, elec_rate_tgt = 0.005, 
+            hydrogen_ref = False, ccs_ref = False, hydrogen_tgt = True, ccs_tgt = True, 
+            hyd_increment_tgt = 0.005)
+
+# Chemicals
+fuel_switch(economy = '11_MEX', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
+            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True)
+
+# Non-ferrous metals:
+fuel_switch(economy = '11_MEX', sector = ind2[2], elec_rate_tgt = 0.006, c2g_rate_ref = 0.001, 
+            c2g_rate_tgt = 0.0005)
+
+# Non-metallic minerals
+fuel_switch(economy = '11_MEX', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
+            ccs_ref = True, ccs_tgt = True, c2g_rate_tgt = 0.004)
+
+# Transport
+fuel_switch(economy = '11_MEX', sector = ind2[4], elec_rate_ref = 0.003, elec_rate_tgt = 0.006)
+
+# Machinery
+fuel_switch(economy = '11_MEX', sector = ind2[5], elec_rate_ref = 0.003, elec_rate_tgt = 0.005)
+
+# Food and Beverages
+fuel_switch(economy = '11_MEX', sector = ind2[6], elec_rate_tgt = 0.0075)
+
+# Pulp and paper
+fuel_switch(economy = '11_MEX', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005, 
+            bio_rate_tgt = 0.001)
+
+# Wood
+fuel_switch(economy = '11_MEX', sector = ind2[8], bio_rate_tgt = 0.002)
+
+# Textiles
+fuel_switch(economy = '11_MEX', sector = ind2[9], elec_rate_ref = 0.003, elec_rate_tgt = 0.0075)
+
+# Non-specified
+fuel_switch(economy = '11_MEX', sector = ind2[10], elec_rate_tgt = 0.01)
+
+# Non-energy
+fuel_switch_ne(economy = '11_MEX', hyd_increment_ref = 0.001, hyd_increment_tgt = 0.002, 
                gas_switch_ref = False, gas_switch_tgt = False)
 
 ##################################################################################################################

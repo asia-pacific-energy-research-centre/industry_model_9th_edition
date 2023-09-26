@@ -94,15 +94,15 @@ ind_projection(economy = '05_PRC', series = 'NV.IND.MANF.ZS', low_bound = 10, hi
 
 # Subsets of Manufacturing (% of Manufacturing)
 # Chemicals
-ind_projection(economy = '05_PRC', series = 'NV.MNF.CHEM.ZS.UN')
+ind_projection(economy = '05_PRC', series = 'NV.MNF.CHEM.ZS.UN', low_bound = 8, high_bound = 9, high_change = 0.9995)
 # Food and beverage
-ind_projection(economy = '05_PRC', series = 'NV.MNF.FBTO.ZS.UN')
+ind_projection(economy = '05_PRC', series = 'NV.MNF.FBTO.ZS.UN', low_bound = 8, high_bound = 9, high_change = 0.9995)
 # Machinery and Transport
-ind_projection(economy = '05_PRC', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 24, high_bound = 26)
+ind_projection(economy = '05_PRC', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 20, high_bound = 21, high_change = 0.9995)
 # Other manufacturing
-ind_projection(economy = '05_PRC', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 40, high_bound = 50)
+ind_projection(economy = '05_PRC', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 35, high_bound = 37, high_change = 0.9995)
 # Textiles
-ind_projection(economy = '05_PRC', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 5, high_bound = 7)
+ind_projection(economy = '05_PRC', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 3, high_bound = 5, high_change = 0.998)
 
 ###############################################################################################
 # 06_HKC
@@ -210,13 +210,13 @@ ind_projection(economy = '11_MEX', series = 'NV.IND.MANF.ZS', low_bound = 10, hi
 # Chemicals
 ind_projection(economy = '11_MEX', series = 'NV.MNF.CHEM.ZS.UN', low_bound = 5, high_bound = 10)
 # Food and beverage
-ind_projection(economy = '11_MEX', series = 'NV.MNF.FBTO.ZS.UN', low_bound = 20, high_bound = 35)
+ind_projection(economy = '11_MEX', series = 'NV.MNF.FBTO.ZS.UN', low_bound = 15, high_bound = 17, high_change = 0.9995)
 # Machinery and Transport
-ind_projection(economy = '11_MEX', series = 'NV.MNF.MTRN.ZS.UN')
+ind_projection(economy = '11_MEX', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 15, high_bound = 17, high_change = 0.999)
 # Other manufacturing
-ind_projection(economy = '11_MEX', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 30, high_bound = 36)
+ind_projection(economy = '11_MEX', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 15, high_bound = 17, high_change = 0.9995)
 # Textiles
-ind_projection(economy = '11_MEX', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 1, high_bound = 2.5, high_change = 0.9998)
+ind_projection(economy = '11_MEX', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 1, high_bound = 2, high_change = 0.999)
 
 ###############################################################################################
 # 12_NZ

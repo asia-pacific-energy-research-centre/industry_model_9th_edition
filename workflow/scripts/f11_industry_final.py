@@ -27,8 +27,14 @@ id = ['scenarios', 'economy', 'sectors', 'sub1sectors',	'sub2sectors', 'sub3sect
 # Canada
 biogas_switch(economy = '03_CDA', biogas_ref = True, biogas_tgt = True, biogas_rate_ref = 0.001, biogas_rate_tgt = 0.002)
 
+# China
+biogas_switch(economy = '05_PRC', biogas_ref = False, biogas_tgt = False)
+
 # Japan
 biogas_switch(economy = '08_JPN', biogas_ref = False, biogas_tgt = False)
+
+# Mexico
+biogas_switch(economy = '11_MEX', biogas_ref = False, biogas_tgt = False)
 
 # Chinese Taipei
 biogas_switch(economy = '18_CT', biogas_ref = False, biogas_tgt = False)
