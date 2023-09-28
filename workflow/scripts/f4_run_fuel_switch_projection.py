@@ -157,8 +157,8 @@ fuel_switch(economy = '08_JPN', sector = ind1[1])
 
 # Iron and steel
 fuel_switch(economy = '08_JPN', sector = ind2[0], elec_rate_ref = 0.001, elec_rate_tgt = 0.005, 
-            hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, hyd_start_tgt = 2025, ccs_tgt = True, 
-            c2g_rate_tgt = 0.003) 
+            hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, hyd_start_tgt = 2030, hyd_increment_tgt = 0.012,
+            ccs_tgt = True, c2g_rate_tgt = 0.003, hyd_fuel_mix = {'16_x_hydrogen': 0.6, '17_electricity': 0.4}) 
 
 # Chemicals
 fuel_switch(economy = '08_JPN', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
