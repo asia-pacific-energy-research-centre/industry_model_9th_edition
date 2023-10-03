@@ -363,7 +363,7 @@ def fuel_switch(economy = '01_AUS',
     switched_ref_calcs = switched_ref.copy()
 
     # Add in hydrogen for REF
-    if (sector in ind2[:2]) & (hydrogen_ref):
+    if (sector in (ind2[:2] + ind2[3:4])) & (hydrogen_ref):
         hyd_ref = hydrogen(fuel_mix = hyd_fuel_mix, start_year = hyd_start_ref, increment = hyd_increment_ref)
         for hyd_year in range(hyd_start_ref, proj_years[-1] + 1, 1):
             for fuel in switched_ref['fuels'].unique():
@@ -387,6 +387,8 @@ def fuel_switch(economy = '01_AUS',
             hyd_ref['sub3sectors'] = '14_03_01_05_hydrogen'
         elif sector == ind2[1]:
             hyd_ref['sub3sectors'] = '14_03_02_01_fs'
+        elif sector == ind2[3]:
+            hyd_tgt['sub3sectors'] = '14_03_04_02_nonccs'
 
         hyd_ref = hyd_ref[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'energy']]\
             .sort_values(['year', 'fuels']).reset_index(drop = True)
@@ -524,7 +526,7 @@ def fuel_switch(economy = '01_AUS',
 
     # Add in hydrogen for TGT
 
-    if (sector in ind2[:2]) & (hydrogen_tgt):
+    if (sector in (ind2[:2] + ind2[3:4])) & (hydrogen_tgt):
         hyd_tgt = hydrogen(fuel_mix = hyd_fuel_mix, start_year = hyd_start_tgt, increment = hyd_increment_tgt)
         for hyd_year in range(hyd_start_tgt, proj_years[-1] + 1, 1):
             for fuel in switched_tgt['fuels'].unique():
@@ -548,6 +550,8 @@ def fuel_switch(economy = '01_AUS',
             hyd_tgt['sub3sectors'] = '14_03_01_05_hydrogen'
         elif sector == ind2[1]:
             hyd_tgt['sub3sectors'] = '14_03_02_01_fs'
+        elif sector == ind2[3]:
+            hyd_tgt['sub3sectors'] = '14_03_04_02_nonccs'
 
         hyd_tgt = hyd_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'energy']]\
             .sort_values(['year', 'fuels']).reset_index(drop = True)

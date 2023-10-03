@@ -115,6 +115,22 @@ industry_adj(economy = '03_CDA',
              data = industry_refine1)
 
 ##################################################################
+# China
+# Construction
+industry_adj(economy = '05_PRC',
+             adjust = {2021: 0.9},  
+             sub1sectors = '14_02_construction', 
+             sub2sectors = 'x',
+             data = industry_refine1)
+
+# Wood
+industry_adj(economy = '05_PRC',
+             adjust = {2021: 0.98, 2022: 0.98},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_09_wood_and_wood_products',
+             data = industry_refine1)
+
+##################################################################
 # Japan
 industry_adj(economy = '08_JPN',
              adjust = {2023: 0.93},  
@@ -122,6 +138,7 @@ industry_adj(economy = '08_JPN',
              sub2sectors = '14_03_01_iron_and_steel',
              data = industry_refine1)
 
+##################################################################
 # Thailand
 
 industry_adj(economy = '19_THA',

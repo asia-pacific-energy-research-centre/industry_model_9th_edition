@@ -14,6 +14,8 @@ with open(config_file) as infile:
 
 # Grab APEC economies
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
+APEC_economy_list = list(APEC_economies.keys())[:-7]
+# APEC_economy_list = APEC_economy_list[4:5]
 
 # Energy industry subsectors
 industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)\
@@ -31,7 +33,7 @@ print('Industry production data is from:', prod_date)
 nonen_prod_df = pd.read_csv(latest_nonenergy)
 print('Non-energy production data is from:', nonenergy_date)
 
-for economy in list(APEC_economies.keys())[:-7]:
+for economy in APEC_economy_list:
     # Where to save charts
     industry_charts = './data/industry_production/7_industry_scenarios_charts/{}/'.format(economy)
 
@@ -101,7 +103,7 @@ for economy in list(APEC_economies.keys())[:-7]:
             pass
 
 
-for economy in list(APEC_economies.keys())[:-7]:
+for economy in APEC_economy_list:
     # Where to save charts
     nonenergy_charts = './data/non_energy/5_nonenergy_scenarios_charts/{}/'.format(economy)
 

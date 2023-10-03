@@ -59,7 +59,8 @@ fuel_switch(economy = '03_CDA', sector = ind2[0], elec_rate_ref = 0.005, elec_ra
 
 # Chemicals
 fuel_switch(economy = '03_CDA', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
-            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True)
+            hydrogen_ref = False, hydrogen_tgt = True, ccs_ref = True, ccs_tgt = True,
+            hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Non-ferrous metals
 fuel_switch(economy = '03_CDA', sector = ind2[2], elec_rate_tgt = 0.006, c2g_rate_ref = 0.001, 
@@ -67,7 +68,8 @@ fuel_switch(economy = '03_CDA', sector = ind2[2], elec_rate_tgt = 0.006, c2g_rat
 
 # Non-metallic minerals
 fuel_switch(economy = '03_CDA', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
-            ccs_ref = True, ccs_tgt = True, c2g_rate_tgt = 0.004)
+            ccs_ref = True, ccs_tgt = True, c2g_rate_tgt = 0.004, hydrogen_tgt = True, 
+            hyd_start_tgt = 2030, hyd_increment_tgt = 0.002, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Transport
 fuel_switch(economy = '03_CDA', sector = ind2[4], elec_rate_ref = 0.003, elec_rate_tgt = 0.006)
@@ -98,16 +100,16 @@ fuel_switch_ne(economy = '03_CDA', hyd_increment_ref = 0.002, hyd_increment_tgt 
 ###########################################################################################################
 # China
 # Mining
-fuel_switch(economy = '05_PRC', sector = ind1[0], c2g_rate_ref = 0.001, c2g_rate_tgt = 0.002)
+fuel_switch(economy = '05_PRC', sector = ind1[0], c2g_rate_ref = 0.0005, c2g_rate_tgt = 0.0005)
 
 # Construction
-fuel_switch(economy = '05_PRC', sector = ind1[1], c2g_rate_ref = 0.001, c2g_rate_tgt = 0.0025, 
+fuel_switch(economy = '05_PRC', sector = ind1[1], elec_rate_tgt = 0.008, c2g_rate_ref = 0.0005, 
             elec_start_ref = 2024, elec_start_tgt = 2024)
 
 # Iron and steel
 fuel_switch(economy = '05_PRC', sector = ind2[0], elec_rate_ref = 0.005, elec_rate_tgt = 0.0075, 
             hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, ccs_tgt = True, 
-            hyd_increment_tgt = 0.02, c2g_rate_ref = 0.001, c2g_rate_tgt = 0.005)
+            hyd_increment_tgt = 0.015, c2g_rate_ref = 0.001, c2g_rate_tgt = 0.005)
 
 # Chemicals
 fuel_switch(economy = '05_PRC', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
@@ -115,7 +117,7 @@ fuel_switch(economy = '05_PRC', sector = ind2[1], elec_rate_ref = 0.002, elec_ra
 
 # Non-ferrous metals
 fuel_switch(economy = '05_PRC', sector = ind2[2], elec_rate_tgt = 0.006, c2g_rate_ref = 0.001, 
-            c2g_rate_tgt = 0.0005)
+            c2g_rate_tgt = 0.001)
 
 # Non-metallic minerals
 fuel_switch(economy = '05_PRC', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
@@ -128,11 +130,11 @@ fuel_switch(economy = '05_PRC', sector = ind2[4], elec_rate_ref = 0.003, elec_ra
 fuel_switch(economy = '05_PRC', sector = ind2[5], elec_rate_ref = 0.003, elec_rate_tgt = 0.005)
 
 # Food and Beverages
-fuel_switch(economy = '05_PRC', sector = ind2[6], elec_rate_tgt = 0.0075)
+fuel_switch(economy = '05_PRC', sector = ind2[6], elec_rate_tgt = 0.0075, c2g_rate_tgt = 0.0025)
 
 # Pulp and paper
 fuel_switch(economy = '05_PRC', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.008, 
-            bio_rate_tgt = 0.001)
+            bio_rate_tgt = 0.002)
 
 # Wood
 fuel_switch(economy = '05_PRC', sector = ind2[8], bio_rate_tgt = 0.002)
@@ -162,15 +164,16 @@ fuel_switch(economy = '08_JPN', sector = ind2[0], elec_rate_ref = 0.001, elec_ra
 
 # Chemicals
 fuel_switch(economy = '08_JPN', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
-            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = False, ccs_tgt = True,
-            c2g_rate_tgt = 0.001)
+            hydrogen_ref = False, hydrogen_tgt = True, ccs_ref = False, ccs_tgt = True, c2g_rate_tgt = 0.001, 
+            hyd_start_tgt = 2030, hyd_increment_tgt = 0.002, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Non-ferrous metals
 fuel_switch(economy = '08_JPN', sector = ind2[2], c2g_rate_tgt = 0.001)
 
 # Non-metallic minerals
 fuel_switch(economy = '08_JPN', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
-            bio_rate_tgt = 0.001, ccs_tgt = True, c2g_rate_tgt = 0.002)
+            bio_rate_tgt = 0.001, ccs_tgt = True, c2g_rate_tgt = 0.002, hydrogen_tgt = True, hyd_start_tgt = 2030, 
+            hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Transport
 fuel_switch(economy = '08_JPN', sector = ind2[4], c2g_rate_tgt = 0.002)
@@ -210,11 +213,12 @@ fuel_switch(economy = '11_MEX', sector = ind1[1],
 # Iron and steel
 fuel_switch(economy = '11_MEX', sector = ind2[0], elec_rate_ref = 0.003, elec_rate_tgt = 0.005, 
             hydrogen_ref = False, ccs_ref = False, hydrogen_tgt = True, ccs_tgt = True, 
-            hyd_increment_tgt = 0.005)
+            hyd_start_tgt = 2035, hyd_increment_tgt = 0.005)
 
 # Chemicals
 fuel_switch(economy = '11_MEX', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
-            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True)
+            hydrogen_ref = False, hydrogen_tgt = True, ccs_ref = True, ccs_tgt = True,
+            hyd_start_tgt = 2035, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Non-ferrous metals:
 fuel_switch(economy = '11_MEX', sector = ind2[2], elec_rate_tgt = 0.006, c2g_rate_ref = 0.001, 
@@ -222,7 +226,8 @@ fuel_switch(economy = '11_MEX', sector = ind2[2], elec_rate_tgt = 0.006, c2g_rat
 
 # Non-metallic minerals
 fuel_switch(economy = '11_MEX', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
-            ccs_ref = True, ccs_tgt = True, c2g_rate_tgt = 0.004)
+            ccs_ref = True, ccs_tgt = True, c2g_rate_tgt = 0.004, hydrogen_tgt = True, hyd_start_tgt = 2035, 
+            hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 0.8, '17_electricity': 0.2})
 
 # Transport
 fuel_switch(economy = '11_MEX', sector = ind2[4], elec_rate_ref = 0.003, elec_rate_tgt = 0.006)
@@ -265,14 +270,16 @@ fuel_switch(economy = '18_CT', sector = ind2[0], elec_rate_ref = 0.003, elec_rat
 
 # Chemicals
 fuel_switch(economy = '18_CT', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
-            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = False, ccs_tgt = False,
-            c2g_rate_tgt = 0.002)
+            hydrogen_ref = False, hydrogen_tgt = True, ccs_ref = False, ccs_tgt = False,
+            c2g_rate_tgt = 0.002, hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, 
+            hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Non-ferrous metals
 fuel_switch(economy = '18_CT', sector = ind2[2])
 
 # Non-metallic minerals
-fuel_switch(economy = '18_CT', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.005, c2g_rate_tgt = 0.002)
+fuel_switch(economy = '18_CT', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.005, c2g_rate_tgt = 0.002,
+            hydrogen_tgt = True, hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Transport
 fuel_switch(economy = '18_CT', sector = ind2[4])
@@ -315,14 +322,16 @@ fuel_switch(economy = '19_THA', sector = ind2[0], elec_rate_ref = 0.001, elec_ra
 
 # Chemicals
 fuel_switch(economy = '19_THA', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
-            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = False, ccs_tgt = True)
+            hydrogen_ref = False, hydrogen_tgt = True, ccs_ref = False, ccs_tgt = True,
+            hyd_start_tgt = 2035, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Non-ferrous metals
 fuel_switch(economy = '19_THA', sector = ind2[2])
 
 # Non-metallic minerals
 fuel_switch(economy = '19_THA', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
-            bio_rate_tgt = 0.001, ccs_tgt = True, c2g_rate_tgt = 0.001)
+            bio_rate_tgt = 0.001, ccs_tgt = True, c2g_rate_tgt = 0.001, hydrogen_tgt = True,
+            hyd_start_tgt = 2035, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Transport
 fuel_switch(economy = '19_THA', sector = ind2[4])
@@ -365,14 +374,16 @@ fuel_switch(economy = '20_USA', sector = ind2[0], elec_rate_ref = 0.0025, elec_r
 
 # Chemicals
 fuel_switch(economy = '20_USA', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
-            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True, ccs_increment_tgt = 0.008)
+            hydrogen_ref = False, hydrogen_tgt = True, ccs_ref = True, ccs_tgt = True, ccs_increment_tgt = 0.008,
+            hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Non-ferrous metals
 fuel_switch(economy = '20_USA', sector = ind2[2], elec_rate_tgt = 0.006)
 
 # Non-metallic minerals
 fuel_switch(economy = '20_USA', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
-            bio_rate_tgt = 0.001, ccs_ref = True, ccs_tgt = True, ccs_increment_tgt = 0.008)
+            bio_rate_tgt = 0.001, ccs_ref = True, ccs_tgt = True, ccs_increment_tgt = 0.008, hydrogen_tgt = True,
+            hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Transport
 fuel_switch(economy = '20_USA', sector = ind2[4], elec_rate_ref = 0.003, elec_rate_tgt = 0.0075)
