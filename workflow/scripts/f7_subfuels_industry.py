@@ -12,7 +12,7 @@ with open(config_file) as infile:
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
 # Only run one economy option
-# economy_select = economy_select[4:5]
+# economy_select = economy_select[2:3]
 
 # Energy industry subsectors
 industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)\

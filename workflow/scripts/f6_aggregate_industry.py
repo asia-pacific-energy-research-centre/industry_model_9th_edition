@@ -12,7 +12,7 @@ with open(config_file) as infile:
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
 # Just choose one economy
-# economy_select = economy_select[4:5]
+# economy_select = economy_select[2:3]
 
 # Energy industry subsectors
 industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)\
@@ -163,6 +163,10 @@ for economy in list(economy_select):
                 hyd_sub1.loc[z, 'sub1sectors'] = 'x'
 
             hyd_df = pd.concat([hydrogen_rows, hyd_sub3, hyd_sub2, hyd_sub1]).copy().drop_duplicates()
+
+            # Now aggregate hydrogen at each appropriate level
+            hyd_df = hyd_df.groupby(['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 
+                                     'sub4sectors', 'fuels', 'subfuels']).sum().reset_index()
 
             groundup_df = pd.concat([groundup_df, hyd_df]).copy()\
                 .sort_values(['sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels']).reset_index(drop = True)

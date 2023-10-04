@@ -18,6 +18,7 @@ ind2 = list(industry_sectors.values())[3:]
 
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
+#economy_select = economy_select[2:3]
 
 # Modelled years
 proj_years = list(range(2021, 2101, 1))
@@ -38,6 +39,8 @@ for economy in list(economy_select):
     for scenario in ['ref', 'tgt']:
 
         steel_file = [s for s in steel_files if scenario + '.csv' in s]
+        chem_file = [s for s in chem_files if scenario + '.csv' in s]
+        cem_file = [s for s in cement_files if scenario + '.csv' in s]
 
         if len(steel_file) == 1:
             steel_df = pd.read_csv(steel_file[0])
@@ -57,17 +60,36 @@ for economy in list(economy_select):
         else:
             pass
 
-        chem_file = [s for s in chem_files if scenario + '.csv' in s]
-        cem_file = [s for s in cement_files if scenario + '.csv' in s]
-
         if len(chem_file) == 1:    
             chem_df = pd.read_csv(chem_file[0])
+
+            adjust_df = chem_df[chem_df['subfuels'] == '16_x_hydrogen']
+            adjust_df['subfuels'] = 'x'
+
+            chem_df = chem_df.merge(adjust_df, how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                  'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            chem_df['energy'] = chem_df['energy_x'].fillna(0) + chem_df['energy_y'].fillna(0)        
+            chem_df = chem_df.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
+
             chem_df.to_csv(adj_location + economy + '_14_03_02_chemical_incl_petrochemical_' + scenario + '.csv', index = False)
         else:
             pass
 
         if len(cem_file) == 1:    
             cement_df = pd.read_csv(cem_file[0])
+
+            adjust_df = cement_df[cement_df['subfuels'] == '16_x_hydrogen']
+            adjust_df['subfuels'] = 'x'
+
+            cement_df = cement_df.merge(adjust_df, how = 'outer',
+                                            on = ['scenarios', 'economy', 'sectors', 'sub1sectors', 
+                                                  'sub2sectors', 'fuels', 'subfuels', 'year']).reset_index(drop = True)
+            
+            cement_df['energy'] = cement_df['energy_x'].fillna(0) + cement_df['energy_y'].fillna(0)        
+            cement_df = cement_df.drop(['energy_x', 'energy_y'], axis = 1).reset_index(drop = True)
+
             cement_df.to_csv(adj_location + economy + '_14_03_04_nonmetallic_mineral_products_' + scenario + '.csv', index = False)
         else:
             pass
@@ -137,8 +159,10 @@ for economy in list(economy_select):
         else:
             pass
     
+        # Identify the adjusted files to be used instead of the files in the higher folder location
         adjusted_files = glob.glob(adj_location + '*.csv')
-
+        
+        # Identify non-adjusted sector files (i.e. no hydrogen or CCS in these sectors)
         other_files = glob.glob(file_location + '*.csv') 
         other_files = [x for x in other_files if ('14_03_01' not in x) & ('14_03_02' not in x) & ('14_03_04' not in x)]
         

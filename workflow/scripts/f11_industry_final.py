@@ -12,8 +12,8 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Import function
-from f10a_biogas_function import biogas_switch
-from f10b_hyd_function import hyd_switch
+from f10_biogas_function import biogas_switch
+# from f10b_hyd_function import hyd_switch
 
 # Modelled years
 proj_years = list(range(2021, 2101, 1))
@@ -23,7 +23,6 @@ all_years = list(range(1980, 2101, 1))
 all_years_str = [str(i) for i in all_years]
 
 id = ['scenarios', 'economy', 'sectors', 'sub1sectors',	'sub2sectors', 'sub3sectors', 'sub4sectors', 'fuels', 'subfuels']
-# hyd_2sectors = ['14_03_02_chemical_incl_petrochemical', '14_03_04_nonmetallic_mineral_products']
 
 # Run biogas switch function for relevant economies
 # Canada
