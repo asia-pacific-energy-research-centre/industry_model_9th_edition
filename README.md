@@ -47,7 +47,7 @@ The choice of 'best' model is then a qualitative assessment by the researcher.
 ##### Fuel switching
 - f2_fuel_switch_function.py
 
-This script defines a function that builds in electrification, a switch to biomass (where applicable), coal-to-gas switching, hydrogen technology deployment (just for steel (DRI processes)), including choice of rate, and when such a switch begins in the projection. Choices can also be made to deploy CCS, via rate and beginning year for chemicals, steel, and non-metallic minerals (cement) subsectors.
+This script defines a function that builds in electrification, a switch to biomass (where applicable), coal-to-gas switching, hydrogen technology deployment (for steel (DRI processes), non-metallic minerals (cement) and chemicals production), including choice of rate, and when such a switch begins in the projection. Choices can also be made to deploy CCS, via rate and beginning year for chemicals, steel, and non-metallic minerals (cement) subsectors.
 - f3_non_energy_switch_function.py
 
 This function enables choices to shift the non-energy sector to more gas or hydrogen (as a feedstock for methanol or ammonia)
