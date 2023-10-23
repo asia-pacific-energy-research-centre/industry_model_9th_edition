@@ -34,7 +34,7 @@ proj_years_str = [str(i) for i in proj_years]
 all_years = list(range(1980, 2101, 1))
 all_years_str = [str(i) for i in all_years]
 
-# Read in steel data
+# Go about executing the process
 for economy in list(economy_select):
     # Save location for charts and data
     save_location = './results/industry/4_consolidation/{}/'.format(economy)
