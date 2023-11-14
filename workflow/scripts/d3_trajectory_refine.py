@@ -293,7 +293,41 @@ nonenergy_traj(economy = '08_JPN', proj_start_year = 2023,
 # Peru
 # Philippines
 # Russia
-# Singapore
+
+################################################# Singapore #####################################################
+# Mining: no adjustment
+
+# Construction: no adjustment
+
+# Steel
+industry_traj(economy = '17_SIN', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.1, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
+
+# Chemicals: no adjustment
+
+# Non-ferrous metals: no adjustment
+
+# Non-metallic minerals: no adjustment
+
+# Transportation equipment: no adjustment
+
+# Machinery: no adjustment
+
+# Food and beverages: no adjustment
+
+# Pulp and paper
+industry_traj(economy = '17_SIN', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.2, data = industry_interim)
+
+# Wood and wood products
+industry_traj(economy = '17_SIN', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.1, data = industry_interim)
+
+# Textiles
+industry_traj(economy = '17_SIN', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
+              shape = 'increase', magnitude = 0.5, data = industry_interim)
+
+# Non-specified: no adjustment
 
 ##################### Chinese Taipei ######################################################################
 # Mining: no adjustment

@@ -20,6 +20,10 @@ proj_years = list(range(2021, 2101, 1))
 # Also grab historical energy data
 hist_egeda = pd.read_csv(latest_EGEDA).loc[:, :'2020']
 
+# PHL SGP edit
+hist_egeda = hist_egeda.replace({'15_PHL': '15_RP',
+                                 '17_SGP': '17_SIN'})
+
 # Functions for Hydrogen and CCS
 # Hydrogen
 def hydrogen_ne(start_year = 2030,

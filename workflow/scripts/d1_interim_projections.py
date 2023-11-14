@@ -43,7 +43,7 @@ alum_df = alum_df.rename(columns = {'production': 'series'})
 
 # Custom grab for aluminium using industry total trajectory
 alum_add_on = wdi_subsectors[(wdi_subsectors['series'] == 'NV.IND.TOTL.ZS') &
-                             (wdi_subsectors['economy_code'].isin(['09_ROK', '10_MAS', '11_MEX', '18_CT', '19_THA']))].copy().reset_index(drop = True)
+                             (wdi_subsectors['economy_code'].isin(['09_ROK', '10_MAS', '11_MEX', '17_SIN', '18_CT', '19_THA']))].copy().reset_index(drop = True)
 
 alum_add_on['sub2sectors'] = ind2[2]
 
