@@ -322,66 +322,89 @@ for economy in list(economy_select):
 
         sns.set_theme(style = 'ticks')
 
-        steel_ref.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[0, 0], color = fuel_palette_CCS, 
-                       linewidth = 0, width = 0.7)
+        if steel_ref.empty:
+            pass
 
-        axs[0, 0].set(title = economy + ' steel consumption REF',
-            xlabel = 'Year',
-            ylabel = 'Energy (PJ)',
-            ylim = (0, max_steel))
-        
-        axs[0, 0].legend(title = '', fontsize = 8)
-
-        steel_tgt.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[0, 1], color = fuel_palette_CCS, 
-                       linewidth = 0, width = 0.7)
-
-        axs[0, 1].set(title = economy + ' steel consumption TGT',
-            xlabel = 'Year',
-            ylabel = 'Energy (PJ)',
-            ylim = (0, max_steel))
-        
-        axs[0, 1].legend(title = '', fontsize = 8)
-
-        chem_ref.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[1, 0], color = fuel_palette_CCS, 
-                      linewidth = 0, width = 0.7)
-
-        axs[1, 0].set(title = economy + ' chemicals consumption REF',
-            xlabel = 'Year',
-            ylabel = 'Energy (PJ)',
-            ylim = (0, max_chem))
-        
-        axs[1, 0].legend(title = '', fontsize = 8)
-    
-        chem_tgt.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[1, 1], color = fuel_palette_CCS, 
-                      linewidth = 0, width = 0.7)
-
-        axs[1, 1].set(title = economy + ' chemicals consumption TGT',
-            xlabel = 'Year',
-            ylabel = 'Energy (PJ)',
-            ylim = (0, max_chem))
-        
-        axs[1, 1].legend(title = '', fontsize = 8)
-
-        cement_ref.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[2, 0], color = fuel_palette_CCS, 
+        else:
+            steel_ref.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[0, 0], color = fuel_palette_CCS, 
                         linewidth = 0, width = 0.7)
 
-        axs[2, 0].set(title = economy + ' cement consumption REF',
-            xlabel = 'Year',
-            ylabel = 'Energy (PJ)',
-            ylim = (0, max_cement))
-        
-        axs[2, 0].legend(title = '', fontsize = 8)
-    
+            axs[0, 0].set(title = economy + ' steel consumption REF',
+                xlabel = 'Year',
+                ylabel = 'Energy (PJ)',
+                ylim = (0, max_steel))
+            
+            axs[0, 0].legend(title = '', fontsize = 8)
 
-        cement_tgt.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[2, 1], color = fuel_palette_CCS, 
+        if steel_tgt.empty:
+            pass
+
+        else:
+            steel_tgt.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[0, 1], color = fuel_palette_CCS, 
                         linewidth = 0, width = 0.7)
 
-        axs[2, 1].set(title = economy + ' cement consumption TGT',
-            xlabel = 'Year',
-            ylabel = 'Energy (PJ)',
-            ylim = (0, max_cement))
+            axs[0, 1].set(title = economy + ' steel consumption TGT',
+                xlabel = 'Year',
+                ylabel = 'Energy (PJ)',
+                ylim = (0, max_steel))
+            
+            axs[0, 1].legend(title = '', fontsize = 8)
+
+        if chem_ref.empty:
+            pass
+
+        else:
+            chem_ref.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[1, 0], color = fuel_palette_CCS, 
+                        linewidth = 0, width = 0.7)
+
+            axs[1, 0].set(title = economy + ' chemicals consumption REF',
+                xlabel = 'Year',
+                ylabel = 'Energy (PJ)',
+                ylim = (0, max_chem))
+            
+            axs[1, 0].legend(title = '', fontsize = 8)
+    
+        if chem_tgt.empty:
+            pass
         
-        axs[2, 1].legend(title = '', fontsize = 8)
+        else:
+            chem_tgt.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[1, 1], color = fuel_palette_CCS, 
+                        linewidth = 0, width = 0.7)
+
+            axs[1, 1].set(title = economy + ' chemicals consumption TGT',
+                xlabel = 'Year',
+                ylabel = 'Energy (PJ)',
+                ylim = (0, max_chem))
+            
+            axs[1, 1].legend(title = '', fontsize = 8)
+
+        if cement_ref.empty:
+            pass
+
+        else:
+            cement_ref.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[2, 0], color = fuel_palette_CCS, 
+                            linewidth = 0, width = 0.7)
+
+            axs[2, 0].set(title = economy + ' cement consumption REF',
+                xlabel = 'Year',
+                ylabel = 'Energy (PJ)',
+                ylim = (0, max_cement))
+            
+            axs[2, 0].legend(title = '', fontsize = 8)
+    
+        if cement_tgt.empty:
+            pass
+
+        else:
+            cement_tgt.plot(kind = 'bar', x = 'year', stacked = True, ax = axs[2, 1], color = fuel_palette_CCS, 
+                            linewidth = 0, width = 0.7)
+
+            axs[2, 1].set(title = economy + ' cement consumption TGT',
+                xlabel = 'Year',
+                ylabel = 'Energy (PJ)',
+                ylim = (0, max_cement))
+            
+            axs[2, 1].legend(title = '', fontsize = 8)
 
         for axis_to_change in [axs[0, 0], axs[0, 1], axs[1, 0], axs[1, 1], axs[2, 0], axs[2, 1]]:
             axis_to_change.xaxis.set_tick_params(rotation = 0)

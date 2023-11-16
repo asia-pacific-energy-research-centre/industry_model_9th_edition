@@ -172,13 +172,13 @@ ind_projection(economy = '09_ROK', series = 'NV.IND.MANF.ZS', high_bound = 15, h
 # Chemicals
 ind_projection(economy = '09_ROK', series = 'NV.MNF.CHEM.ZS.UN', high_bound = 8)
 # Food and beverage
-ind_projection(economy = '09_ROK', series = 'NV.MNF.FBTO.ZS.UN', low_bound = 5)
+ind_projection(economy = '09_ROK', series = 'NV.MNF.FBTO.ZS.UN', high_bound = 3, high_change = 0.998)
 # Machinery and Transport
-ind_projection(economy = '09_ROK', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 40, high_bound = 50)
+ind_projection(economy = '09_ROK', series = 'NV.MNF.MTRN.ZS.UN', high_bound = 40, high_change = 0.9995)
 # Other manufacturing
-ind_projection(economy = '09_ROK', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 30, high_bound = 35)
+ind_projection(economy = '09_ROK', series = 'NV.MNF.OTHR.ZS.UN', high_bound = 20)
 # Textiles
-ind_projection(economy = '09_ROK', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 2, high_bound = 3)
+ind_projection(economy = '09_ROK', series = 'NV.MNF.TXTL.ZS.UN', high_bound = 1)
 
 ###############################################################################################
 # 10_MAS
@@ -324,13 +324,13 @@ ind_projection(economy = '17_SIN', series = 'NV.IND.MANF.ZS', high_bound = 10, h
 # Chemicals
 ind_projection(economy = '17_SIN', series = 'NV.MNF.CHEM.ZS.UN', high_bound = 14)
 # Food and beverage
-ind_projection(economy = '17_SIN', series = 'NV.MNF.FBTO.ZS.UN')
+ind_projection(economy = '17_SIN', series = 'NV.MNF.FBTO.ZS.UN', high_bound = 2)
 # Machinery and Transport
-ind_projection(economy = '17_SIN', series = 'NV.MNF.MTRN.ZS.UN')
+ind_projection(economy = '17_SIN', series = 'NV.MNF.MTRN.ZS.UN', high_bound = 25, high_change = 0.998)
 # Other manufacturing
-ind_projection(economy = '17_SIN', series = 'NV.MNF.OTHR.ZS.UN')
+ind_projection(economy = '17_SIN', series = 'NV.MNF.OTHR.ZS.UN', high_bound = 2, high_change = 0.997)
 # Textiles
-ind_projection(economy = '17_SIN', series = 'NV.MNF.TXTL.ZS.UN')
+ind_projection(economy = '17_SIN', series = 'NV.MNF.TXTL.ZS.UN', high_bound = 0.1)
 
 ###############################################################################################
 # 19_THA
