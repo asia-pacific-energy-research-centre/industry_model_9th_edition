@@ -198,7 +198,7 @@ for economy in APEC_economies:
         max_y1 = coalp_df['value'].max() * 1.1
         
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (8, 8))
-
+        
         sns.set_theme(style = 'ticks')
 
         sns.lineplot(data = coalp_df,
