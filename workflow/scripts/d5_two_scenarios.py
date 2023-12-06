@@ -123,11 +123,11 @@ scenario_adj(economy = '09_ROK', sub1sectors = ind1[0], sub2sectors = 'x',
 
 # Steel: Material efficiency
 scenario_adj(economy = '09_ROK', sub1sectors = ind1[2], sub2sectors = ind2[0], 
-             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2) 
+             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2) 
 
 # Chemicals: Material efficiency
 scenario_adj(economy = '09_ROK', sub1sectors = ind1[2], sub2sectors = ind2[1], 
-             increment = -0.003, start_year = 2023, end_year = 2100, data = industry_refine2)
+             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2)
 
 # Non-ferrous metals
 scenario_adj(economy = '09_ROK', sub1sectors = ind1[2], sub2sectors = ind2[2], 
@@ -135,7 +135,7 @@ scenario_adj(economy = '09_ROK', sub1sectors = ind1[2], sub2sectors = ind2[2],
 
 # Cement (non-metallic minerals): Material efficiency
 scenario_adj(economy = '09_ROK', sub1sectors = ind1[2], sub2sectors = ind2[3], 
-             increment = -0.004, start_year = 2023, end_year = 2100, data = industry_refine2)
+             increment = -0.003, start_year = 2023, end_year = 2100, data = industry_refine2)
 
 # Non-energy
 scenario_adj_ne(economy = '09_ROK', 

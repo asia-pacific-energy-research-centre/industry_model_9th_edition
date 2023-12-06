@@ -247,7 +247,7 @@ fuel_switch(economy = '09_ROK', sector = ind2[6], elec_rate_tgt = 0.0075, c2g_ra
 
 # Pulp and paper
 fuel_switch(economy = '09_ROK', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.008, 
-            bio_rate_tgt = 0.002, c2g_rate_tgt = 0.002)
+            bio_rate_tgt = 0.004, c2g_rate_tgt = 0.0)
 
 # Wood
 fuel_switch(economy = '09_ROK', sector = ind2[8], bio_rate_tgt = 0.001)

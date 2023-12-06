@@ -166,7 +166,7 @@ ind_projection(economy = '08_JPN', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 1, 
 # Industry (including construction) % GDP
 ind_projection(economy = '09_ROK', series = 'NV.IND.TOTL.ZS')
 # Manufacturing % GDP
-ind_projection(economy = '09_ROK', series = 'NV.IND.MANF.ZS', high_bound = 15, high_change = 0.998)
+ind_projection(economy = '09_ROK', series = 'NV.IND.MANF.ZS', high_bound = 15, high_change = 0.999)
 
 # Subsets of Manufacturing (% of Manufacturing)
 # Chemicals
@@ -174,7 +174,7 @@ ind_projection(economy = '09_ROK', series = 'NV.MNF.CHEM.ZS.UN', high_bound = 8)
 # Food and beverage
 ind_projection(economy = '09_ROK', series = 'NV.MNF.FBTO.ZS.UN', high_bound = 3, high_change = 0.998)
 # Machinery and Transport
-ind_projection(economy = '09_ROK', series = 'NV.MNF.MTRN.ZS.UN', high_bound = 40, high_change = 0.9995)
+ind_projection(economy = '09_ROK', series = 'NV.MNF.MTRN.ZS.UN', high_bound = 40, high_change = 0.9996)
 # Other manufacturing
 ind_projection(economy = '09_ROK', series = 'NV.MNF.OTHR.ZS.UN', high_bound = 20)
 # Textiles

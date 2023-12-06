@@ -259,11 +259,11 @@ nonenergy_traj(economy = '08_JPN', proj_start_year = 2023,
 
 #################################### Korea #################################################################
 # Mining: no adjustment
-industry_traj(economy = '09_ROK', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2023,
+industry_traj(economy = '09_ROK', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2022,
               shape = 'peak', magnitude = 0.9, apex_mag = 1.2, apex_loc = 25, data = industry_interim)
 
 # Construction
-industry_traj(economy = '09_ROK', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2023,
+industry_traj(economy = '09_ROK', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2022,
               shape = 'peak', magnitude = 0.9, apex_mag = 1.2, apex_loc = 25, data = industry_interim)
 
 # Steel: no adjustment
