@@ -379,21 +379,22 @@ fuel_switch(economy = '18_CT', sector = ind1[1])
 
 # Iron and steel
 fuel_switch(economy = '18_CT', sector = ind2[0], elec_rate_ref = 0.003, elec_rate_tgt = 0.0075, 
-            hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, hyd_start_tgt = 2030, ccs_tgt = False, 
-            c2g_rate_tgt = 0.004) 
+            hydrogen_ref = True, ccs_ref = True, hydrogen_tgt = True, hyd_start_tgt = 2030, ccs_start_ref = 2040, 
+            ccs_tgt = True, c2g_rate_tgt = 0.004) 
 
 # Chemicals
 fuel_switch(economy = '18_CT', sector = ind2[1], elec_rate_ref = 0.0025, elec_rate_tgt = 0.005,
-            hydrogen_ref = False, hydrogen_tgt = True, ccs_ref = False, ccs_tgt = False,
-            c2g_rate_tgt = 0.002, hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, 
+            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = True, ccs_tgt = True,
+            c2g_rate_tgt = 0.0025, hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, 
             hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Non-ferrous metals
 fuel_switch(economy = '18_CT', sector = ind2[2])
 
 # Non-metallic minerals
-fuel_switch(economy = '18_CT', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.005, c2g_rate_tgt = 0.002,
-            hydrogen_tgt = True, hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
+fuel_switch(economy = '18_CT', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, c2g_rate_tgt = 0.0025,
+            ccs_ref = True, ccs_tgt = True, bio_rate_tgt = 0.002, bio_start_tgt = 2025,
+            hydrogen_tgt = False, hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Transport
 fuel_switch(economy = '18_CT', sector = ind2[4])
@@ -406,7 +407,7 @@ fuel_switch(economy = '18_CT', sector = ind2[6], elec_rate_tgt = 0.008)
 
 # Pulp and paper
 fuel_switch(economy = '18_CT', sector = ind2[7], elec_rate_ref = 0.0025, elec_rate_tgt = 0.01, 
-            bio_rate_ref = 0.001, bio_rate_tgt = 0.008, c2g_rate_tgt = 0.002)
+            bio_rate_ref = 0.001, bio_rate_tgt = 0.006, c2g_rate_tgt = 0.002)
 
 # Wood
 fuel_switch(economy = '18_CT', sector = ind2[8])

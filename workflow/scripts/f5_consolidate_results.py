@@ -18,7 +18,7 @@ ind2 = list(industry_sectors.values())[3:]
 
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
-#economy_select = economy_select[2:3]
+# economy_select = economy_select[17:18]
 
 # Modelled years
 proj_years = list(range(2021, 2101, 1))

@@ -139,6 +139,39 @@ industry_adj(economy = '08_JPN',
              data = industry_refine1)
 
 ##################################################################
+# Chinese Taipei
+
+industry_adj(economy = '18_CT',
+             adjust = {2022: 0.945},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_02_chemical_incl_petrochemical',
+             data = industry_refine1)
+
+industry_adj(economy = '18_CT',
+             adjust = {2022: 1.05},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_06_machinery',
+             data = industry_refine1)
+
+industry_adj(economy = '18_CT',
+             adjust = {2021: 0.95, 2022: 0.96},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_07_food_beverages_and_tobacco',
+             data = industry_refine1)
+
+industry_adj(economy = '18_CT',
+             adjust = {2021: 0.89, 2022: 1.05, 2023: 0.99},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_08_pulp_paper_and_printing',
+             data = industry_refine1)
+
+industry_adj(economy = '18_CT',
+             adjust = {2021: 0.93},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_09_wood_and_wood_products',
+             data = industry_refine1)
+
+##################################################################
 # Thailand
 
 industry_adj(economy = '19_THA',

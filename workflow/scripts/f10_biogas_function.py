@@ -55,7 +55,7 @@ def biogas_switch(economy = '01_AUS',
         file_date = re.search(r'(\d{4})_(\d{2})_(\d{2})', latest_data).group(0)
 
         # Print file data info
-        print(scenario, 'file date:', file_date)
+        print(economy, scenario, 'file date:', file_date)
 
         scenario_df = pd.read_csv(latest_data)
 

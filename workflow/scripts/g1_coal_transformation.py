@@ -43,6 +43,7 @@ EGEDA_coaltrans = EGEDA_coaltrans[(EGEDA_coaltrans['sub1sectors'] == '09_08_coal
 # Grab APEC economies
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 APEC_economies = list(APEC_economies.keys())[:-7]
+# APEC_economies = APEC_economies[17:18]
 
 # Years
 all_years = list(range(1980, 2101, 1))
@@ -201,36 +202,45 @@ for economy in APEC_economies:
         
         sns.set_theme(style = 'ticks')
 
-        sns.lineplot(data = coalp_df,
-                     x = 'year',
-                     y = 'value',
-                     hue = 'scenarios',
-                     ax = ax1, 
-                     palette = custom_palette)
-        
-        sns.barplot(data = coaltrans_df,
-                    x = 'year',
-                    y = 'value',
-                    hue = 'fuel',
-                    ax = ax2,
-                    palette = coal_palette)
+        if coalp_df.empty:
+            pass
 
-        ax1.set(title = economy + ' coal products industry consumption',
-                xlabel = 'Year',
-                ylabel = 'Petajoules',
-                xlim = (2000, 2070),
-                ylim = (0, max_y1))
+        else:
+            sns.lineplot(data = coalp_df,
+                        x = 'year',
+                        y = 'value',
+                        hue = 'scenarios',
+                        ax = ax1, 
+                        palette = custom_palette)
+            
+            ax1.set(title = economy + ' coal products industry consumption',
+                    xlabel = 'Year',
+                    ylabel = 'Petajoules',
+                    xlim = (2000, 2070),
+                    ylim = (0, max_y1))
+            
+            ax1.legend(title = '')
+
+            # Projection demarcation
+            ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
         
-        ax2.set(title = economy + ' coal transformation',
+        if coaltrans_df.empty:
+            pass
+
+        else:        
+            sns.barplot(data = coaltrans_df,
+                        x = 'year',
+                        y = 'value',
+                        hue = 'fuel',
+                        ax = ax2,
+                        palette = coal_palette)
+            
+            ax2.set(title = economy + ' coal transformation',
                 xlabel = 'Year',
                 ylabel = 'Petajoules',
                 ylim = (min_y3, max_y3))
-        
-        ax1.legend(title = '')
-        ax2.legend(title = '', fontsize = 8)
-
-        # Projection demarcation
-        ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+            
+            ax2.legend(title = '', fontsize = 8)
 
         plt.tight_layout()
         plt.show()
@@ -243,45 +253,59 @@ for economy in APEC_economies:
 
         sns.set_theme(style = 'ticks')
 
-        sns.barplot(data = coking_df,
-                    x = 'year',
-                    y = 'value',
-                    hue = 'sectors',
-                    ax = ax1,
-                    palette = tpes_palette)
+        if coking_df.empty:
+            pass
         
-        sns.barplot(data = thermal_df,
-                    x = 'year',
-                    y = 'value',
-                    hue = 'sectors',
-                    ax = ax2, 
-                    palette = tpes_palette)
-        
-        sns.barplot(data = lignite_df,
-                    x = 'year',
-                    y = 'value',
-                    hue = 'sectors',
-                    ax = ax3,
-                    palette = tpes_palette)
+        else:
+            sns.barplot(data = coking_df,
+                        x = 'year',
+                        y = 'value',
+                        hue = 'sectors',
+                        ax = ax1,
+                        palette = tpes_palette)
+            
+            ax1.set(title = economy + ' coking coal production and trade',
+                xlabel = 'Year',
+                ylabel = 'Petajoules',
+                ylim = (min_y2, max_y2))
+            
+            ax1.legend(title = '', fontsize = 8)
 
-        ax1.set(title = economy + ' coking coal production and trade',
+        if thermal_df.empty:
+            pass
+
+        else:
+            sns.barplot(data = thermal_df,
+                        x = 'year',
+                        y = 'value',
+                        hue = 'sectors',
+                        ax = ax2, 
+                        palette = tpes_palette)
+            
+            ax2.set(title = economy + ' thermal coal production and trade',
                 xlabel = 'Year',
                 ylabel = 'Petajoules',
                 ylim = (min_y2, max_y2))
-        
-        ax2.set(title = economy + ' thermal coal production and trade',
-                xlabel = 'Year',
-                ylabel = 'Petajoules',
-                ylim = (min_y2, max_y2))
-        
-        ax3.set(title = economy + ' lignite production and trade',
-                xlabel = 'Year',
-                ylabel = 'Petajoules',
-                ylim = (min_y2, max_y2))
-        
-        ax1.legend(title = '', fontsize = 8)
-        ax2.legend(title = '', fontsize = 8)
-        ax3.legend(title = '', fontsize = 8)
+            
+            ax2.legend(title = '', fontsize = 8)
+            
+        if lignite_df.empty:
+            pass
+
+        else:
+            sns.barplot(data = lignite_df,
+                        x = 'year',
+                        y = 'value',
+                        hue = 'sectors',
+                        ax = ax3,
+                        palette = tpes_palette)
+
+            ax3.set(title = economy + ' lignite production and trade',
+                    xlabel = 'Year',
+                    ylabel = 'Petajoules',
+                    ylim = (min_y2, max_y2))
+                    
+            ax3.legend(title = '', fontsize = 8)
 
         plt.tight_layout()
         plt.show()
@@ -294,32 +318,41 @@ for economy in APEC_economies:
 
         sns.set_theme(style = 'ticks')
 
-        sns.lineplot(data = ct_chart_ref,
-                     x = 'year',
-                     y = 'value',
-                     hue = 'fuel',
-                     ax = ax1, 
-                     palette = coal_palette)
-        
-        sns.lineplot(data = ct_chart_tgt,
-                     x = 'year',
-                     y = 'value',
-                     hue = 'fuel',
-                     ax = ax2,
-                     palette = coal_palette)
-        
-        ax1.set(title = economy + ' coal transformation REF',
+        if ct_chart_ref.empty:
+            pass
+
+        else:
+            sns.lineplot(data = ct_chart_ref,
+                        x = 'year',
+                        y = 'value',
+                        hue = 'fuel',
+                        ax = ax1, 
+                        palette = coal_palette)
+            
+            ax1.set(title = economy + ' coal transformation REF',
                 xlabel = 'Year',
                 ylabel = 'Petajoules',
                 xlim = (2000, 2070))
+            
+            ax1.legend(title = '')
         
-        ax2.set(title = economy + ' coal transformation TGT',
-                xlabel = 'Year',
-                ylabel = 'Petajoules',
-                xlim = (2000, 2070))
+        if ct_chart_tgt.empty:
+            pass
+
+        else:
+            sns.lineplot(data = ct_chart_tgt,
+                        x = 'year',
+                        y = 'value',
+                        hue = 'fuel',
+                        ax = ax2,
+                        palette = coal_palette)
         
-        ax1.legend(title = '')
-        ax2.legend(title = '', fontsize = 8)
+            ax2.set(title = economy + ' coal transformation TGT',
+                    xlabel = 'Year',
+                    ylabel = 'Petajoules',
+                    xlim = (2000, 2070))
+
+            ax2.legend(title = '', fontsize = 8)
 
         # Projection demarcation
         ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
