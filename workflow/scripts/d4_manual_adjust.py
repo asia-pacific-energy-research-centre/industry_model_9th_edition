@@ -118,17 +118,37 @@ industry_adj(economy = '03_CDA',
 # China
 # Construction
 industry_adj(economy = '05_PRC',
-             adjust = {2021: 0.9},  
+             adjust = {2021: 0.88, 2022: 0.98, 2023: 0.99, 2024: 0.9925,
+                       2025: 0.995, 2026: 0.9975, 2027: 0.999},  
              sub1sectors = '14_02_construction', 
              sub2sectors = 'x',
              data = industry_refine1)
 
+# Chemicals
+industry_adj(economy = '05_PRC',
+             adjust = {2021: 0.97, 2022: 0.97},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_02_chemical_incl_petrochemical',
+             data = industry_refine1)
+
 # Wood
 industry_adj(economy = '05_PRC',
-             adjust = {2021: 0.98, 2022: 0.98},  
+             adjust = {2021: 0.92, 2022: 0.98},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_09_wood_and_wood_products',
              data = industry_refine1)
+
+# Textiles
+industry_adj(economy = '05_PRC',
+             adjust = {2021: 0.9, 2022: 0.98, 2023: 0.99,
+                       2024: 0.995, 2025: 0.9975},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_10_textiles_and_leather',
+             data = industry_refine1)
+
+nonenergy_adj(economy = '05_PRC',
+              adjust = {2021: 0.95, 2022: 0.97},
+              data = nonenergy_refine1)
 
 ##################################################################
 # Japan

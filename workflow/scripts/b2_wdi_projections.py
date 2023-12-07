@@ -90,7 +90,7 @@ ind_projection(economy = '04_CHL', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 1.5
 # Industry (including construction) % GDP
 ind_projection(economy = '05_PRC', series = 'NV.IND.TOTL.ZS', low_bound = 20, high_bound = 22, high_change = 0.998)
 # Manufacturing % GDP
-ind_projection(economy = '05_PRC', series = 'NV.IND.MANF.ZS', low_bound = 10, high_bound = 13, high_change = 0.997)
+ind_projection(economy = '05_PRC', series = 'NV.IND.MANF.ZS', low_bound = 10, high_bound = 13, high_change = 0.998)
 
 # Subsets of Manufacturing (% of Manufacturing)
 # Chemicals
@@ -102,7 +102,7 @@ ind_projection(economy = '05_PRC', series = 'NV.MNF.MTRN.ZS.UN', low_bound = 20,
 # Other manufacturing
 ind_projection(economy = '05_PRC', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 35, high_bound = 37, high_change = 0.9995)
 # Textiles
-ind_projection(economy = '05_PRC', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 3, high_bound = 5, high_change = 0.998)
+ind_projection(economy = '05_PRC', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 3, high_bound = 4, high_change = 0.997)
 
 ###############################################################################################
 # 06_HKC
@@ -318,7 +318,7 @@ ind_projection(economy = '16_RUS', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 1, 
 # Industry (including construction) % GDP
 ind_projection(economy = '17_SIN', series = 'NV.IND.TOTL.ZS', high_bound = 15)
 # Manufacturing % GDP
-ind_projection(economy = '17_SIN', series = 'NV.IND.MANF.ZS', high_bound = 10, high_change = 0.997)
+ind_projection(economy = '17_SIN', series = 'NV.IND.MANF.ZS', high_bound = 10, high_change = 0.998)
 
 # Subsets of Manufacturing (% of Manufacturing)
 # Chemicals

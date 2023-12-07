@@ -85,6 +85,10 @@ scenario_adj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[2],
 scenario_adj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[3], 
              increment = -0.004, start_year = 2023, end_year = 2100, data = industry_refine2)
 
+# Pulp, paper, and printing
+scenario_adj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[7], 
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2)
+
 # Non-energy
 scenario_adj_ne(economy = '05_PRC', 
                 increment = -0.003, start_year = 2023, end_year = 2100, data = nonenergy_refine2)

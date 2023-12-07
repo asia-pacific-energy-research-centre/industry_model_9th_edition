@@ -14,7 +14,7 @@ with open(config_file) as infile:
 # Grab APEC economies
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 APEC_economies = list(APEC_economies.keys())[:-7]
-# APEC_economies = APEC_economies[8:9]
+APEC_economies = APEC_economies[16:17]
 
 # 2021 and beyond
 proj_years = list(range(2021, 2101, 1))
@@ -62,20 +62,24 @@ for economy in APEC_economies:
                                                                '08_gas', '15_solid_biomass'])) &
                                    (scenario_df['subfuels'] == 'x')].copy().reset_index(drop = True)
             
-            total_steel = steel_df.groupby(['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 
-                                            'sub3sectors', 'sub4sectors', 'subfuels']).sum().reset_index()
-            
-            total_steel['fuels'] = 'Total of primary'
-            total_steel = total_steel.fillna(0)
+            if steel_df.empty:
+                pass
 
-            own_df = scenario_dict[scenario][1]
+            else:       
+                total_steel = steel_df.groupby(['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 
+                                                'sub3sectors', 'sub4sectors', 'subfuels']).sum().reset_index()
+                
+                total_steel['fuels'] = 'Total of primary'
+                total_steel = total_steel.fillna(0)
 
-            for year in proj_years_str:
-                if total_steel.loc[0, str(int(year) - 1)] == 0:
-                    ratio = 0
-                else:
-                    ratio = total_steel.loc[0, year] / total_steel.loc[0, str(int(year) - 1)]
-                for row in own_df.index:
-                    own_df.loc[row, year] = own_df.loc[row, str(int(year) - 1)] * ratio
+                own_df = scenario_dict[scenario][1]
 
-            own_df.to_csv(save_location + economy + '_coal_ownuse_' + scenario + '_' + timestamp + '.csv', index = False)
+                for year in proj_years_str:
+                    if total_steel.loc[0, str(int(year) - 1)] == 0:
+                        ratio = 0
+                    else:
+                        ratio = total_steel.loc[0, year] / total_steel.loc[0, str(int(year) - 1)]
+                    for row in own_df.index:
+                        own_df.loc[row, year] = own_df.loc[row, str(int(year) - 1)] * ratio
+
+                own_df.to_csv(save_location + economy + '_coal_ownuse_' + scenario + '_' + timestamp + '.csv', index = False)

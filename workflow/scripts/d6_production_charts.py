@@ -15,7 +15,7 @@ with open(config_file) as infile:
 # Grab APEC economies
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 APEC_economy_list = list(APEC_economies.keys())[:-7]
-# APEC_economy_list = APEC_economy_list[8:9]
+APEC_economy_list = APEC_economy_list[16:17]
 
 # Energy industry subsectors
 industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)\
