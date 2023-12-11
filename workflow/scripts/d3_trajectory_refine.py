@@ -366,6 +366,10 @@ industry_traj(economy = '17_SIN', sub1sectors = ind1[2], sub2sectors = ind2[9], 
 
 # Non-specified: no adjustment
 
+# Non energy
+nonenergy_traj(economy = '17_SIN', proj_start_year = 2022,
+              shape = 'decrease', magnitude = 1.8, data = nonenergy_production)
+
 ##################### Chinese Taipei ######################################################################
 # Mining: no adjustment
 
