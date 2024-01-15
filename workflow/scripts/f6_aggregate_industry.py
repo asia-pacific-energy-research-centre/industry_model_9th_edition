@@ -12,7 +12,7 @@ with open(config_file) as infile:
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
 # Just choose one economy
-economy_select = economy_select[16:17]
+# economy_select = economy_select[16:17]
 
 # Energy industry subsectors
 industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)\
@@ -27,7 +27,7 @@ industry_fuels = list(egeda_fuels.values())
 industry_fuels = [industry_fuels[i] for i in [0, 1, 5, 6, 7, 11, 14, 15, 16, 17]]
 
 # Modelled years
-proj_years = list(range(2021, 2101, 1))
+proj_years = list(range(2022, 2101, 1))
 proj_years_str = [str(i) for i in proj_years]
 
 # All years
@@ -261,27 +261,27 @@ for economy in list(economy_select):
 
         steel_ref = steel_ref.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
         steel_ref = steel_ref.astype({'year': 'int'})
-        steel_ref = steel_ref[(steel_ref['year'] <= 2070) & (steel_ref['year'] >= 2020)]
+        steel_ref = steel_ref[(steel_ref['year'] <= 2070) & (steel_ref['year'] >= 2021)]
 
         steel_tgt = steel_tgt.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
         steel_tgt = steel_tgt.astype({'year': 'int'})
-        steel_tgt = steel_tgt[(steel_tgt['year'] <= 2070) & (steel_tgt['year'] >= 2020)]
+        steel_tgt = steel_tgt[(steel_tgt['year'] <= 2070) & (steel_tgt['year'] >= 2021)]
 
         chem_ref = chem_ref.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
         chem_ref = chem_ref.astype({'year': 'int'})
-        chem_ref = chem_ref[(chem_ref['year'] <= 2070) & (chem_ref['year'] >= 2020)]
+        chem_ref = chem_ref[(chem_ref['year'] <= 2070) & (chem_ref['year'] >= 2021)]
 
         chem_tgt = chem_tgt.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
         chem_tgt = chem_tgt.astype({'year': 'int'})
-        chem_tgt = chem_tgt[(chem_tgt['year'] <= 2070) & (chem_tgt['year'] >= 2020)]
+        chem_tgt = chem_tgt[(chem_tgt['year'] <= 2070) & (chem_tgt['year'] >= 2021)]
 
         cement_ref = cement_ref.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
         cement_ref = cement_ref.astype({'year': 'int'})
-        cement_ref = cement_ref[(cement_ref['year'] <= 2070) & (cement_ref['year'] >= 2020)] 
+        cement_ref = cement_ref[(cement_ref['year'] <= 2070) & (cement_ref['year'] >= 2021)] 
 
         cement_tgt = cement_tgt.melt(id_vars = id, var_name = 'year')[['sub3sectors', 'year', 'value']].copy().reset_index(drop = True)
         cement_tgt = cement_tgt.astype({'year': 'int'})
-        cement_tgt = cement_tgt[(cement_tgt['year'] <= 2070) & (cement_tgt['year'] >= 2020)]    
+        cement_tgt = cement_tgt[(cement_tgt['year'] <= 2070) & (cement_tgt['year'] >= 2021)]    
 
         # Change steel variable names 
         steel_ref.replace({'14_03_01_01_fs': 'Non-CCS capacity',

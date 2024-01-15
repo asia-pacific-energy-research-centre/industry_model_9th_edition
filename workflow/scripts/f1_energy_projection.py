@@ -16,6 +16,9 @@ ind_energy_df = pd.read_csv(latest_inden)
 nonenergy_data = pd.read_csv(latest_nonenergy)
 EGEDA_df = pd.read_csv(latest_EGEDA)
 
+# Drop column indicator column row from Hyuga and Fin
+EGEDA_df = EGEDA_df.drop(columns = ['is_subtotal']).copy().reset_index(drop = True)
+
 EGEDA_df = EGEDA_df.replace({'15_PHL': '15_RP',
                              '17_SGP': '17_SIN'})
 
@@ -28,42 +31,42 @@ ind2 = list(industry_sectors.values())[3:]
 
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
-economy_select = economy_select[16:17]
+# economy_select = economy_select[16:17]
 
-# Subset energy data to just 2020
-EGEDA_2020_df = EGEDA_df[list(EGEDA_df.iloc[:,:9].columns) + ['2020']]
+# Subset energy data to just 2021
+EGEDA_2021_df = EGEDA_df[list(EGEDA_df.iloc[:,:9].columns) + ['2021']]
 
 # Now only keep industry data
-EGEDA_ind_2020_df = EGEDA_2020_df[(EGEDA_2020_df['sub1sectors'].str.startswith('14_')) &
-                                  (EGEDA_2020_df['sub3sectors'] == 'x') &
-                                  (EGEDA_2020_df['subfuels'].isin(['x']))]\
+EGEDA_ind_2021_df = EGEDA_2021_df[(EGEDA_2021_df['sub1sectors'].str.startswith('14_')) &
+                                  (EGEDA_2021_df['sub3sectors'] == 'x') &
+                                  (EGEDA_2021_df['subfuels'].isin(['x']))]\
                                     .copy().reset_index(drop = True)
 
 # Convert to long data format
-EGEDA_ind_2020_df = EGEDA_ind_2020_df.melt(id_vars = ['economy', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels'],
-                                           value_vars = '2020',
+EGEDA_ind_2021_df = EGEDA_ind_2021_df.melt(id_vars = ['economy', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels'],
+                                           value_vars = '2021',
                                            var_name = 'year',
                                            value_name = 'energy')
 
 # Ensure year is an integer
-EGEDA_ind_2020_df['year'] = EGEDA_ind_2020_df['year'].astype('int') 
+EGEDA_ind_2021_df['year'] = EGEDA_ind_2021_df['year'].astype('int') 
 
-# Non-energy 2020
-EGEDA_ne_2020_df = EGEDA_2020_df[(EGEDA_2020_df['sectors'].str.startswith('17_')) &
-                                  (EGEDA_2020_df['sub1sectors'] == 'x') &
-                                  (EGEDA_2020_df['subfuels'].isin(['x']))]\
+# Non-energy 2021
+EGEDA_ne_2021_df = EGEDA_2021_df[(EGEDA_2021_df['sectors'].str.startswith('17_')) &
+                                  (EGEDA_2021_df['sub1sectors'] == 'x') &
+                                  (EGEDA_2021_df['subfuels'].isin(['x']))]\
                                     .copy().reset_index(drop = True)
 
-EGEDA_ne_2020_df = EGEDA_ne_2020_df.melt(id_vars = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels'],
-                                         value_vars = '2020',
+EGEDA_ne_2021_df = EGEDA_ne_2021_df.melt(id_vars = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels'],
+                                         value_vars = '2021',
                                          var_name = 'year',
                                          value_name = 'energy')
 
 # Ensure year is an integer
-EGEDA_ne_2020_df['year'] = EGEDA_ne_2020_df['year'].astype('int') 
+EGEDA_ne_2021_df['year'] = EGEDA_ne_2021_df['year'].astype('int') 
 
 # Projection years
-proj_years = list(range(2021, 2101, 1))
+proj_years = list(range(2022, 2101, 1))
 
 # Fuels of interest 
 relevant_fuels = EGEDA_df['fuels'].unique()[[0, 1, 5, 6, 7, 11, 14, 15, 16, 17]]
@@ -77,9 +80,9 @@ for economy in economy_select:
 
     for sector in ind1[:2] + ind2:
         if sector in ind1: 
-            # Historical nergy data
-            energy_df = EGEDA_ind_2020_df[(EGEDA_ind_2020_df['economy'] == economy) &
-                                        (EGEDA_ind_2020_df['sub1sectors'] == sector)]\
+            # Historical energy data
+            energy_df = EGEDA_ind_2021_df[(EGEDA_ind_2021_df['economy'] == economy) &
+                                        (EGEDA_ind_2021_df['sub1sectors'] == sector)]\
                                             .copy().reset_index(drop = True)
             
             # Projected total energy trajectory out to 2100 (reference and target)
@@ -93,8 +96,8 @@ for economy in economy_select:
         
         else:
             # Historical energy data
-            energy_df = EGEDA_ind_2020_df[(EGEDA_ind_2020_df['economy'] == economy) &
-                                          (EGEDA_ind_2020_df['sub2sectors'] == sector)]\
+            energy_df = EGEDA_ind_2021_df[(EGEDA_ind_2021_df['economy'] == economy) &
+                                          (EGEDA_ind_2021_df['sub2sectors'] == sector)]\
                                             .copy().reset_index(drop = True)
             
             # Projected energy data (manufacturing)
@@ -110,25 +113,25 @@ for economy in economy_select:
         energy_proj_ref = pd.DataFrame(columns = energy_df.columns)
         energy_proj_tgt = pd.DataFrame(columns = energy_df.columns)
         
-        # Fuel ratio in 2020 dataframe
-        fuel_ratio_2020 = energy_df.loc[:, ['fuels', 'energy']]
+        # Fuel ratio in 2021 dataframe
+        fuel_ratio_2021 = energy_df.loc[:, ['fuels', 'energy']]
 
-        # Calculate percentage for each fuel in 2020 and save it in the dataframe    
+        # Calculate percentage for each fuel in 2021 and save it in the dataframe    
         for i in range(len(energy_df)):
-            fuel_ratio_2020.iloc[i, 1] = energy_df.iloc[i, -1] / \
+            fuel_ratio_2021.iloc[i, 1] = energy_df.iloc[i, -1] / \
                 energy_df.loc[energy_df['fuels'] == '19_total', 'energy']
         
         if ind_prod_ref.empty:
             pass
         else:
-            base_ref = ind_prod_ref.loc[ind_prod_ref['year'] == 2020, 'value'].values[0]
+            base_ref = ind_prod_ref.loc[ind_prod_ref['year'] == 2021, 'value'].values[0]
 
         if ind_prod_tgt.empty:
             pass
         else:
-            base_tgt = ind_prod_tgt.loc[ind_prod_tgt['year'] == 2020, 'value'].values[0]
+            base_tgt = ind_prod_tgt.loc[ind_prod_tgt['year'] == 2021, 'value'].values[0]
 
-        energy_2020 = energy_df.loc[energy_df['fuels'] == '19_total', 'energy'].values[0]
+        energy_2021 = energy_df.loc[energy_df['fuels'] == '19_total', 'energy'].values[0]
     
         if ind_prod_ref.empty | ind_prod_tgt.empty:
             pass
@@ -143,12 +146,12 @@ for economy in economy_select:
                 
                 for fuel in relevant_fuels:
                     # Reference
-                    temp_ref_df.loc[temp_ref_df['fuels'] == fuel, 'energy'] = fuel_ratio_2020.loc[fuel_ratio_2020['fuels'] == fuel, 'energy'].values[0] *\
-                        energy_2020 * (ind_prod_ref.loc[ind_prod_ref['year'] == year, 'value'].values[0] / base_ref)
+                    temp_ref_df.loc[temp_ref_df['fuels'] == fuel, 'energy'] = fuel_ratio_2021.loc[fuel_ratio_2021['fuels'] == fuel, 'energy'].values[0] *\
+                        energy_2021 * (ind_prod_ref.loc[ind_prod_ref['year'] == year, 'value'].values[0] / base_ref)
                     
                     # Target
-                    temp_tgt_df.loc[temp_tgt_df['fuels'] == fuel, 'energy'] = fuel_ratio_2020.loc[fuel_ratio_2020['fuels'] == fuel, 'energy'].values[0] *\
-                        energy_2020 * (ind_prod_tgt.loc[ind_prod_tgt['year'] == year, 'value'].values[0] / base_tgt)
+                    temp_tgt_df.loc[temp_tgt_df['fuels'] == fuel, 'energy'] = fuel_ratio_2021.loc[fuel_ratio_2021['fuels'] == fuel, 'energy'].values[0] *\
+                        energy_2021 * (ind_prod_tgt.loc[ind_prod_tgt['year'] == year, 'value'].values[0] / base_tgt)
                     
                 energy_proj_ref = pd.concat([energy_proj_ref, temp_ref_df]).copy().reset_index(drop = True)
                 energy_proj_tgt = pd.concat([energy_proj_tgt, temp_tgt_df]).copy().reset_index(drop = True)
@@ -209,7 +212,7 @@ for economy in economy_select:
         os.makedirs(nonenergy_location)
 
     # Historical energy data
-    nonenergy_df = EGEDA_ne_2020_df[(EGEDA_ne_2020_df['economy'] == economy)]\
+    nonenergy_df = EGEDA_ne_2021_df[(EGEDA_ne_2021_df['economy'] == economy)]\
                                     .copy().reset_index(drop = True)
     
     # Projected total energy trajectory out to 2100 (reference and target)
@@ -223,25 +226,25 @@ for economy in economy_select:
     nonenergy_proj_ref = pd.DataFrame(columns = nonenergy_df.columns)
     nonenergy_proj_tgt = pd.DataFrame(columns = nonenergy_df.columns)
 
-    # Fuel ratio in 2020 dataframe
-    fuel_ratio_2020 = nonenergy_df.loc[:, ['fuels', 'energy']]
+    # Fuel ratio in 2021 dataframe
+    fuel_ratio_2021 = nonenergy_df.loc[:, ['fuels', 'energy']]
 
-    # Calculate percentage for each fuel in 2020 and save it in the dataframe    
+    # Calculate percentage for each fuel in 2021 and save it in the dataframe    
     for i in range(len(nonenergy_df)):
-        fuel_ratio_2020.iloc[i, 1] = nonenergy_df.iloc[i, -1] / \
+        fuel_ratio_2021.iloc[i, 1] = nonenergy_df.iloc[i, -1] / \
             nonenergy_df.loc[nonenergy_df['fuels'] == '19_total', 'energy']
     
     if ne_prod_ref.empty:
         pass
     else:
-        base_ref = ne_prod_ref.loc[ne_prod_ref['year'] == 2020, 'value'].values[0]
+        base_ref = ne_prod_ref.loc[ne_prod_ref['year'] == 2021, 'value'].values[0]
 
     if ne_prod_tgt.empty:
         pass
     else:
-        base_tgt = ne_prod_tgt.loc[ne_prod_tgt['year'] == 2020, 'value'].values[0]
+        base_tgt = ne_prod_tgt.loc[ne_prod_tgt['year'] == 2021, 'value'].values[0]
 
-    nonenergy_2020 = nonenergy_df.loc[nonenergy_df['fuels'] == '19_total', 'energy'].values[0]
+    nonenergy_2021 = nonenergy_df.loc[nonenergy_df['fuels'] == '19_total', 'energy'].values[0]
 
     if ne_prod_ref.empty | ne_prod_tgt.empty:
         pass
@@ -256,12 +259,12 @@ for economy in economy_select:
             
             for fuel in relevant_fuels:
                 # Reference
-                temp_ref_df.loc[temp_ref_df['fuels'] == fuel, 'energy'] = fuel_ratio_2020.loc[fuel_ratio_2020['fuels'] == fuel, 'energy'].values[0] *\
-                    nonenergy_2020 * (ne_prod_ref.loc[ne_prod_ref['year'] == year, 'value'].values[0] / base_ref)
+                temp_ref_df.loc[temp_ref_df['fuels'] == fuel, 'energy'] = fuel_ratio_2021.loc[fuel_ratio_2021['fuels'] == fuel, 'energy'].values[0] *\
+                    nonenergy_2021 * (ne_prod_ref.loc[ne_prod_ref['year'] == year, 'value'].values[0] / base_ref)
                 
                 # Target
-                temp_tgt_df.loc[temp_tgt_df['fuels'] == fuel, 'energy'] = fuel_ratio_2020.loc[fuel_ratio_2020['fuels'] == fuel, 'energy'].values[0] *\
-                    nonenergy_2020 * (ne_prod_tgt.loc[ne_prod_tgt['year'] == year, 'value'].values[0] / base_tgt)
+                temp_tgt_df.loc[temp_tgt_df['fuels'] == fuel, 'energy'] = fuel_ratio_2021.loc[fuel_ratio_2021['fuels'] == fuel, 'energy'].values[0] *\
+                    nonenergy_2021 * (ne_prod_tgt.loc[ne_prod_tgt['year'] == year, 'value'].values[0] / base_tgt)
                 
             nonenergy_proj_ref = pd.concat([nonenergy_proj_ref, temp_ref_df]).copy().reset_index(drop = True)
             nonenergy_proj_tgt = pd.concat([nonenergy_proj_tgt, temp_tgt_df]).copy().reset_index(drop = True)

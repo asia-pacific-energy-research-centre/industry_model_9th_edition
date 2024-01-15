@@ -18,15 +18,16 @@ nonenergy_fuels = list(egeda_fuels.values())
 nonenergy_fuels = [nonenergy_fuels[i] for i in [0, 1, 5, 6, 7, 15]]
 
 # Modelled years
-proj_years = list(range(2021, 2101, 1))
+proj_years = list(range(2022, 2101, 1))
 proj_years_str = [str(i) for i in proj_years]
 
 # All years
 all_years = list(range(1980, 2101, 1))
 all_years_str = [str(i) for i in all_years]
 
-# Read in EGEDA data to 2020 to provide disaggregation of fuels
-EGEDA_hist = pd.read_csv(latest_EGEDA).loc[:, :'2020']
+# Read in EGEDA data to 2021 to provide disaggregation of fuels
+EGEDA_hist = pd.read_csv(latest_EGEDA).loc[:, :'2021']
+EGEDA_hist = EGEDA_hist.drop(columns = ['is_subtotal']).copy().reset_index(drop = True)
 
 # Relevant subfuels
 coal_sub = [i for i in EGEDA_hist['subfuels'].unique() if i.startswith('01_')]
@@ -127,11 +128,11 @@ for economy in list(economy_select):
 
                     subfuels_df = temp_df[~temp_df['subfuels'].isin(['x', '16_x_hydrogen'])].copy().reset_index(drop = True)
 
-                    # Need the 2020 ratio
-                    fuel_ratio = subfuels_df.loc[:, ['subfuels', '2020']].copy().reset_index(drop = True)
+                    # Need the 2021 ratio
+                    fuel_ratio = subfuels_df.loc[:, ['subfuels', '2021']].copy().reset_index(drop = True)
 
                     fuel_ratio['ratio'] = np.nan
-                    total_for_calc = fuel_total_row.loc[0, '2020']
+                    total_for_calc = fuel_total_row.loc[0, '2021']
 
                     for i in range(len(fuel_ratio['subfuels'].unique())):
                         # To avoid dividng by zero

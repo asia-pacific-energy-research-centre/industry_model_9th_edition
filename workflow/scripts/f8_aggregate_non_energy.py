@@ -18,7 +18,7 @@ nonenergy_fuels = list(egeda_fuels.values())
 nonenergy_fuels = [nonenergy_fuels[i] for i in [0, 1, 5, 6, 7, 15]]
 
 # Modelled years
-proj_years = list(range(2021, 2101, 1))
+proj_years = list(range(2022, 2101, 1))
 proj_years_str = [str(i) for i in proj_years]
 
 # All years

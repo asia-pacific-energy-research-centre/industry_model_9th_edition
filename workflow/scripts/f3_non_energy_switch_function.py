@@ -15,10 +15,11 @@ with open(config_file) as infile:
 economy_select = economy_list[:-7]
 
 # Modelled years
-proj_years = list(range(2021, 2101, 1))
+proj_years = list(range(2022, 2101, 1))
 
 # Also grab historical energy data
-hist_egeda = pd.read_csv(latest_EGEDA).loc[:, :'2020']
+hist_egeda = pd.read_csv(latest_EGEDA).loc[:, :'2021']
+hist_egeda = hist_egeda.drop(columns = ['is_subtotal']).copy().reset_index(drop = True)
 
 # PHL SGP edit
 hist_egeda = hist_egeda.replace({'15_PHL': '15_RP',
@@ -42,7 +43,7 @@ def hydrogen_ne(start_year = 2030,
 
 # Master function for all fuel switching
 def fuel_switch_ne(economy = '01_AUS',
-                   base_year = 2021,
+                   base_year = 2022,
                    hist_data = hist_egeda,
                    hyd_start_ref = 2040,
                    hyd_start_tgt = 2030,
@@ -333,13 +334,13 @@ def fuel_switch_ne(economy = '01_AUS',
             ylim = (0, max_y))
     
     # Projection demarcation
-    ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
-    ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+    ax1.axvline(x = 2021, linewidth = 1, linestyle = '--', color = 'black')
+    ax2.axvline(x = 2021, linewidth = 1, linestyle = '--', color = 'black')
     
     # Projection text
     ax1.annotate('Projection', 
-                 xy = (2030, proj_location),
-                 xytext = (2024, proj_location),
+                 xy = (2031, proj_location),
+                 xytext = (2025, proj_location),
                  va = 'center',
                  ha = 'center',
                  fontsize = 9,

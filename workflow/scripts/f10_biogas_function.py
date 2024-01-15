@@ -12,7 +12,7 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # Modelled years
-proj_years = list(range(2021, 2101, 1))
+proj_years = list(range(2022, 2101, 1))
 
 # All years
 all_years = list(range(1980, 2101, 1))

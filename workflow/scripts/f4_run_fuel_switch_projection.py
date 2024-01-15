@@ -24,10 +24,12 @@ ind2 = list(industry_sectors.values())[3:]
 economy_select = economy_list[:-7]
 
 # Modelled years
-proj_years = list(range(2021, 2101, 1))
+proj_years = list(range(2022, 2101, 1))
 
 # Historical energy data
-hist_egeda = pd.read_csv(latest_EGEDA).loc[:, :'2020']
+hist_egeda = pd.read_csv(latest_EGEDA).loc[:, :'2021']
+
+hist_egeda = hist_egeda.drop(columns = ['is_subtotal']).copy().reset_index(drop = True)
 
 # PHL SGP edit
 hist_egeda = hist_egeda.replace({'15_PHL': '15_RP',
@@ -580,13 +582,13 @@ for economy in list(economy_select):
                 ylim = (0, max_y))
         
         # Projection demarcation
-        ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
-        ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+        ax1.axvline(x = 2021, linewidth = 1, linestyle = '--', color = 'black')
+        ax2.axvline(x = 2021, linewidth = 1, linestyle = '--', color = 'black')
 
         # Projection text
         ax1.annotate('Projection', 
-                    xy = (2030, proj_location),
-                    xytext = (2024, proj_location),
+                    xy = (2031, proj_location),
+                    xytext = (2025, proj_location),
                     va = 'center',
                     ha = 'center',
                     fontsize = 9,
@@ -596,8 +598,8 @@ for economy in list(economy_select):
                                 'color': 'black'})
         
         ax2.annotate('Projection', 
-                    xy = (2030, proj_location),
-                    xytext = (2024, proj_location),
+                    xy = (2031, proj_location),
+                    xytext = (2025, proj_location),
                     va = 'center',
                     ha = 'center',
                     fontsize = 9,
