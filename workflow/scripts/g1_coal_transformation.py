@@ -12,10 +12,11 @@ with open(config_file) as infile:
     exec(infile.read())
 
 # latest EGEDA data
-EGEDA_df = pd.read_csv(latest_EGEDA).loc[:,['economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', '2019', '2020']]\
+EGEDA_df = pd.read_csv(latest_EGEDA).loc[:,['economy', 'sectors', 'sub1sectors', 'sub2sectors', 'fuels', 'subfuels', '2020', '2021']]\
     .reset_index(drop = True)
 
-EGEDA_coaltrans = pd.read_csv(latest_EGEDA).loc[:,:'2020']
+EGEDA_coaltrans = pd.read_csv(latest_EGEDA).loc[:,:'2021']
+EGEDA_coaltrans = EGEDA_coaltrans.drop(columns = ['is_subtotal']).copy().reset_index(drop = True)
 
 # Vectors to subset
 coal_vector = ['01_coal', '02_coal_products']
@@ -32,7 +33,7 @@ coal_df = EGEDA_df[EGEDA_df['fuels'].isin(coal_vector) &
 column_vector = ['economy', 'sectors', 'sub1sectors', 'fuels', 'subfuels']
 
 coal_df = coal_df[(coal_df['sub1sectors'].isin(sub1sector_vector)) & 
-                  (coal_df['sub2sectors'] == 'x')][column_vector + ['2019', '2020']]\
+                  (coal_df['sub2sectors'] == 'x')][column_vector + ['2020', '2021']]\
     .melt(id_vars = column_vector, var_name = 'year').copy().reset_index(drop = True)
 
 # Coal transformation historical 
@@ -43,14 +44,14 @@ EGEDA_coaltrans = EGEDA_coaltrans[(EGEDA_coaltrans['sub1sectors'] == '09_08_coal
 # Grab APEC economies
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 APEC_economies = list(APEC_economies.keys())[:-7]
-APEC_economies = APEC_economies[16:17]
+#APEC_economies = APEC_economies[16:17]
 
 # Years
 all_years = list(range(1980, 2101, 1))
 all_years_str = [str(i) for i in all_years]
 
-# 2020 and beyond
-proj_years = list(range(2020, 2101, 1))
+# 2021 and beyond
+proj_years = list(range(2021, 2101, 1))
 proj_years_str = [str(i) for i in proj_years]
 
 for economy in APEC_economies:
@@ -130,12 +131,12 @@ for economy in APEC_economies:
         coalp_df = coalp_df[(coalp_df['year'] >= 2000) &
                             (coalp_df['year'] <= 2070)].copy().reset_index(drop = True)
         
-        # Now build in growth for coal transformation (add 2020 data as a beginning to loop through)
+        # Now build in growth for coal transformation (add 2021 data as a beginning to loop through)
         coaltrans_ref = hist_coal_df[(hist_coal_df['sub1sectors'] == '09_08_coal_transformation') &
-                                     (hist_coal_df['year'] == 2020)].copy().reset_index(drop = True)
+                                     (hist_coal_df['year'] == 2021)].copy().reset_index(drop = True)
 
         coaltrans_tgt = hist_coal_df[(hist_coal_df['sub1sectors'] == '09_08_coal_transformation') &
-                                     (hist_coal_df['year'] == 2020)].copy().reset_index(drop = True)
+                                     (hist_coal_df['year'] == 2021)].copy().reset_index(drop = True)
 
         for year in proj_years[1:]:
             # REF
@@ -222,7 +223,7 @@ for economy in APEC_economies:
             ax1.legend(title = '')
 
             # Projection demarcation
-            ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+            ax1.axvline(x = 2021, linewidth = 1, linestyle = '--', color = 'black')
         
         if coaltrans_df.empty:
             pass
@@ -355,8 +356,8 @@ for economy in APEC_economies:
             ax2.legend(title = '', fontsize = 8)
 
         # Projection demarcation
-        ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
-        ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+        ax1.axvline(x = 2021, linewidth = 1, linestyle = '--', color = 'black')
+        ax2.axvline(x = 2021, linewidth = 1, linestyle = '--', color = 'black')
 
         plt.tight_layout()
         plt.show()

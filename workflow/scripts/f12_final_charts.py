@@ -12,7 +12,7 @@ with open(config_file) as infile:
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
 # Only run one economy
-economy_select = economy_list[16:17]
+#economy_select = economy_list[16:17]
 
 # Energy industry subsectors
 industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)\
@@ -189,13 +189,13 @@ for economy in list(economy_select):
                         ylim = (0, max_y))
                 
                 # Projection demarcation
-                ax1.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
-                ax2.axvline(x = 2020, linewidth = 1, linestyle = '--', color = 'black')
+                ax1.axvline(x = 2021, linewidth = 1, linestyle = '--', color = 'black')
+                ax2.axvline(x = 2021, linewidth = 1, linestyle = '--', color = 'black')
 
                 # Projection text
                 ax1.annotate('Projection', 
-                            xy = (2030, proj_location),
-                            xytext = (2024, proj_location),
+                            xy = (2031, proj_location),
+                            xytext = (2025, proj_location),
                             va = 'center',
                             ha = 'center',
                             fontsize = 9,
@@ -205,8 +205,8 @@ for economy in list(economy_select):
                                         'color': 'black'})
                 
                 ax2.annotate('Projection', 
-                            xy = (2030, proj_location),
-                            xytext = (2024, proj_location),
+                            xy = (2031, proj_location),
+                            xytext = (2025, proj_location),
                             va = 'center',
                             ha = 'center',
                             fontsize = 9,

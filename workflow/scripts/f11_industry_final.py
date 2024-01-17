@@ -16,7 +16,7 @@ from f10_biogas_function import biogas_switch
 # from f10b_hyd_function import hyd_switch
 
 # Modelled years
-proj_years = list(range(2021, 2101, 1))
+proj_years = list(range(2022, 2101, 1))
 
 # All years
 all_years = list(range(1980, 2101, 1))

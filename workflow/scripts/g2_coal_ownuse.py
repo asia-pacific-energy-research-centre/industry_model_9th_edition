@@ -14,16 +14,17 @@ with open(config_file) as infile:
 # Grab APEC economies
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 APEC_economies = list(APEC_economies.keys())[:-7]
-APEC_economies = APEC_economies[16:17]
+# APEC_economies = APEC_economies[16:17]
 
-# 2021 and beyond
-proj_years = list(range(2021, 2101, 1))
+# 2022 and beyond
+proj_years = list(range(2022, 2101, 1))
 proj_years_str = [str(i) for i in proj_years]
 
 # latest EGEDA data
 EGEDA_df = pd.read_csv(latest_EGEDA)
+EGEDA_df = EGEDA_df.drop(columns = ['is_subtotal'])
 
-EGEDA_coalown_df = EGEDA_df[EGEDA_df['sub2sectors'].isin(['10_01_08_coke_ovens', '10_01_10_blast_furnaces'])]\
+EGEDA_coalown_df = EGEDA_df[EGEDA_df['sub2sectors'].isin(['10_01_05_coke_ovens', '10_01_07_blast_furnaces'])]\
                         .copy().reset_index(drop = True)
 
 for economy in APEC_economies:
