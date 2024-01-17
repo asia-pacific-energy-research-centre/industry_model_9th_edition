@@ -16,33 +16,34 @@ APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).
 
 # Read in historical production data
 hist_prod = pd.read_csv('./data/industry_production/3_industry_projections/interim_all_sectors.csv')
-hist_prod = hist_prod[hist_prod['year'] <= 2020]
+hist_prod = hist_prod[hist_prod['year'] <= 2021]
 
 # Sectors that we have production data for 
 relevant_sectors = hist_prod['sub2sectors'].unique()[[1, 2, 3, 4, 5, 6, 7, 10]]
 
 # Read in energy data
-EGEDA_2020 = pd.read_csv(latest_EGEDA)
+EGEDA_2021 = pd.read_csv(latest_EGEDA)
+EGEDA_2021 = EGEDA_2021.drop(columns = ['is_subtotal']).copy().reset_index(drop = True)
 
-EGEDA_2020 = EGEDA_2020[(EGEDA_2020['sub1sectors'].str.startswith('14_')) &
-                        (EGEDA_2020['fuels'] == '19_total') &
-                        (EGEDA_2020['sub3sectors'] == 'x')]\
-                            .copy().reset_index(drop = True).loc[:, :'2020']
+EGEDA_2021 = EGEDA_2021[(EGEDA_2021['sub1sectors'].str.startswith('14_')) &
+                        (EGEDA_2021['fuels'] == '19_total') &
+                        (EGEDA_2021['sub3sectors'] == 'x')]\
+                            .copy().reset_index(drop = True).loc[:, :'2021']
 
-EGEDA_2020 = EGEDA_2020.melt(id_vars = ['economy', 'sub1sectors', 'sub2sectors'],
-                             value_vars = [str(i) for i in list(range(1980, 2021, 1))],
+EGEDA_2021 = EGEDA_2021.melt(id_vars = ['economy', 'sub1sectors', 'sub2sectors'],
+                             value_vars = [str(i) for i in list(range(1980, 2022, 1))],
                              var_name = 'year',
                              value_name = 'energy')
 
-EGEDA_2020['year'] = EGEDA_2020['year'].astype('int')
+EGEDA_2021['year'] = EGEDA_2021['year'].astype('int')
 
 # Energy intensity analysis
 for economy in hist_prod['economy_code'].unique():
     # Define empty datadrame to save all en_int for each economy
     en_int_economy_df = pd.DataFrame()
     for sector in relevant_sectors:
-        energy_df = EGEDA_2020[(EGEDA_2020['economy'] == economy) &
-                               (EGEDA_2020['sub2sectors'] == sector)].copy().reset_index(drop = True)
+        energy_df = EGEDA_2021[(EGEDA_2021['economy'] == economy) &
+                               (EGEDA_2021['sub2sectors'] == sector)].copy().reset_index(drop = True)
         
         prod_df = hist_prod[(hist_prod['economy_code'] == economy) &
                             (hist_prod['sub2sectors'] == sector)].copy().reset_index(drop = True)

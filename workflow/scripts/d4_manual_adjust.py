@@ -162,33 +162,51 @@ industry_adj(economy = '08_JPN',
 # Chinese Taipei
 
 industry_adj(economy = '18_CT',
-             adjust = {2022: 0.945},  
+             adjust = {2022: 0.93, 2023: 1.05},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_01_iron_and_steel',
+             data = industry_refine1)
+
+industry_adj(economy = '18_CT',
+             adjust = {2022: 0.88, 2023: 1.1},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_02_chemical_incl_petrochemical',
              data = industry_refine1)
 
 industry_adj(economy = '18_CT',
-             adjust = {2022: 1.05},  
+             adjust = {2022: 0.88, 2023: 1.09},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_03_non_ferrous_metals',
+             data = industry_refine1)
+
+industry_adj(economy = '18_CT',
+             adjust = {2022: 0.94, 2023: 1.04},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_04_nonmetallic_mineral_products',
+             data = industry_refine1)
+
+industry_adj(economy = '18_CT',
+             adjust = {2022: 1.04, 2023: 0.98},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_06_machinery',
              data = industry_refine1)
 
 industry_adj(economy = '18_CT',
-             adjust = {2021: 0.95, 2022: 0.96},  
-             sub1sectors = '14_03_manufacturing', 
-             sub2sectors = '14_03_07_food_beverages_and_tobacco',
-             data = industry_refine1)
-
-industry_adj(economy = '18_CT',
-             adjust = {2021: 0.89, 2022: 1.05, 2023: 0.99},  
+             adjust = {2022: 0.97, 2023: 1.02},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_08_pulp_paper_and_printing',
              data = industry_refine1)
 
 industry_adj(economy = '18_CT',
-             adjust = {2021: 0.93},  
+             adjust = {2022: 0.92, 2023: 1.06},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_09_wood_and_wood_products',
+             data = industry_refine1)
+
+industry_adj(economy = '18_CT',
+             adjust = {2022: 0.93, 2023: 1.05},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_10_textiles_and_leather',
              data = industry_refine1)
 
 ##################################################################

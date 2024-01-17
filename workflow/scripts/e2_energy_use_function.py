@@ -20,7 +20,7 @@ def energy_use(economy = '01_AUS',
                sub2sectors = 'x',
                increment_ref = 0.01,
                increment_tgt = 0.02,
-               start_year = 2022,
+               start_year = 2025,
                end_year = 2050,
                data = indprod_df):
     
