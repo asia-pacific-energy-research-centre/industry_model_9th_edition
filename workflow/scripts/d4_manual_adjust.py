@@ -186,7 +186,7 @@ industry_adj(economy = '18_CT',
              data = industry_refine1)
 
 industry_adj(economy = '18_CT',
-             adjust = {2022: 1.04, 2023: 0.98},  
+             adjust = {2022: 1.04, 2023: 0.98, 2024: 1.04, 2025: 1.04},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_06_machinery',
              data = industry_refine1)
