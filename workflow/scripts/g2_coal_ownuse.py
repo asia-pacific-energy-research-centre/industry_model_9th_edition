@@ -14,7 +14,7 @@ with open(config_file) as infile:
 # Grab APEC economies
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 APEC_economies = list(APEC_economies.keys())[:-7]
-APEC_economies = APEC_economies[17:18]
+APEC_economies = APEC_economies[8:9]
 
 # 2022 and beyond
 proj_years = list(range(2022, 2101, 1))

@@ -211,7 +211,7 @@ energy_use(economy = '09_ROK', sub1sectors = ind1[1], sub2sectors = 'x',
 
 # Steel
 energy_use(economy = '09_ROK', sub1sectors = ind1[2], sub2sectors = ind2[0],
-           increment_ref = 0.002, increment_tgt = 0.0025, end_year = 2100)
+           increment_ref = 0.002, increment_tgt = 0.003, end_year = 2100)
 
 # Chemicals
 energy_use(economy = '09_ROK', sub1sectors = ind1[2], sub2sectors = ind2[1],
