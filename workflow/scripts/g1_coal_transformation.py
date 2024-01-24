@@ -44,7 +44,7 @@ EGEDA_coaltrans = EGEDA_coaltrans[(EGEDA_coaltrans['sub1sectors'] == '09_08_coal
 # Grab APEC economies
 APEC_economies = pd.read_csv('./data/config/APEC_economies.csv', index_col = 0).squeeze().to_dict()
 APEC_economies = list(APEC_economies.keys())[:-7]
-APEC_economies = APEC_economies[8:9]
+APEC_economies = APEC_economies[4:5]
 
 # Years
 all_years = list(range(1980, 2101, 1))

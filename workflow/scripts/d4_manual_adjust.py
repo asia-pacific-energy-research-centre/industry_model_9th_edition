@@ -126,14 +126,14 @@ industry_adj(economy = '05_PRC',
 
 # Chemicals
 industry_adj(economy = '05_PRC',
-             adjust = {2021: 0.97, 2022: 0.97},  
+             adjust = {2025: 0.99, 2026: 0.99, 2027: 0.99, 2028: 0.99, 2029: 0.98, 2030: 0.97},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_02_chemical_incl_petrochemical',
              data = industry_refine1)
 
 # Wood
 industry_adj(economy = '05_PRC',
-             adjust = {2021: 0.92, 2022: 0.98},  
+             adjust = {2021: 0.93, 2022: 0.99},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_09_wood_and_wood_products',
              data = industry_refine1)
@@ -147,7 +147,7 @@ industry_adj(economy = '05_PRC',
              data = industry_refine1)
 
 nonenergy_adj(economy = '05_PRC',
-              adjust = {2021: 0.95, 2022: 0.97},
+              adjust = {2025: 0.99, 2026: 0.99, 2027: 0.99, 2028: 0.99, 2029: 0.98, 2030: 0.97},
               data = nonenergy_refine1)
 
 ##################################################################

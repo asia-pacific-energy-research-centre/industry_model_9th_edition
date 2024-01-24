@@ -106,29 +106,31 @@ fuel_switch_ne(economy = '03_CDA', hyd_increment_ref = 0.002, hyd_increment_tgt 
 ###########################################################################################################
 # China
 # Mining
-fuel_switch(economy = '05_PRC', sector = ind1[0], c2g_rate_ref = 0.0005, c2g_rate_tgt = 0.0005)
+fuel_switch(economy = '05_PRC', sector = ind1[0], elec_rate_tgt = 0.011, c2g_rate_ref = 0.0005, 
+            c2g_rate_tgt = 0.0005)
 
 # Construction
 fuel_switch(economy = '05_PRC', sector = ind1[1], elec_rate_tgt = 0.008, c2g_rate_ref = 0.0005, 
             elec_start_ref = 2024, elec_start_tgt = 2024)
 
 # Iron and steel
-fuel_switch(economy = '05_PRC', sector = ind2[0], elec_rate_ref = 0.005, elec_rate_tgt = 0.0075, 
+fuel_switch(economy = '05_PRC', sector = ind2[0], elec_rate_ref = 0.005, elec_rate_tgt = 0.01, 
             hydrogen_ref = True, ccs_ref = True, hydrogen_tgt = True, ccs_tgt = True, 
-            hyd_increment_tgt = 0.015, c2g_rate_ref = 0.001, c2g_rate_tgt = 0.005)
+            hyd_increment_tgt = 0.0175, c2g_rate_ref = 0.001, c2g_rate_tgt = 0.01)
 
 # Chemicals
 fuel_switch(economy = '05_PRC', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
             hydrogen_ref = False, hydrogen_tgt = True, ccs_ref = True, ccs_tgt = True,
-            hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
+            hyd_start_tgt = 2030, hyd_increment_tgt = 0.004, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Non-ferrous metals
-fuel_switch(economy = '05_PRC', sector = ind2[2], elec_rate_tgt = 0.005, c2g_rate_ref = 0.001, 
+fuel_switch(economy = '05_PRC', sector = ind2[2], elec_rate_tgt = 0.0075, c2g_rate_ref = 0.001, 
             c2g_rate_tgt = 0.001)
 
 # Non-metallic minerals
 fuel_switch(economy = '05_PRC', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.003, 
             ccs_ref = True, ccs_tgt = True, c2g_rate_tgt = 0.004, hydrogen_tgt = True,
+            bio_start_ref = 2025, bio_start_tgt = 2025, bio_rate_ref = 0.002, bio_rate_tgt = 0.01,
             hyd_start_tgt = 2030, hyd_increment_tgt = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Transport

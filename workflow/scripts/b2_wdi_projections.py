@@ -30,7 +30,7 @@ ind_projection(economy = '01_AUS', series = 'NV.IND.MANF.ZS', low_bound = 5, hig
 
 # Subsets of Manufacturing (% of Manufacturing)
 # Chemicals
-ind_projection(economy = '01_AUS', series = 'NV.MNF.CHEM.ZS.UN', high_bound = 4, high_change = 0.997)
+ind_projection(economy = '01_AUS', series = 'NV.MNF.CHEM.ZS.UN', high_bound = 4, high_change = 0.998)
 # Food and beverage
 ind_projection(economy = '01_AUS', series = 'NV.MNF.FBTO.ZS.UN', low_bound = 32, high_bound = 35, low_change = 1.0005)
 # Machinery and Transport
@@ -38,7 +38,7 @@ ind_projection(economy = '01_AUS', series = 'NV.MNF.MTRN.ZS.UN', high_bound = 14
 # Other manufacturing
 ind_projection(economy = '01_AUS', series = 'NV.MNF.OTHR.ZS.UN', low_bound = 40, high_bound = 60, low_change = 1.0005)
 # Textiles
-ind_projection(economy = '01_AUS', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 0.3, high_bound = 0.5, high_change = 0.996) 
+ind_projection(economy = '01_AUS', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 0.3, high_bound = 0.5, high_change = 0.999) 
 
 ##############################################################################################
 # 02_BD
@@ -94,7 +94,7 @@ ind_projection(economy = '05_PRC', series = 'NV.IND.MANF.ZS', low_bound = 10, hi
 
 # Subsets of Manufacturing (% of Manufacturing)
 # Chemicals
-ind_projection(economy = '05_PRC', series = 'NV.MNF.CHEM.ZS.UN', low_bound = 8, high_bound = 9, high_change = 0.9995)
+ind_projection(economy = '05_PRC', series = 'NV.MNF.CHEM.ZS.UN', low_bound = 6, high_bound = 7, high_change = 0.999)
 # Food and beverage
 ind_projection(economy = '05_PRC', series = 'NV.MNF.FBTO.ZS.UN', low_bound = 8, high_bound = 9, high_change = 0.9995)
 # Machinery and Transport

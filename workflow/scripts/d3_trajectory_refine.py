@@ -151,27 +151,29 @@ industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[10],
 # Chile
 
 #################################### China #################################################################
-# Mining: no adjustment
+# Mining
+industry_traj(economy = '05_PRC', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2025,
+              shape = 'peak', magnitude = 0.8, apex_mag = 1.5, apex_loc = 10, data = industry_interim)
 
 # Construction
-industry_traj(economy = '05_PRC', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2021,
-              shape = 'peak', magnitude = 0.2, apex_mag = 5.05, apex_loc = 1, data = industry_interim)
+industry_traj(economy = '05_PRC', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2022,
+              shape = 'decrease', magnitude = 0.35, data = industry_interim)
 
 # Steel
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2026,
               shape = 'decrease', magnitude = 0.4, data = industry_interim)
 
 # Chemicals
-industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2022,
-              shape = 'peak', magnitude = 0.8, apex_mag = 1.5, apex_loc = 30, data = industry_interim)
+industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 0.3, data = industry_interim)
 
 # Non-ferrous metals
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[2], proj_start_year = 2021,
-              shape = 'peak', magnitude = 0.8, apex_mag = 1.6, apex_loc = 40, data = industry_interim)
+              shape = 'peak', magnitude = 0.8, apex_mag = 1.35, apex_loc = 10, data = industry_interim)
 
 # Non-metallic minerals
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2022,
-              shape = 'decrease', magnitude = 0.35, apex_mag = 7.4, apex_loc = 60, data = industry_interim)
+              shape = 'decrease', magnitude = 0.1, data = industry_interim)
 
 # Transportation equipment
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2021,
@@ -183,7 +185,7 @@ industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[5], 
 
 # Food and beverages
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
-              shape = 'peak', magnitude = 0.65, apex_mag = 1.8, apex_loc = 20, data = industry_interim)
+              shape = 'peak', magnitude = 0.65, apex_mag = 1.8, apex_loc = 10, data = industry_interim)
 
 # Pulp and paper
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
@@ -191,19 +193,19 @@ industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[7], 
 
 # Wood and wood products
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2022,
-              shape = 'peak', magnitude = 0.5, apex_mag = 2.1, apex_loc = 30, data = industry_interim)
+              shape = 'peak', magnitude = 0.5, apex_mag = 2.1, apex_loc = 10, data = industry_interim)
 
 # Textiles
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2022,
-              shape = 'bottom', magnitude = 0.5, apex_mag = 2.2, apex_loc = 20, data = industry_interim)
+              shape = 'bottom', magnitude = 0.55, apex_mag = 1.9, apex_loc = 10, data = industry_interim)
 
 # Non-specified
-industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2023,
-              shape = 'peak', magnitude = 0.6, apex_mag = 1.8, apex_loc = 30, data = industry_interim)
+industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2022,
+              shape = 'peak', magnitude = 0.55, apex_mag = 1.9, apex_loc = 10, data = industry_interim)
 
 # Non-energy: no adjustment
-nonenergy_traj(economy = '05_PRC', proj_start_year = 2022,
-              shape = 'peak', magnitude = 0.8, apex_mag = 1.35, apex_loc = 30, data = nonenergy_production)
+nonenergy_traj(economy = '05_PRC', proj_start_year = 2030,
+              shape = 'decrease', magnitude = 0.3, data = nonenergy_production)
 
 # HKC
 # Indonesia
