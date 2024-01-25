@@ -57,7 +57,7 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[0], 
 
 # Chemicals
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2021,
-              shape = 'increase', magnitude = 1.1, data = industry_interim)
+              shape = 'increase', magnitude = 0.5, data = industry_interim)
 
 # Non-ferrous metals
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[2], proj_start_year = 2025,
@@ -97,7 +97,7 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[10],
 
 # Non-energy: no adjustment
 nonenergy_traj(economy = '01_AUS', proj_start_year = 2021,
-              shape = 'increase', magnitude = 1.1, data = nonenergy_production)
+              shape = 'increase', magnitude = 0.5, data = nonenergy_production)
 
 ############################################################################################################
 # Brunei
@@ -208,8 +208,8 @@ industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[10],
               shape = 'peak', magnitude = 0.55, apex_mag = 1.9, apex_loc = 10, data = industry_interim)
 
 # Non-energy: no adjustment
-nonenergy_traj(economy = '05_PRC', proj_start_year = 2030,
-              shape = 'decrease', magnitude = 0.3, data = nonenergy_production)
+nonenergy_traj(economy = '05_PRC', proj_start_year = 2023,
+              shape = 'peak', magnitude = 0.8, apex_mag = 1.4, apex_loc = 10, data = nonenergy_production)
 
 # HKC
 
@@ -437,61 +437,43 @@ industry_traj(economy = '09_ROK', sub1sectors = ind1[2], sub2sectors = ind2[9], 
 # Peru
 
 ############################################## Philippines #####################################################
-# Mining
-industry_traj(economy = '15_PHL', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2070,
-              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
+# Mining: no adjustment
 
 # Construction
-industry_traj(economy = '15_PHL', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2070,
-              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20, data = industry_interim) 
+industry_traj(economy = '15_RP', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2025,
+              shape = 'decrease', magnitude = 3.5, data = industry_interim) 
 
-# Steel
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2025,
-              shape = 'decrease', magnitude = 1.05, data = industry_interim)
+# Steel: no adjustment
 
 # Chemicals
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2021,
-              shape = 'increase', magnitude = 1.1, data = industry_interim)
+industry_traj(economy = '15_RP', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2024,
+              shape = 'decrease', magnitude = 4, data = industry_interim)
 
-# Non-ferrous metals
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[2], proj_start_year = 2025,
-              shape = 'increase', magnitude = 1.25, data = industry_interim)
+# Non-ferrous metals: no data
 
 # Non-metallic minerals
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.6, data = industry_interim)
+industry_traj(economy = '15_RP', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2024,
+              shape = 'decrease', magnitude = 2.5, data = industry_interim)
 
-# Transportation equipment
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+# Transportation equipment: no adjustment
 
-# Machinery
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+# Machinery: no adjustment
 
-# Food and beverages
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+# Food and beverages: no adjustment
 
-# Pulp and paper
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+# Pulp and paper: no adjustment
 
-# Wood and wood products
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+# Wood and wood products: no adjustment
 
-# Textiles
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 0.9, data = industry_interim)
+# Textiles: no adjustment
 
 # Non-specified
-industry_traj(economy = '15_PHL', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2030,
+industry_traj(economy = '15_RP', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2050,
               shape = 'decrease', magnitude = 1.8, data = industry_interim)
 
 # Non-energy: no adjustment
-nonenergy_traj(economy = '15_PHL', proj_start_year = 2021,
-               shape = 'increase', magnitude = 1.1, data = nonenergy_production)
+nonenergy_traj(economy = '15_RP', proj_start_year = 2024,
+               shape = 'decrease', magnitude = 4, data = nonenergy_production)
 
 
 # Russia
@@ -651,7 +633,58 @@ industry_traj(economy = '20_USA', sub1sectors = ind1[2], sub2sectors = ind2[9], 
 # Non-energy: no adjustment
 
 
-# VN
+############################################ VN ################################################################
+# Mining
+industry_traj(economy = '21_VN', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2025,
+              shape = 'decrease', magnitude = 4, data = industry_interim)
+
+# Construction
+industry_traj(economy = '21_VN', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2040,
+              shape = 'decrease', magnitude = 2, data = industry_interim) 
+
+# Steel
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2024,
+              shape = 'decrease', magnitude = 4, data = industry_interim)
+
+# Chemicals
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 2.5, data = industry_interim)
+
+# Non-ferrous metals: no data
+
+# Non-metallic minerals: no adjustment
+
+# Transportation equipment
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 2.5, data = industry_interim)
+
+# Machinery
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 2.5, data = industry_interim)
+
+# Food and beverages
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 2.5, data = industry_interim)
+
+# Pulp and paper
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 2.5, data = industry_interim)
+
+# Wood and wood products
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 2.5, data = industry_interim)
+
+# Textiles
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 2.5, data = industry_interim)
+
+# Non-specified
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 3, data = industry_interim)
+
+# Non-energy: no adjustment
+nonenergy_traj(economy = '21_VN', proj_start_year = 2030,
+              shape = 'decrease', magnitude = 2.5, data = nonenergy_production)
 
 # Consolidate refined trajectories
 traj_overwrite_df = pd.DataFrame()

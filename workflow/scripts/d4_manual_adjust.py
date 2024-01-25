@@ -146,9 +146,7 @@ industry_adj(economy = '05_PRC',
              sub2sectors = '14_03_10_textiles_and_leather',
              data = industry_refine1)
 
-nonenergy_adj(economy = '05_PRC',
-              adjust = {2025: 0.99, 2026: 0.99, 2027: 0.99, 2028: 0.99, 2029: 0.98, 2030: 0.97},
-              data = nonenergy_refine1)
+# Non-energy: no adjustment
 
 ##################################################################
 # Japan
