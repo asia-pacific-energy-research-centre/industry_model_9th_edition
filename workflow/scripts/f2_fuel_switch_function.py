@@ -93,6 +93,8 @@ def fuel_switch(economy = '01_AUS',
                 c2g_rate_tgt = 0.0,
                 hydrogen_ref = False,
                 hydrogen_tgt = False,
+                hyd_only_tgt = False,
+                hyd_only_year = 2040, 
                 hyd_fuel_mix = {'16_x_hydrogen': 0.5,
                                 '17_electricity': 0.5},
                 hyd_start_ref = 2040,
@@ -538,7 +540,7 @@ def fuel_switch(economy = '01_AUS',
                 relevant_fuel = switched_tgt['fuels'] == fuel   
                 switched_tgt.loc[(relevant_year) & (relevant_fuel), 'energy'] = switched_tgt_calcs.loc[(relevant_year) & (relevant_fuel), 'energy'].values[0] *\
                     (1 - hyd_tgt.loc[hyd_tgt['year'] == hyd_year, 'share'].values[0])
-
+                    
             hyd_tgt['energy'] = hyd_tgt['fuel_ratio'] * hyd_tgt['share'] * total_tgt[hyd_year]
 
         hyd_tgt['fuels'] = np.where(hyd_tgt['fuel'] == '17_electricity', '17_electricity', '16_others')
@@ -559,6 +561,22 @@ def fuel_switch(economy = '01_AUS',
 
         hyd_tgt = hyd_tgt[['scenarios', 'economy', 'sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels', 'year', 'energy']]\
             .sort_values(['year', 'fuels']).reset_index(drop = True)
+        
+        # New addition to give hydrogen only results
+        if hyd_only_tgt:
+            for new_year in range(hyd_only_year, proj_years[-1] + 1, 1):
+                relevant_year = hyd_tgt['year'] == new_year
+                elec = hyd_tgt['fuels'] == '17_electricity'
+                hyd = hyd_tgt['subfuels'] == '16_x_hydrogen'
+                hyd_tgt.loc[(relevant_year) & (elec), 'energy'] = total_tgt[new_year] * hyd_fuel_mix['17_electricity']
+                hyd_tgt.loc[(relevant_year) & (hyd), 'energy'] = total_tgt[new_year] * hyd_fuel_mix['16_x_hydrogen']
+
+            # Zero out results
+            subset1 = switched_tgt[switched_tgt['year'] < hyd_only_year].copy()
+            subset2 = switched_tgt[switched_tgt['year'] >= hyd_only_year].copy()
+            subset2['energy'] = 0
+
+            switched_tgt = pd.concat([subset1, subset2]).copy()
         
         hyd_tgt.to_csv(hyd_ccs_location + economy + '_' + sector + '_hydrogen_tgt.csv', index = False)
 

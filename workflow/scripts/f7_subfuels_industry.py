@@ -12,7 +12,7 @@ with open(config_file) as infile:
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
 # Only run one economy option
-economy_select = economy_select[4:5]
+# economy_select = economy_select[10:12]
 
 # Energy industry subsectors
 industry_sectors = pd.read_csv('./data/EGEDA/industry_egeda.csv', header = None)\
@@ -231,7 +231,12 @@ for economy in list(economy_select):
                             fuel_ratio = subfuels_df.loc[:, ['subfuels', '2021']].copy().reset_index(drop = True)
 
                             fuel_ratio['ratio'] = np.nan
-                            total_for_calc = fuel_total_row.loc[0, '2021']
+                            
+                            # Use this if else just in case there is no total
+                            if fuel_total_row.empty:
+                                pass
+                            else:
+                                total_for_calc = fuel_total_row.loc[0, '2021']
 
                             for i in range(len(fuel_ratio['subfuels'].unique())):
                                 # To avoid dividng by zero
@@ -240,10 +245,14 @@ for economy in list(economy_select):
                                 else: 
                                     fuel_ratio.iloc[i, 2] = fuel_ratio.iloc[i, 1] / total_for_calc
 
-                            for year in proj_years_str:
-                                for subfuel in fuel_ratio['subfuels'].unique():
-                                    subfuels_df.loc[subfuels_df['subfuels'] == subfuel, year] = \
-                                        fuel_total_row.loc[0, year] * fuel_ratio.loc[fuel_ratio['subfuels'] == subfuel, 'ratio']
+                            if fuel_total_row.empty:
+                                pass
+
+                            else:
+                                for year in proj_years_str:
+                                    for subfuel in fuel_ratio['subfuels'].unique():
+                                        subfuels_df.loc[subfuels_df['subfuels'] == subfuel, year] = \
+                                            fuel_total_row.loc[0, year] * fuel_ratio.loc[fuel_ratio['subfuels'] == subfuel, 'ratio']
 
                             # Now if hydrogen subtracted from 16_others, add the original 16_others total line in        
                             if hydrogen_adjust.empty:
@@ -308,7 +317,11 @@ for economy in list(economy_select):
                             fuel_ratio = subfuels_df.loc[:, ['subfuels', '2021']].copy().reset_index(drop = True)
 
                             fuel_ratio['ratio'] = np.nan
-                            total_for_calc = fuel_total_row.loc[0, '2021']
+
+                            if fuel_total_row.empty:
+                                pass
+                            else:
+                                total_for_calc = fuel_total_row.loc[0, '2021']
 
                             for i in range(len(fuel_ratio['subfuels'].unique())):
                                 # To avoid dividng by zero
@@ -317,10 +330,13 @@ for economy in list(economy_select):
                                 else: 
                                     fuel_ratio.iloc[i, 2] = fuel_ratio.iloc[i, 1] / total_for_calc
 
-                            for year in proj_years_str:
-                                for subfuel in fuel_ratio['subfuels'].unique():
-                                    subfuels_df.loc[subfuels_df['subfuels'] == subfuel, year] = \
-                                        fuel_total_row.loc[0, year] * fuel_ratio.loc[fuel_ratio['subfuels'] == subfuel, 'ratio']
+                            if fuel_total_row.empty:
+                                pass
+                            else: 
+                                for year in proj_years_str:
+                                    for subfuel in fuel_ratio['subfuels'].unique():
+                                        subfuels_df.loc[subfuels_df['subfuels'] == subfuel, year] = \
+                                            fuel_total_row.loc[0, year] * fuel_ratio.loc[fuel_ratio['subfuels'] == subfuel, 'ratio']
 
                             # Now if hydrogen subtracted from 16_others, add the original 16_others total line in        
                             if hydrogen_adjust.empty:
@@ -388,7 +404,11 @@ for economy in list(economy_select):
                             fuel_ratio = subfuels_df.loc[:, ['subfuels', '2021']].copy().reset_index(drop = True)
 
                             fuel_ratio['ratio'] = np.nan
-                            total_for_calc = fuel_total_row.loc[0, '2021']
+
+                            if fuel_total_row.empty:
+                                pass
+                            else:
+                                total_for_calc = fuel_total_row.loc[0, '2021']
 
                             for i in range(len(fuel_ratio['subfuels'].unique())):
                                 # To avoid dividng by zero
@@ -397,10 +417,13 @@ for economy in list(economy_select):
                                 else: 
                                     fuel_ratio.iloc[i, 2] = fuel_ratio.iloc[i, 1] / total_for_calc
 
-                            for year in proj_years_str:
-                                for subfuel in fuel_ratio['subfuels'].unique():
-                                    subfuels_df.loc[subfuels_df['subfuels'] == subfuel, year] = \
-                                        fuel_total_row.loc[0, year] * fuel_ratio.loc[fuel_ratio['subfuels'] == subfuel, 'ratio']
+                            if fuel_total_row.empty:
+                                pass
+                            else: 
+                                for year in proj_years_str:
+                                    for subfuel in fuel_ratio['subfuels'].unique():
+                                        subfuels_df.loc[subfuels_df['subfuels'] == subfuel, year] = \
+                                            fuel_total_row.loc[0, year] * fuel_ratio.loc[fuel_ratio['subfuels'] == subfuel, 'ratio']
 
                             # Now if hydrogen subtracted from 16_others, add the original 16_others total line in        
                             if hydrogen_adjust.empty:

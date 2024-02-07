@@ -397,12 +397,12 @@ industry_traj(economy = '09_ROK', sub1sectors = ind1[2], sub2sectors = ind2[9], 
 #               shape = 'decrease', magnitude = 0.9, data = industry_interim)
 
 # # Non-specified
-# industry_traj(economy = '10_MAS', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2030,
-#               shape = 'decrease', magnitude = 1.8, data = industry_interim)
+industry_traj(economy = '10_MAS', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2050,
+              shape = 'decrease', magnitude = 1.6, data = industry_interim)
 
-# # Non-energy: no adjustment
-# nonenergy_traj(economy = '10_MAS', proj_start_year = 2021,
-#               shape = 'increase', magnitude = 1.1, data = nonenergy_production)
+# Non-energy:
+nonenergy_traj(economy = '10_MAS', proj_start_year = 2025,
+              shape = 'decrease', magnitude = 2.5, data = nonenergy_production)
 
 #################################### Mexico #################################################################
 # Mining: no adjustment
@@ -476,7 +476,40 @@ nonenergy_traj(economy = '15_RP', proj_start_year = 2024,
                shape = 'decrease', magnitude = 4, data = nonenergy_production)
 
 
-# Russia
+################################################ Russia ###################################################
+# Mining: no adjustment
+
+# Construction: no adjustment
+
+# Steel
+industry_traj(economy = '16_RUS', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 1.05, data = industry_interim)
+
+# Chemicals
+industry_traj(economy = '16_RUS', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2040,
+              shape = 'decrease', magnitude = 1.2, data = industry_interim)
+
+# Non-ferrous metals: no adjustment
+
+# Non-metallic minerals: no adjustment
+
+# Transportation equipment: no adjustment
+
+# Machinery: no adjustment
+
+# Food and beverages: no adjustment
+
+# Pulp and paper: no adjustment
+
+# Wood and wood products: no adjustment
+
+# Textiles: no adjustment
+
+# Non-specified: no adjustment
+
+# Non-energy: no adjustment
+nonenergy_traj(economy = '16_RUS', proj_start_year = 2040,
+              shape = 'decrease', magnitude = 1.2, data = nonenergy_production)
 
 ################################################# Singapore #####################################################
 # Mining: no adjustment
