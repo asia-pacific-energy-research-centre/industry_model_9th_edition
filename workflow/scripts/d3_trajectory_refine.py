@@ -48,8 +48,8 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[0], sub2sectors = 'x', proj
               shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Construction
-industry_traj(economy = '01_AUS', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2070,
-              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20, data = industry_interim) 
+industry_traj(economy = '01_AUS', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2035,
+              shape = 'decrease', magnitude = 1.7, data = industry_interim) 
 
 # Steel
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2025,
@@ -64,8 +64,8 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[2], 
               shape = 'increase', magnitude = 1.25, data = industry_interim)
 
 # Non-metallic minerals
-industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.6, data = industry_interim)
+industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 1.4, data = industry_interim)
 
 # Transportation equipment
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2021,
@@ -73,7 +73,7 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[4], 
 
 # Machinery
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+              shape = 'decrease', magnitude = 1.1, data = industry_interim)
 
 # Food and beverages
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
@@ -85,7 +85,7 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[7], 
 
 # Wood and wood products
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
-              shape = 'bottom', magnitude = 1.4, apex_mag = 0.9, apex_loc = 40, data = industry_interim)
+              shape = 'decrease', magnitude = 1.1, data = industry_interim)
 
 # Textiles
 industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
@@ -231,7 +231,7 @@ industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[1], 
 # Non-ferrous metals: no adjustment
 
 # Non-metallic minerals
-industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2023,
+industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2028,
               shape = 'decrease', magnitude = 2.7, data = industry_interim)
 
 # Transportation equipment
@@ -243,24 +243,24 @@ industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[5], 
               shape = 'decrease', magnitude = 3, data = industry_interim)
 
 # Food and beverages
-industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2024,
+industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2030,
               shape = 'decrease', magnitude = 2.2, data = industry_interim)
 
 # Pulp and paper
-industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2024,
-              shape = 'decrease', magnitude = 2.1, data = industry_interim)
+industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 3.1, data = industry_interim)
 
 # Wood and wood products
-industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 2, data = industry_interim)
+industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 2.5, data = industry_interim)
 
 # Textiles
-industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 1.1, data = industry_interim)
+industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2022,
+              shape = 'decrease', magnitude = 2.1, data = industry_interim)
 
 # Non-specified
-industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2021,
-              shape = 'decrease', magnitude = 3, data = industry_interim)
+industry_traj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 3.2, data = industry_interim)
 
 # Non-energy: no adjustment
 nonenergy_traj(economy = '07_INA', proj_start_year = 2025,
@@ -432,7 +432,63 @@ nonenergy_traj(economy = '10_MAS', proj_start_year = 2025,
 # Non-specified: no adjustment
 
 
-# New Zealand
+############################################## New Zealand #####################################################
+# Mining
+industry_traj(economy = '12_NZ', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2040,
+              shape = 'decrease', magnitude = 1.5, data = industry_interim)
+
+# Construction
+industry_traj(economy = '12_NZ', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2022,
+              shape = 'decrease', magnitude = 1.8, data = industry_interim) 
+
+# Steel
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 1.05, data = industry_interim)
+
+# Chemicals: 
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 0.01, data = industry_interim)
+
+# Non-ferrous metals
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[2], proj_start_year = 2025,
+              shape = 'increase', magnitude = 1.00000000001, data = industry_interim)
+
+# Non-metallic minerals: no adjustment
+# industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2021,
+#               shape = 'decrease', magnitude = 1.6, data = industry_interim)
+
+# Transportation equipment
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.4, data = industry_interim)
+
+# Machinery
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.4, data = industry_interim)
+
+# Food and beverages
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.4, data = industry_interim)
+
+# Pulp and paper
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.4, data = industry_interim)
+
+# Wood and wood products
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.4, data = industry_interim)
+
+# Textiles
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 0.9, data = industry_interim)
+
+# Non-specified
+industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2030,
+              shape = 'decrease', magnitude = 1.6, data = industry_interim)
+
+# Non-energy: no adjustment
+nonenergy_traj(economy = '12_NZ', proj_start_year = 2025,
+              shape = 'decrease', magnitude = 0.01, data = nonenergy_production)
+
 # PNG
 # Peru
 
@@ -677,22 +733,24 @@ industry_traj(economy = '21_VN', sub1sectors = ind1[1], sub2sectors = 'x', proj_
 
 # Steel
 industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2024,
-              shape = 'decrease', magnitude = 4, data = industry_interim)
+              shape = 'decrease', magnitude = 4.6, data = industry_interim)
 
 # Chemicals
-industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2030,
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2031,
               shape = 'decrease', magnitude = 2.5, data = industry_interim)
 
 # Non-ferrous metals: no data
 
-# Non-metallic minerals: no adjustment
+# Non-metallic minerals
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2022,
+              shape = 'decrease', magnitude = 1.7, data = industry_interim)
 
 # Transportation equipment
-industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2030,
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2035,
               shape = 'decrease', magnitude = 2.5, data = industry_interim)
 
 # Machinery
-industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2030,
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2035,
               shape = 'decrease', magnitude = 2.5, data = industry_interim)
 
 # Food and beverages
@@ -700,7 +758,7 @@ industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[6], p
               shape = 'decrease', magnitude = 2.5, data = industry_interim)
 
 # Pulp and paper
-industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2030,
+industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2032,
               shape = 'decrease', magnitude = 2.5, data = industry_interim)
 
 # Wood and wood products

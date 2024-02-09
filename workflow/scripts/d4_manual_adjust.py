@@ -34,8 +34,6 @@ ind2 = list(industry_sectors.values())[3:]
 industry_refine1 = pd.read_csv('./data/industry_production/4_industry_refine1/refined_industry_all.csv')
 nonenergy_refine1 = pd.read_csv('./data/non_energy/2_nonenergy_refine1/refined_nonenergy_all.csv')
 
-#################################################################################################
-
 ##################################################################
 # Canada
 # Mining
@@ -149,11 +147,27 @@ industry_adj(economy = '05_PRC',
 # Non-energy: no adjustment
 
 ##################################################################
+# Indonesia
+industry_adj(economy = '07_INA',
+             adjust = {2022: 1.05, 2023: 1.03, 2024: 1.02, 2025: 1.02, 2026: 1.02, 2027: 1.02, 2028: 1.01, 2029: 1.01, 2030: 1.01},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_01_iron_and_steel',
+             data = industry_refine1)
+
+##################################################################
 # Japan
 industry_adj(economy = '08_JPN',
              adjust = {2023: 0.93},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_01_iron_and_steel',
+             data = industry_refine1)
+
+###################################################################
+# New Zealand
+industry_adj(economy = '12_NZ',
+             adjust = {2031: 0.0},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_03_non_ferrous_metals',
              data = industry_refine1)
 
 ##################################################################
@@ -354,6 +368,10 @@ industry_adj(economy = '20_USA',
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_11_nonspecified_industry',
              data = industry_refine1)
+
+##################################################################
+# Viet Nam
+
 
 
 # Consolidate new results

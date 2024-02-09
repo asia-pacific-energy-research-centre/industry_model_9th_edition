@@ -38,11 +38,11 @@ nonenergy_refine2 = pd.read_csv('./data/non_energy/3_nonenergy_refine2/refined_n
 # Australia
 # Mining
 scenario_adj(economy = '01_AUS', sub1sectors = ind1[0], sub2sectors = 'x', 
-             increment = 0.03, start_year = 2024, end_year = 2040, data = industry_refine2)
+             increment = 0.03, start_year = 2024, end_year = 2042, data = industry_refine2)
 
 # Steel: Green steel production massive ramp up
 scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[0], 
-             increment = 0.15, start_year = 2030, end_year = 2045, data = industry_refine2) 
+             increment = 0.175, start_year = 2030, end_year = 2042, data = industry_refine2) 
 
 # Chemicals: Material efficiency
 scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[1], 
@@ -50,7 +50,7 @@ scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[1],
 
 # Non-ferrous metals
 scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[2], 
-             increment = 0.035, start_year = 2024, end_year = 2040, data = industry_refine2)
+             increment = 0.03, start_year = 2024, end_year = 2042, data = industry_refine2)
 
 # Cement (non-metallic minerals): Material efficiency
 scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[3], 
@@ -124,7 +124,7 @@ scenario_adj_ne(economy = '05_PRC',
 # Indonesia
 # Mining
 scenario_adj(economy = '07_INA', sub1sectors = ind1[0], sub2sectors = 'x', 
-             increment = 0.025, start_year = 2024, end_year = 2040, data = industry_refine2)
+             increment = 0.01, start_year = 2024, end_year = 2040, data = industry_refine2)
 
 # Steel: Material efficiency
 scenario_adj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[0], 
@@ -136,11 +136,11 @@ scenario_adj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[1],
 
 # Non-ferrous metals
 scenario_adj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[2], 
-             increment = 0.03, start_year = 2024, end_year = 2040, data = industry_refine2)
+             increment = 0.01, start_year = 2024, end_year = 2040, data = industry_refine2)
 
 # Cement (non-metallic minerals): Material efficiency
 scenario_adj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[3], 
-             increment = -0.003, start_year = 2023, end_year = 2100, data = industry_refine2)
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2)
 
 # Pulp, paper, and printing
 scenario_adj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[7], 
@@ -148,11 +148,11 @@ scenario_adj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[7],
 
 # Non-specified
 scenario_adj(economy = '07_INA', sub1sectors = ind1[2], sub2sectors = ind2[10], 
-             increment = 0.0275, start_year = 2025, end_year = 2040, data = industry_refine2)
+             increment = 0.0025, start_year = 2025, end_year = 2040, data = industry_refine2)
 
 # Non-energy
 scenario_adj_ne(economy = '07_INA', 
-                increment = -0.003, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
+                increment = -0.003, start_year = 2025, end_year = 2100, data = nonenergy_refine2)
 
 ##############################################################################################
 # Japan
@@ -242,6 +242,36 @@ scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[3],
 scenario_adj_ne(economy = '11_MEX', 
                 increment = -0.0025, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
 
+##########################################################################################
+# New Zealand
+# Mining
+scenario_adj(economy = '12_NZ', sub1sectors = ind1[0], sub2sectors = 'x', 
+             increment = 0.01, start_year = 2024, end_year = 2040, data = industry_refine2)
+
+# Steel: material efficiency
+scenario_adj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[0], 
+             increment = -0.001, start_year = 2024, end_year = 2100, data = industry_refine2) 
+
+# Chemicals: Material efficiency
+scenario_adj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[1], 
+             increment = 0.0, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-ferrous metals
+scenario_adj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[2], 
+             increment = 0.0, start_year = 2024, end_year = 2100, data = industry_refine2)
+
+# Cement (non-metallic minerals): Material efficiency
+scenario_adj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[3], 
+             increment = -0.003, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Pulp, paper, and printing
+scenario_adj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[7], 
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-energy
+scenario_adj_ne(economy = '12_NZ', 
+                increment = 0.0, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
+
 #############################################################################################
 # Philippines
 # Mining
@@ -260,7 +290,7 @@ scenario_adj(economy = '15_RP', sub1sectors = ind1[2], sub2sectors = ind2[1],
 
 # Cement (non-metallic minerals): Material efficiency
 scenario_adj(economy = '15_RP', sub1sectors = ind1[2], sub2sectors = ind2[3], 
-             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2)
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2)
 
 # Pulp, paper, and printing
 scenario_adj(economy = '15_RP', sub1sectors = ind1[2], sub2sectors = ind2[7], 
@@ -286,7 +316,7 @@ scenario_adj(economy = '16_RUS', sub1sectors = ind1[2], sub2sectors = ind2[1],
 
 # Non-ferrous metals
 scenario_adj(economy = '16_RUS', sub1sectors = ind1[2], sub2sectors = ind2[2], 
-             increment = 0.03, start_year = 2024, end_year = 2040, data = industry_refine2)
+             increment = 0.02, start_year = 2024, end_year = 2040, data = industry_refine2)
 
 # Cement (non-metallic minerals): Material efficiency
 scenario_adj(economy = '16_RUS', sub1sectors = ind1[2], sub2sectors = ind2[3], 
@@ -425,7 +455,7 @@ scenario_adj(economy = '21_VN', sub1sectors = ind1[0], sub2sectors = 'x',
 
 # Steel: Material efficiency
 scenario_adj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[0], 
-             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2) 
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2) 
 
 # Chemicals: Material efficiency
 scenario_adj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[1], 
