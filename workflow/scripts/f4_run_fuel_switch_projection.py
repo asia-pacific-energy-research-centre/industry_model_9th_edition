@@ -47,7 +47,7 @@ to_gas = ['06_crude_oil_and_ngl', '07_petroleum_products', '08_gas', '12_solar',
 # CCS fuels
 ccs_fuels = ['01_coal', '02_coal_products', '08_gas']
 
-# Run the function for the different economies
+# Run the function for the different economies 
 
 ###########################################################################################################
 # Australia

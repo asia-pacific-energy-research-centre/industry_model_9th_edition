@@ -51,6 +51,9 @@ biogas_switch(economy = '10_MAS', biogas_ref = False, biogas_tgt = False)
 # Mexico
 biogas_switch(economy = '11_MEX', biogas_ref = False, biogas_tgt = False)
 
+# New Zealand
+biogas_switch(economy = '12_NZ', biogas_ref = False, biogas_tgt = False)
+
 # Philippines
 biogas_switch(economy = '15_RP', biogas_ref = False, biogas_tgt = False)
 
