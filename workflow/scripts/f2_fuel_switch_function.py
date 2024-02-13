@@ -32,10 +32,10 @@ hist_egeda = hist_egeda.replace({'15_PHL': '15_RP',
                                  '17_SGP': '17_SIN'})
 
 # don't electrify
-no_elec = ['12_solar', '17_electricity', '18_heat']
+no_elec = ['11_geothermal', '12_solar', '17_electricity', '18_heat']
 
 # biomass 
-no_biomass = ['12_solar', '15_solid_biomass', '17_electricity', '18_heat']
+no_biomass = ['11_geothermal', '12_solar', '15_solid_biomass', '17_electricity', '18_heat']
 
 # To gas (from coal)
 to_gas = ['06_crude_oil_and_ngl', '07_petroleum_products', '08_gas', '12_solar', '15_solid_biomass',

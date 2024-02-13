@@ -37,9 +37,9 @@ hist_egeda = hist_egeda.replace({'15_PHL': '15_RP',
 
 # Vectors for switching
 # don't electrify
-no_elec = ['12_solar', '17_electricity', '18_heat']
+no_elec = ['11_geothermal', '12_solar', '17_electricity', '18_heat']
 # biomass doesnt switch for the below fuels 
-no_biomass = ['12_solar', '15_solid_biomass', '17_electricity', '18_heat']
+no_biomass = ['11_geothermal', '12_solar', '15_solid_biomass', '17_electricity', '18_heat']
 # To gas (from coal); aka these fuels dont get switched from:
 to_gas = ['06_crude_oil_and_ngl', '07_petroleum_products', '08_gas', '12_solar', '15_solid_biomass',
           '16_others', '17_electricity', '18_heat']
@@ -445,6 +445,61 @@ fuel_switch(economy = '11_MEX', sector = ind2[10], elec_rate_tgt = 0.01)
 
 # Non-energy
 fuel_switch_ne(economy = '11_MEX', hyd_increment_ref = 0.001, hyd_increment_tgt = 0.002, 
+               gas_switch_ref = False, gas_switch_tgt = False)
+
+###########################################################################################################
+# New Zealand
+# Mining
+fuel_switch(economy = '12_NZ', sector = ind1[0], elec_rate_tgt = 0.014)
+
+# Construction
+fuel_switch(economy = '12_NZ', sector = ind1[1], elec_rate_tgt = 0.014, elec_start_ref = 2024, elec_start_tgt = 2024)
+
+# Iron and steel
+fuel_switch(economy = '12_NZ', sector = ind2[0], elec_rate_ref = 0.005, elec_rate_tgt = 0.02, 
+            elec_start_tgt = 2024, hydrogen_ref = True, ccs_ref = False, hydrogen_tgt = True, ccs_tgt = False, 
+            hyd_increment_tgt = 0.02, c2g_rate_ref = 0.001, hyd_fuel_mix = {'16_x_hydrogen': 0.2, '17_electricity': 0.9}, 
+            hyd_only_tgt = True, hyd_only_year = 2032)
+
+# Chemicals
+fuel_switch(economy = '12_NZ', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.01,
+            hydrogen_ref = False, hydrogen_tgt = True, ccs_ref = False, ccs_tgt = False,
+            hyd_start_tgt = 2030, hyd_increment_tgt = 0.01, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
+
+# Non-ferrous metals
+fuel_switch(economy = '12_NZ', sector = ind2[2], elec_rate_ref = 0.0001, elec_rate_tgt = 0.001)
+
+# Non-metallic minerals
+fuel_switch(economy = '12_NZ', sector = ind2[3], elec_rate_ref = 0.0015, elec_rate_tgt = 0.008, 
+            ccs_ref = False, ccs_tgt = True, c2g_rate_tgt = 0.004, hydrogen_tgt = True,
+            bio_start_ref = 2025, bio_start_tgt = 2025, bio_rate_ref = 0.002, bio_rate_tgt = 0.014,
+            hyd_start_tgt = 2030, hyd_increment_tgt = 0.003, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
+
+# Transport
+fuel_switch(economy = '12_NZ', sector = ind2[4], elec_rate_ref = 0.003, elec_rate_tgt = 0.015)
+
+# Machinery
+fuel_switch(economy = '12_NZ', sector = ind2[5], elec_rate_ref = 0.003, elec_rate_tgt = 0.01)
+
+# Food and Beverages
+fuel_switch(economy = '12_NZ', sector = ind2[6], elec_rate_tgt = 0.013, bio_rate_tgt = 0.012)
+
+# Pulp and paper
+fuel_switch(economy = '12_NZ', sector = ind2[7], elec_rate_ref = 0.005, elec_rate_tgt = 0.011, 
+            bio_rate_ref = 0.005, bio_rate_tgt = 0.01)
+
+# Wood
+fuel_switch(economy = '12_NZ', sector = ind2[8])
+
+# Textiles
+fuel_switch(economy = '12_NZ', sector = ind2[9], elec_rate_ref = 0.004, elec_rate_tgt = 0.015)
+
+# Non-specified
+fuel_switch(economy = '12_NZ', sector = ind2[10], elec_rate_tgt = 0.01, bio_start_tgt = 2025, 
+            bio_rate_tgt = 0.005)
+
+# Non-energy
+fuel_switch_ne(economy = '12_NZ', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005, 
                gas_switch_ref = False, gas_switch_tgt = False)
 
 ##################################################################################################################

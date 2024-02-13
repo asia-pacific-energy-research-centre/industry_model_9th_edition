@@ -31,7 +31,7 @@ ind2 = list(industry_sectors.values())[3:]
 
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
-# economy_select = economy_select[6:7]
+economy_select = economy_select[11:12]
 
 # Subset energy data to just 2021
 EGEDA_2021_df = EGEDA_df[list(EGEDA_df.iloc[:,:9].columns) + ['2021']]
