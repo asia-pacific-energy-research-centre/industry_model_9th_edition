@@ -29,11 +29,17 @@ id = ['scenarios', 'economy', 'sectors', 'sub1sectors',	'sub2sectors', 'sub3sect
 # Australia
 biogas_switch(economy = '01_AUS', biogas_ref = False, biogas_tgt = False)
 
+# Brunei
+biogas_switch(economy = '02_BD', biogas_ref = False, biogas_tgt = False)
+
 # Canada
 biogas_switch(economy = '03_CDA', biogas_ref = True, biogas_tgt = True, biogas_rate_ref = 0.001, biogas_rate_tgt = 0.002)
 
 # China
 biogas_switch(economy = '05_PRC', biogas_ref = False, biogas_tgt = False)
+
+# Hong Kong, China
+biogas_switch(economy = '06_HKC', biogas_ref = False, biogas_tgt = False)
 
 # Indonesia
 #biogas_switch(economy = '07_INA', biogas_ref = False, biogas_tgt = False)

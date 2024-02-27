@@ -35,6 +35,19 @@ industry_refine1 = pd.read_csv('./data/industry_production/4_industry_refine1/re
 nonenergy_refine1 = pd.read_csv('./data/non_energy/2_nonenergy_refine1/refined_nonenergy_all.csv')
 
 ##################################################################
+# Brunei D
+industry_adj(economy = '02_BD',
+             adjust = {2027: 2.4},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_02_chemical_incl_petrochemical',
+             data = industry_refine1)
+
+nonenergy_adj(economy = '02_BD', 
+              adjust = {2027: 2.4},
+              data = nonenergy_refine1)
+
+
+##################################################################
 # Canada
 # Mining
 industry_adj(economy = '03_CDA',

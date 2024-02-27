@@ -43,9 +43,9 @@ ind_projection(economy = '01_AUS', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 0.3
 ##############################################################################################
 # 02_BD
 # Industry (including construction) % GDP
-ind_projection(economy = '02_BD', series = 'NV.IND.TOTL.ZS', high_change = 0.997)
+ind_projection(economy = '02_BD', series = 'NV.IND.TOTL.ZS', high_change = 0.998)
 # Manufacturing % GDP
-ind_projection(economy = '02_BD', series = 'NV.IND.MANF.ZS', low_bound = 10, high_bound = 13, high_change = 0.9986)
+ind_projection(economy = '02_BD', series = 'NV.IND.MANF.ZS', low_bound = 10, high_bound = 13, high_change = 0.999)
 
 ###############################################################################################
 # 03_CDA
@@ -107,7 +107,7 @@ ind_projection(economy = '05_PRC', series = 'NV.MNF.TXTL.ZS.UN', low_bound = 3, 
 ###############################################################################################
 # 06_HKC
 # Industry (including construction) % GDP
-ind_projection(economy = '06_HKC', series = 'NV.IND.TOTL.ZS', low_bound = 4, high_bound = 5)
+ind_projection(economy = '06_HKC', series = 'NV.IND.TOTL.ZS', low_bound = 3, high_bound = 4)
 # Manufacturing % GDP
 ind_projection(economy = '06_HKC', series = 'NV.IND.MANF.ZS', low_bound = 0.3, high_bound = 0.5)
 

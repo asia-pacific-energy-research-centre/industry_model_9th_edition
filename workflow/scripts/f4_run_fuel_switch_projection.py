@@ -108,6 +108,23 @@ fuel_switch(economy = '01_AUS', sector = ind2[10], elec_rate_tgt = 0.021, bio_st
 fuel_switch_ne(economy = '01_AUS', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005, 
                gas_switch_ref = False, gas_switch_tgt = False)
 
+##################################################################################################################
+# Brunei
+# Mining: no data
+
+# Chemicals
+fuel_switch(economy = '02_BD', sector = ind2[1], elec_rate_ref = 0.002, elec_rate_tgt = 0.004,
+            hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = False, ccs_tgt = False,
+            hyd_start_tgt = 2030, hyd_increment_tgt = 0.004, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
+
+# Non-specified
+fuel_switch(economy = '02_BD', sector = ind2[10], elec_rate_tgt = 0.01, c2g_rate_ref = 0.002, 
+            c2g_rate_tgt = 0.008, c2g_start_ref = 2027, c2g_start_tgt = 2027)
+
+# Non-energy
+fuel_switch_ne(economy = '02_BD', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005, 
+               gas_switch_ref = False, gas_switch_tgt = False)
+
 ###########################################################################################################
 # Canada
 # Mining
@@ -217,6 +234,16 @@ fuel_switch(economy = '05_PRC', sector = ind2[10], elec_rate_tgt = 0.01)
 # Non-energy
 fuel_switch_ne(economy = '05_PRC', hyd_increment_ref = 0.002, hyd_increment_tgt = 0.005, 
                gas_switch_ref = False, gas_switch_tgt = False)
+
+###########################################################################################################
+# Hong Kong
+# Transport
+fuel_switch(economy = '06_HKC', sector = ind2[4], elec_rate_ref = 0.005, elec_rate_tgt = 0.01)
+
+# Non-specified
+fuel_switch(economy = '06_HKC', sector = ind2[10], elec_rate_tgt = 0.01)
+
+# Non-energy: no data
 
 ##################################################################################################################
 # Indonesia

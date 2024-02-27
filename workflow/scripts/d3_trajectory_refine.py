@@ -99,8 +99,10 @@ industry_traj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[10],
 nonenergy_traj(economy = '01_AUS', proj_start_year = 2021,
               shape = 'increase', magnitude = 0.5, data = nonenergy_production)
 
-############################################################################################################
-# Brunei
+#################################### Brunei D #################################################################
+# Mining, chemicals, non-specified and non-energy: no adjustment
+
+# All other sectors: no data
 
 #################################### Canada #################################################################
 # Mining
@@ -211,7 +213,48 @@ industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[10],
 nonenergy_traj(economy = '05_PRC', proj_start_year = 2023,
               shape = 'peak', magnitude = 0.8, apex_mag = 1.4, apex_loc = 10, data = nonenergy_production)
 
-# HKC
+#################################### Hong Kong, China ############################################################
+# Mining: no adjustment
+
+# Construction
+industry_traj(economy = '06_HKC', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2023,
+              shape = 'decrease', magnitude = 0.9, data = industry_interim) 
+
+# Steel: no data
+
+# Chemicals: no adjustment
+
+# Non-ferrous metals: no data
+
+# Non-metallic minerals: no adjustment
+
+# Transportation equipment
+industry_traj(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2022,
+              shape = 'decrease', magnitude = 0.9, data = industry_interim)
+
+# Machinery
+industry_traj(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.1, data = industry_interim)
+
+# Food and beverages
+industry_traj(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2023,
+              shape = 'decrease', magnitude = 1.4, data = industry_interim)
+
+# Pulp and paper
+industry_traj(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 0.9, data = industry_interim)
+
+# Wood and wood products
+industry_traj(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[8], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 1.1, data = industry_interim)
+
+# Textiles
+industry_traj(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[9], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 0.9, data = industry_interim)
+
+# Non-specified: no adjustment
+
+# Non-energy: no adjustment
 
 ################################# Indonesia #############################################################
 # Mining: no adjustment

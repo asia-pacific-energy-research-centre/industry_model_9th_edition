@@ -84,6 +84,24 @@ nonenergy_use(economy = '01_AUS', increment_ref = 0.0025, increment_tgt = 0.005,
               start_year = 2025, end_year = 2100)
 
 ##################################################################################
+# Brunei D
+# Mining
+energy_use(economy = '02_BD', sub1sectors = ind1[0], sub2sectors = 'x',
+           increment_ref = 0.002, increment_tgt = 0.004, start_year = 2025, end_year = 2100)
+
+# Chemicals
+energy_use(economy = '02_BD', sub1sectors = ind1[2], sub2sectors = ind2[1],
+           increment_ref = 0.0025, increment_tgt = 0.005, start_year = 2028, end_year = 2100)
+
+# Non-specified
+energy_use(economy = '02_BD', sub1sectors = ind1[2], sub2sectors = ind2[10],
+           increment_ref = 0.005, increment_tgt = 0.0075, start_year = 2025, end_year = 2100)
+
+# Non-energy
+nonenergy_use(economy = '02_BD', increment_ref = 0.0025, increment_tgt = 0.005, 
+              start_year = 2028, end_year = 2100)
+
+##################################################################################
 # Canada
 # Mining
 energy_use(economy = '03_CDA', sub1sectors = ind1[0], sub2sectors = 'x',
@@ -198,6 +216,57 @@ energy_use(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[10],
 # Non-energy
 nonenergy_use(economy = '05_PRC', increment_ref = 0.003, increment_tgt = 0.006, 
               end_year = 2100)
+
+##################################################################################
+# Hong Kong
+# Mining
+energy_use(economy = '06_HKC', sub1sectors = ind1[0], sub2sectors = 'x',
+           increment_ref = 0.002, increment_tgt = 0.004, start_year = 2025, end_year = 2100)
+
+# Construction
+energy_use(economy = '06_HKC', sub1sectors = ind1[1], sub2sectors = 'x',
+           increment_ref = 0.003, increment_tgt = 0.006, start_year = 2025, end_year = 2100)
+
+# Chemicals
+energy_use(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[1],
+           increment_ref = 0.0025, increment_tgt = 0.005, start_year = 2025, end_year = 2100)
+
+# Non-metallic mineral products
+energy_use(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[3],
+           increment_ref = 0.0025, increment_tgt = 0.005, start_year = 2025, end_year = 2100)
+
+# Transportation equipment
+energy_use(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[4],
+           increment_ref = 0.005, increment_tgt = 0.0075, start_year = 2025, end_year = 2100)
+
+# Machinery
+energy_use(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[5],
+           increment_ref = 0.005, increment_tgt = 0.0075, start_year = 2025, end_year = 2100)
+
+# Food and beverage
+energy_use(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[6],
+           increment_ref = 0.004, increment_tgt = 0.008, start_year = 2025, end_year = 2100)
+
+# Pulp and paper
+energy_use(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[7],
+           increment_ref = 0.003, increment_tgt = 0.006, start_year = 2025, end_year = 2100)
+
+# Wood and wood products
+energy_use(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[8],
+           increment_ref = 0.003, increment_tgt = 0.006, start_year = 2025, end_year = 2100)
+
+# Textiles
+energy_use(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[9],
+           increment_ref = 0.003, increment_tgt = 0.006, start_year = 2025, end_year = 2100)
+
+# Non-specified
+energy_use(economy = '06_HKC', sub1sectors = ind1[2], sub2sectors = ind2[10],
+           increment_ref = 0.005, increment_tgt = 0.0075, start_year = 2025, end_year = 2100)
+
+# Non-energy
+nonenergy_use(economy = '06_HKC', increment_ref = 0.0025, increment_tgt = 0.005, 
+              start_year = 2025, end_year = 2100)
+
 
 ##################################################################################
 # Indonesia

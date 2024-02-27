@@ -54,6 +54,14 @@ alum_df = pd.concat([alum_df, alum_add_on]).sort_values(['economy_code', 'year']
 chem_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.CHEM.ZS.UN'].copy().reset_index(drop = True)
 chem_df['sub2sectors'] = ind2[1]
 
+chem_brunei = wdi_subsectors[(wdi_subsectors['series'] == 'NV.IND.MANF.ZS') &
+                             (wdi_subsectors['economy_code'] == '02_BD')].copy().reset_index(drop = True)
+
+chem_brunei['series'] = 'NV.MNF.CHEM.ZS.UN'
+chem_brunei['sub2sectors'] = ind2[1]
+
+chem_df = pd.concat([chem_df, chem_brunei]).copy().sort_values(by = ['economy_code', 'year']).reset_index(drop = True)
+
 # Transportation equipment (WDI: MTRN)
 trans_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.MTRN.ZS.UN'].copy().reset_index(drop = True)
 trans_df['sub2sectors'] = ind2[4]
@@ -91,6 +99,16 @@ ns_df['sub2sectors'] = ind2[10]
 nonenergy_df = wdi_subsectors[wdi_subsectors['series'] == 'NV.MNF.CHEM.ZS.UN'].copy().reset_index(drop = True)
 nonenergy_df['sectors'] = '17_nonenergy_use'
 nonenergy_df['sub1sectors'] = 'x' 
+
+# Edit for Brunei
+nonenergy_bd = wdi_subsectors[(wdi_subsectors['series'] == 'NV.IND.MANF.ZS') &
+                              (wdi_subsectors['economy_code'] == '02_BD')].copy().reset_index(drop = True)
+nonenergy_bd['sectors'] = '17_nonenergy_use'
+nonenergy_bd['sub1sectors'] = 'x'
+
+nonenergy_df = pd.concat([nonenergy_df, nonenergy_bd]).copy().sort_values(by = ['economy_code', 'year']).reset_index(drop = True)
+
+
 
 ################################## All manufacturing #############################################
 all_manf = pd.concat([steel_df, chem_df, alum_df, cement_df, trans_df, mach_df, fb_df, pp_df, ww_df, txt_df, ns_df]).copy().reset_index(drop = True)
