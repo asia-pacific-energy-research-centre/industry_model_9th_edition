@@ -29,6 +29,8 @@ all_years_str = [str(i) for i in all_years]
 EGEDA_hist = pd.read_csv(latest_EGEDA).loc[:, :'2021']
 EGEDA_hist = EGEDA_hist.drop(columns = ['is_subtotal']).copy().reset_index(drop = True)
 
+EGEDA_hist = EGEDA_hist.copy().replace({'15_PHL': '15_RP'})
+
 # Relevant subfuels
 coal_sub = [i for i in EGEDA_hist['subfuels'].unique() if i.startswith('01_')]
 crude_sub = [i for i in EGEDA_hist['subfuels'].unique() if i.startswith('06_')]

@@ -61,7 +61,8 @@ biogas_switch(economy = '11_MEX', biogas_ref = False, biogas_tgt = False)
 biogas_switch(economy = '12_NZ', biogas_ref = False, biogas_tgt = False)
 
 # Philippines
-biogas_switch(economy = '15_RP', biogas_ref = False, biogas_tgt = False)
+#biogas_switch(economy = '15_RP', biogas_ref = False, biogas_tgt = False)
+biodiesel_switch(economy = '15_RP', biogas_ref = True, biogas_tgt = True, biogas_rate_ref = 0.002, biogas_rate_tgt = 0.004)
 
 # Russia
 biogas_switch(economy = '16_RUS', biogas_ref = False, biogas_tgt = False)

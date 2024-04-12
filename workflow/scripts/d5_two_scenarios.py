@@ -42,7 +42,7 @@ scenario_adj(economy = '01_AUS', sub1sectors = ind1[0], sub2sectors = 'x',
 
 # Steel: Green steel production massive ramp up
 scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[0], 
-             increment = 0.175, start_year = 2030, end_year = 2042, data = industry_refine2) 
+             increment = 0.07, start_year = 2030, end_year = 2070, data = industry_refine2) 
 
 # Chemicals: Material efficiency
 scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[1], 
