@@ -44,7 +44,7 @@ nonenergy_production = pd.read_csv('./data/non_energy/1_nonenergy_projections/in
 
 #################################### Australia #################################################################
 # Mining
-industry_traj(economy = '01_AUS', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2070,
+industry_traj(economy = '01_AUS', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2060,
               shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
 
 # Construction
@@ -163,15 +163,15 @@ industry_traj(economy = '05_PRC', sub1sectors = ind1[0], sub2sectors = 'x', proj
 
 # Construction
 industry_traj(economy = '05_PRC', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2022,
-              shape = 'decrease', magnitude = 0.35, data = industry_interim)
+              shape = 'decrease', magnitude = 0.45, data = industry_interim)
 
 # Steel
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2026,
-              shape = 'decrease', magnitude = 0.4, data = industry_interim)
+              shape = 'decrease', magnitude = 0.45, data = industry_interim)
 
 # Chemicals
-industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2030,
-              shape = 'decrease', magnitude = 0.3, data = industry_interim)
+industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2025,
+              shape = 'peak', apex_mag = 1.6, apex_loc = 15, magnitude = 0.8, data = industry_interim)
 
 # Non-ferrous metals
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[2], proj_start_year = 2021,
@@ -181,9 +181,9 @@ industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[2], 
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[3], proj_start_year = 2022,
               shape = 'decrease', magnitude = 0.1, data = industry_interim)
 
-# Transportation equipment
-industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2021,
-              shape = 'peak', magnitude = 0.65, apex_mag = 2, apex_loc = 20, data = industry_interim)
+# Transportation equipment; no adjustment
+# industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2034,
+#               shape = 'decrease', magnitude = 1.8, apex_mag = 1.3, apex_loc = 25, data = industry_interim)
 
 # Machinery
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2021,
@@ -191,10 +191,10 @@ industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[5], 
 
 # Food and beverages
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2021,
-              shape = 'peak', magnitude = 0.65, apex_mag = 1.8, apex_loc = 10, data = industry_interim)
+              shape = 'peak', magnitude = 0.65, apex_mag = 1.8, apex_loc = 15, data = industry_interim)
 
 # Pulp and paper
-industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2021,
+industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2022,
               shape = 'peak', magnitude = 0.7, apex_mag = 1.6, apex_loc = 20, data = industry_interim)
 
 # Wood and wood products
@@ -207,11 +207,11 @@ industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[9], 
 
 # Non-specified
 industry_traj(economy = '05_PRC', sub1sectors = ind1[2], sub2sectors = ind2[10], proj_start_year = 2022,
-              shape = 'peak', magnitude = 0.55, apex_mag = 1.9, apex_loc = 10, data = industry_interim)
+              shape = 'peak', magnitude = 0.55, apex_mag = 1.9, apex_loc = 15, data = industry_interim)
 
 # Non-energy: no adjustment
 nonenergy_traj(economy = '05_PRC', proj_start_year = 2023,
-              shape = 'peak', magnitude = 0.8, apex_mag = 1.4, apex_loc = 10, data = nonenergy_production)
+              shape = 'peak',  apex_mag = 1.6, apex_loc = 15, magnitude = 0.8, data = nonenergy_production)
 
 #################################### Hong Kong, China ############################################################
 # Mining: no adjustment
