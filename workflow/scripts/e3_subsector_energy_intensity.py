@@ -218,6 +218,62 @@ nonenergy_use(economy = '05_PRC', increment_ref = 0.003, increment_tgt = 0.006,
               end_year = 2100)
 
 ##################################################################################
+# Chile
+# Mining
+energy_use(economy = '04_CHL', sub1sectors = ind1[0], sub2sectors = 'x',
+           increment_ref = 0.002, increment_tgt = 0.004, end_year = 2100)
+
+# Construction
+energy_use(economy = '04_CHL', sub1sectors = ind1[1], sub2sectors = 'x',
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Steel
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[0],
+           increment_ref = 0.0015, increment_tgt = 0.0025, end_year = 2100)
+
+# Chemicals
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[1],
+           increment_ref = 0.0025, increment_tgt = 0.005, end_year = 2100)
+
+# Non-ferrous metals: no data
+
+# Non-metallic mineral products
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[3],
+           increment_ref = 0.0015, increment_tgt = 0.0025, end_year = 2100)
+
+# Transportation equipment
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[4],
+           increment_ref = 0.005, increment_tgt = 0.0075, end_year = 2100)
+
+# Machinery
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[5],
+           increment_ref = 0.005, increment_tgt = 0.0075, end_year = 2100)
+
+# Food and beverage
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[6],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Pulp and paper
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[7],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Wood and wood products
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[8],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Textiles
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[9],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Non-specified
+energy_use(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[10],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Non-energy
+nonenergy_use(economy = '04_CHL', increment_ref = 0.003, increment_tgt = 0.006, 
+              end_year = 2100)
+
+##################################################################################
 # Hong Kong
 # Mining
 energy_use(economy = '06_HKC', sub1sectors = ind1[0], sub2sectors = 'x',
@@ -464,7 +520,7 @@ energy_use(economy = '11_MEX', sub1sectors = ind1[1], sub2sectors = 'x',
 
 # Steel
 energy_use(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[0],
-           increment_ref = 0.001, increment_tgt = 0.002, end_year = 2100)
+           increment_ref = 0.0015, increment_tgt = 0.0025, end_year = 2100)
 
 # Chemicals
 energy_use(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[1],
@@ -476,7 +532,7 @@ energy_use(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[2],
 
 # Non-metallic mineral products
 energy_use(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[3],
-           increment_ref = 0.001, increment_tgt = 0.002, end_year = 2100)
+           increment_ref = 0.0015, increment_tgt = 0.0025, end_year = 2100)
 
 # Transportation equipment
 energy_use(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[4],
@@ -492,7 +548,7 @@ energy_use(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[6],
 
 # Pulp and paper
 energy_use(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[7],
-           increment_ref = 0.002, increment_tgt = 0.006, end_year = 2100)
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
 
 # Wood and wood products
 energy_use(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[8],
@@ -567,6 +623,116 @@ energy_use(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[10],
 # Non-energy
 nonenergy_use(economy = '12_NZ', increment_ref = 0.0025, increment_tgt = 0.005, 
               start_year = 2025, end_year = 2100)
+
+##################################################################################
+# PNG
+# Mining
+energy_use(economy = '13_PNG', sub1sectors = ind1[0], sub2sectors = 'x',
+           increment_ref = 0.002, increment_tgt = 0.004, end_year = 2100)
+
+# Construction
+energy_use(economy = '13_PNG', sub1sectors = ind1[1], sub2sectors = 'x',
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Steel: no data
+
+# Chemicals
+energy_use(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[1],
+           increment_ref = 0.0025, increment_tgt = 0.005, end_year = 2100)
+
+# Non-ferrous metals: no data
+
+# Non-metallic mineral products
+energy_use(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[3],
+           increment_ref = 0.0015, increment_tgt = 0.0025, end_year = 2100)
+
+# Transportation equipment
+energy_use(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[4],
+           increment_ref = 0.005, increment_tgt = 0.0075, end_year = 2100)
+
+# Machinery
+energy_use(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[5],
+           increment_ref = 0.005, increment_tgt = 0.0075, end_year = 2100)
+
+# Food and beverage
+energy_use(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[6],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Pulp and paper
+energy_use(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[7],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Wood and wood products
+energy_use(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[8],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Textiles
+energy_use(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[9],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Non-specified
+energy_use(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[10],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Non-energy
+nonenergy_use(economy = '13_PNG', increment_ref = 0.003, increment_tgt = 0.006, 
+              end_year = 2100)
+
+##################################################################################
+# Peru
+# Mining
+energy_use(economy = '14_PE', sub1sectors = ind1[0], sub2sectors = 'x',
+           increment_ref = 0.002, increment_tgt = 0.004, end_year = 2100)
+
+# Construction
+energy_use(economy = '14_PE', sub1sectors = ind1[1], sub2sectors = 'x',
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Steel
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[0],
+           increment_ref = 0.0015, increment_tgt = 0.0025, end_year = 2100)
+
+# Chemicals
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[1],
+           increment_ref = 0.0025, increment_tgt = 0.005, end_year = 2100)
+
+# Non-ferrous metals: no data
+
+# Non-metallic mineral products
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[3],
+           increment_ref = 0.0015, increment_tgt = 0.0025, end_year = 2100)
+
+# Transportation equipment
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[4],
+           increment_ref = 0.005, increment_tgt = 0.0075, end_year = 2100)
+
+# Machinery
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[5],
+           increment_ref = 0.005, increment_tgt = 0.0075, end_year = 2100)
+
+# Food and beverage
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[6],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Pulp and paper
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[7],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Wood and wood products
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[8],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Textiles
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[9],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Non-specified
+energy_use(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[10],
+           increment_ref = 0.003, increment_tgt = 0.006, end_year = 2100)
+
+# Non-energy
+nonenergy_use(economy = '14_PE', increment_ref = 0.003, increment_tgt = 0.006, 
+              end_year = 2100)
 
 ##################################################################################
 # Philippines

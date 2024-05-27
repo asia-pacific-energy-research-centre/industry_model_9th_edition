@@ -109,6 +109,34 @@ scenario_adj_ne(economy = '03_CDA',
                 increment = -0.003, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
 
 ##########################################################################################
+# Chile
+# Mining
+scenario_adj(economy = '04_CHL', sub1sectors = ind1[0], sub2sectors = 'x', 
+             increment = 0.02, start_year = 2024, end_year = 2040, data = industry_refine2)
+
+# Steel: Material efficiency
+scenario_adj(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[0], 
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2) 
+
+# Chemicals: Material efficiency
+scenario_adj(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[1], 
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-ferrous metals: no data
+
+# Cement (non-metallic minerals): Material efficiency
+scenario_adj(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[3], 
+             increment = -0.003, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Pulp, paper, and printing
+scenario_adj(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[7], 
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-energy
+scenario_adj_ne(economy = '04_CHL', 
+                increment = -0.003, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
+
+##########################################################################################
 # China
 # Mining
 scenario_adj(economy = '05_PRC', sub1sectors = ind1[0], sub2sectors = 'x', 
@@ -264,7 +292,7 @@ scenario_adj(economy = '11_MEX', sub1sectors = ind1[0], sub2sectors = 'x',
 
 # Steel: Material efficiency
 scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[0], 
-             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2) 
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2) 
 
 # Chemicals: Material efficiency
 scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[1], 
@@ -272,15 +300,19 @@ scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[1],
 
 # Non-ferrous metals
 scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[2], 
-             increment = 0.025, start_year = 2024, end_year = 2040, data = industry_refine2)
+             increment = 0.02, start_year = 2024, end_year = 2040, data = industry_refine2)
 
 # Cement (non-metallic minerals): Material efficiency
 scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[3], 
-             increment = -0.0025, start_year = 2023, end_year = 2100, data = industry_refine2)
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Pulp, paper, and printing
+scenario_adj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[7], 
+             increment = -0.002, start_year = 2023, end_year = 2100, data = industry_refine2)
 
 # Non-energy
 scenario_adj_ne(economy = '11_MEX', 
-                increment = -0.0025, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
+                increment = -0.002, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
 
 ##########################################################################################
 # New Zealand
@@ -311,6 +343,30 @@ scenario_adj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[7],
 # Non-energy
 scenario_adj_ne(economy = '12_NZ', 
                 increment = 0.0, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
+
+##########################################################################################
+# PNG
+# Non-specified
+scenario_adj(economy = '13_PNG', sub1sectors = ind1[2], sub2sectors = ind2[10], 
+             increment = -0.001, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-energy
+scenario_adj_ne(economy = '13_PNG', 
+                increment = -0.001, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
+
+##########################################################################################
+# Peru
+# Mining
+scenario_adj(economy = '14_PE', sub1sectors = ind1[0], sub2sectors = 'x', 
+             increment = 0.02, start_year = 2024, end_year = 2040, data = industry_refine2)
+
+# Non-specified
+scenario_adj(economy = '14_PE', sub1sectors = ind1[2], sub2sectors = ind2[10], 
+             increment = -0.001, start_year = 2023, end_year = 2100, data = industry_refine2)
+
+# Non-energy
+scenario_adj_ne(economy = '14_PE', 
+                increment = -0.001, start_year = 2023, end_year = 2100, data = nonenergy_refine2)
 
 #############################################################################################
 # Philippines

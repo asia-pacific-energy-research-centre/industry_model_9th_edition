@@ -35,6 +35,9 @@ biogas_switch(economy = '02_BD', biogas_ref = False, biogas_tgt = False)
 # Canada
 biogas_switch(economy = '03_CDA', biogas_ref = True, biogas_tgt = True, biogas_rate_ref = 0.001, biogas_rate_tgt = 0.002)
 
+# Chile
+biogas_switch(economy = '04_CHL', biogas_ref = False, biogas_tgt = False)
+
 # China
 biogas_switch(economy = '05_PRC', biogas_ref = False, biogas_tgt = False)
 
@@ -59,6 +62,12 @@ biogas_switch(economy = '11_MEX', biogas_ref = False, biogas_tgt = False)
 
 # New Zealand
 biogas_switch(economy = '12_NZ', biogas_ref = False, biogas_tgt = False)
+
+# PNG
+biogas_switch(economy = '13_PNG', biogas_ref = False, biogas_tgt = False)
+
+# Chile
+biogas_switch(economy = '14_PE', biogas_ref = False, biogas_tgt = False)
 
 # Philippines
 #biogas_switch(economy = '15_RP', biogas_ref = False, biogas_tgt = False)

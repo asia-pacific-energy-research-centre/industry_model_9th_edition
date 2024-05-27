@@ -153,8 +153,36 @@ industry_traj(economy = '03_CDA', sub1sectors = ind1[2], sub2sectors = ind2[10],
 
 # Non-energy: no adjustment
 
+############################### Chile #####################################################################
+# Mining: no adjustment
 
-# Chile
+# Construction: no adjustment
+
+# Steel: Maybe needs adjustment
+# industry_traj(economy = '04_CHL', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2025,
+#               shape = 'decrease', magnitude = 1.05, data = industry_interim)
+
+# Chemicals: no adjustment
+
+# Non-ferrous metals: no adjustment
+
+# Non-metallic minerals: no adjustment
+
+# Transportation equipment: no adjustment
+
+# Machinery: no adjustment
+
+# Food and beverages: no adjustment
+
+# Pulp and paper: no adjustment
+
+# Wood and wood products: no adjustment
+
+# Textiles: no adjustment
+
+# Non-specified: no adjustment
+
+# Non-energy: no adjustment
 
 #################################### China #################################################################
 # Mining
@@ -532,8 +560,17 @@ industry_traj(economy = '12_NZ', sub1sectors = ind1[2], sub2sectors = ind2[10], 
 nonenergy_traj(economy = '12_NZ', proj_start_year = 2025,
               shape = 'decrease', magnitude = 0.01, data = nonenergy_production)
 
-# PNG
-# Peru
+############################################ PNG ############################################################
+# Non-specified: only sector with data; no adjustment
+
+# Non-energy: no adjustment; small amount of data in 2020 but zero in 2021
+
+############################################ Peru ###########################################################
+# Mining: no adjustment
+
+# Non-specified: no adjustment
+
+# Non-energy: no adjustment
 
 ############################################## Philippines #####################################################
 # Mining: no adjustment
@@ -820,6 +857,7 @@ industry_traj(economy = '21_VN', sub1sectors = ind1[2], sub2sectors = ind2[10], 
 nonenergy_traj(economy = '21_VN', proj_start_year = 2030,
               shape = 'decrease', magnitude = 2.5, data = nonenergy_production)
 
+#########################################################################################################################
 # Consolidate refined trajectories
 traj_overwrite_df = pd.DataFrame()
 
