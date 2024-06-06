@@ -4,7 +4,7 @@ import os
 import re
 
 wanted_wd = 'industry_model_9th_edition'
-
+#
 os.chdir(re.split(wanted_wd, os.getcwd())[0] + wanted_wd)
 
 # execute config file
