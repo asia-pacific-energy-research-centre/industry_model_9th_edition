@@ -484,11 +484,11 @@ fuel_switch_ne(economy = '10_MAS', hyd_increment_ref = 0.002, hyd_increment_tgt 
 ###########################################################################################################
 # Mexico
 # Mining
-fuel_switch(economy = '11_MEX', sector = ind1[0], elec_rate_ref = 0.001, elec_rate_tgt = 0.003, c2g_rate_ref = 0.0005, 
+fuel_switch(economy = '11_MEX', sector = ind1[0], elec_rate_ref = 0.0001, elec_rate_tgt = 0.001, c2g_rate_ref = 0.0005, 
             c2g_rate_tgt = 0.001)
 
 # Construction
-fuel_switch(economy = '11_MEX', sector = ind1[1], elec_rate_ref = 0.001, elec_rate_tgt = 0.004, 
+fuel_switch(economy = '11_MEX', sector = ind1[1], elec_rate_ref = 0.001, elec_rate_tgt = 0.0015, 
             elec_start_ref = 2024, elec_start_tgt = 2024)
 
 # Iron and steel
@@ -497,7 +497,7 @@ fuel_switch(economy = '11_MEX', sector = ind2[0], elec_rate_ref = 0.001, elec_ra
             hyd_increment_tgt = 0.011, c2g_rate_ref = 0.001, c2g_rate_tgt = 0.002)
 
 # Chemicals
-fuel_switch(economy = '11_MEX', sector = ind2[1], elec_rate_ref = 0.00, elec_rate_tgt = 0.001,
+fuel_switch(economy = '11_MEX', sector = ind2[1], elec_rate_ref = 0.00, elec_rate_tgt = 0.00,
             hydrogen_ref = False, hydrogen_tgt = False, ccs_ref = False, ccs_tgt = False,
             ccs_increment_tgt = 0.01,
             hyd_start_tgt = 2030, hyd_increment_tgt = 0.003, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
@@ -508,20 +508,22 @@ fuel_switch(economy = '11_MEX', sector = ind2[2], elec_rate_tgt = 0.0075)
 # Non-metallic minerals
 fuel_switch(economy = '11_MEX', sector = ind2[3], elec_rate_ref = 0.001, elec_rate_tgt = 0.002, 
             ccs_ref = False, ccs_tgt = False, c2g_rate_tgt = 0.009, hydrogen_tgt = False,
-            ccs_increment_tgt = 0.01, c2g_rate_ref = 0.002,
+            ccs_increment_tgt = 0.03, c2g_rate_ref = 0.004,
             hyd_start_tgt = 2030, hyd_increment_tgt = 0.002, hyd_fuel_mix = {'16_x_hydrogen': 1.0, '17_electricity': 0.0})
 
 # Transport
-fuel_switch(economy = '11_MEX', sector = ind2[4], elec_rate_ref = 0.001, elec_rate_tgt = 0.002)
+fuel_switch(economy = '11_MEX', sector = ind2[4], elec_rate_ref = 0.00, elec_rate_tgt = 0.00)
 
 # Machinery
-fuel_switch(economy = '11_MEX', sector = ind2[5], elec_rate_ref = 0.00, elec_rate_tgt = 0.001)
+fuel_switch(economy = '11_MEX', sector = ind2[5], elec_rate_ref = 0.00, elec_rate_tgt = 0.00, c2g_rate_ref = 0.005,
+            c2g_rate_tgt = 0.01)
 
 # Food and Beverages
-fuel_switch(economy = '11_MEX', sector = ind2[6], elec_rate_ref = 0.001, elec_rate_tgt = 0.003, c2g_rate_tgt = 0.001)
+fuel_switch(economy = '11_MEX', sector = ind2[6], elec_rate_ref = 0.001, elec_rate_tgt = 0.001, c2g_rate_tgt = 0.001)
 
 # Pulp and paper
-fuel_switch(economy = '11_MEX', sector = ind2[7], elec_rate_ref = 0.002, elec_rate_tgt = 0.003)
+fuel_switch(economy = '11_MEX', sector = ind2[7], elec_rate_ref = 0.0, elec_rate_tgt = 0.003, c2g_rate_ref = 0.005,
+            c2g_rate_tgt = 0.02)
 
 # Wood: no data
 
@@ -529,7 +531,8 @@ fuel_switch(economy = '11_MEX', sector = ind2[7], elec_rate_ref = 0.002, elec_ra
 fuel_switch(economy = '11_MEX', sector = ind2[9], elec_rate_ref = 0.00, elec_rate_tgt = 0.00)
 
 # Non-specified
-fuel_switch(economy = '11_MEX', sector = ind2[10], elec_rate_ref = 0.001, elec_rate_tgt = 0.002)
+fuel_switch(economy = '11_MEX', sector = ind2[10], elec_rate_ref = 0.0, elec_rate_tgt = 0.0, c2g_rate_ref = 0.005, 
+            c2g_rate_tgt = 0.005)
 
 # Non-energy
 fuel_switch_ne(economy = '11_MEX', hyd_increment_ref = 0.0, hyd_increment_tgt = 0.0, 
