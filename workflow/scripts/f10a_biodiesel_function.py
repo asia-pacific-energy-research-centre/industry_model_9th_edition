@@ -265,22 +265,26 @@ def biodiesel_switch(economy = '01_AUS',
                 new_gas_fuel = gas_fuel.copy()
                 new_others_fuel = others_fuel.copy()
 
-                for year in adjust_ref.index:
-                    adjust_ref.loc[year, 'amount'] = gas_sub.loc[0, str(year)] * adjust_ref.loc[year, 'adjust']
+                if gas_fuel.empty:
+                    pass
 
-                    # Subfuels level
-                    new_gas.loc[0, str(year)] = gas_sub.loc[0, str(year)] - adjust_ref.loc[year, 'amount']
-                    new_biogas.loc[0, str(year)] = biogas_sub.loc[0, str(year)] + adjust_ref.loc[year, 'amount']
+                else:
+                    for year in adjust_ref.index:
+                        adjust_ref.loc[year, 'amount'] = gas_sub.loc[0, str(year)] * adjust_ref.loc[year, 'adjust']
 
-                    # Fuels level
-                    new_gas_fuel.loc[0, str(year)] = gas_fuel.loc[0, str(year)] - adjust_ref.loc[year, 'amount']
-                    if others_fuel.empty:
-                        new_others_fuel = new_biogas.copy()
-                        new_others_fuel['subfuels'] = 'x'
-                    else:
-                        new_others_fuel.loc[0, str(year)] = others_fuel.loc[0, str(year)] + adjust_ref.loc[year, 'amount']
-                
-                new_sector_df = pd.concat([new_sector_df, filtered_data, new_gas, new_biogas, new_gas_fuel, new_others_fuel]).copy().reset_index(drop = True)
+                        # Subfuels level
+                        new_gas.loc[0, str(year)] = gas_sub.loc[0, str(year)] - adjust_ref.loc[year, 'amount']
+                        new_biogas.loc[0, str(year)] = biogas_sub.loc[0, str(year)] + adjust_ref.loc[year, 'amount']
+
+                        # Fuels level
+                        new_gas_fuel.loc[0, str(year)] = gas_fuel.loc[0, str(year)] - adjust_ref.loc[year, 'amount']
+                        if others_fuel.empty:
+                            new_others_fuel = new_biogas.copy()
+                            new_others_fuel['subfuels'] = 'x'
+                        else:
+                            new_others_fuel.loc[0, str(year)] = others_fuel.loc[0, str(year)] + adjust_ref.loc[year, 'amount']
+                    
+                    new_sector_df = pd.concat([new_sector_df, filtered_data, new_gas, new_biogas, new_gas_fuel, new_others_fuel]).copy().reset_index(drop = True)
 
             new_sector_df = new_sector_df.sort_values(['sectors', 'sub1sectors', 'sub2sectors', 'sub3sectors', 'fuels', 'subfuels']).reset_index(drop = True)
 

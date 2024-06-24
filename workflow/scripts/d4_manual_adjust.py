@@ -176,13 +176,51 @@ industry_adj(economy = '08_JPN',
              sub2sectors = '14_03_01_iron_and_steel',
              data = industry_refine1)
 
-###################################################################
-# New Zealand
-industry_adj(economy = '12_NZ',
-             adjust = {2031: 0.0},  
+##################################################################
+# Mexico
+industry_adj(economy = '11_MEX',
+             adjust = {2022: 1.4, 2023: 1.1},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_02_chemical_incl_petrochemical',
+             data = industry_refine1)
+
+industry_adj(economy = '11_MEX',
+             adjust = {2022: 1.2},  
              sub1sectors = '14_03_manufacturing', 
              sub2sectors = '14_03_03_non_ferrous_metals',
              data = industry_refine1)
+
+industry_adj(economy = '11_MEX',
+             adjust = {2022: 1.3},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_05_transportation_equipment',
+             data = industry_refine1)
+
+industry_adj(economy = '11_MEX',
+             adjust = {2022: 1.15},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_07_food_beverages_and_tobacco',
+             data = industry_refine1)
+
+industry_adj(economy = '11_MEX',
+             adjust = {2022: 1.15},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_08_pulp_paper_and_printing',
+             data = industry_refine1)
+
+industry_adj(economy = '11_MEX',
+             adjust = {2022: 1.2},  
+             sub1sectors = '14_03_manufacturing', 
+             sub2sectors = '14_03_11_nonspecified_industry',
+             data = industry_refine1)
+
+###################################################################
+# New Zealand: Closure aborted, and so this amendment has been commented out.
+# industry_adj(economy = '12_NZ',
+#              adjust = {2031: 0.0},  
+#              sub1sectors = '14_03_manufacturing', 
+#              sub2sectors = '14_03_03_non_ferrous_metals',
+#              data = industry_refine1)
 
 ##################################################################
 # Chinese Taipei

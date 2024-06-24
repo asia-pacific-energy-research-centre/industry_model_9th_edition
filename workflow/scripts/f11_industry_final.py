@@ -55,7 +55,8 @@ biogas_switch(economy = '08_JPN', biogas_ref = False, biogas_tgt = False)
 biogas_switch(economy = '09_ROK', biogas_ref = False, biogas_tgt = False)
 
 # Malaysia
-biogas_switch(economy = '10_MAS', biogas_ref = False, biogas_tgt = False)
+# biogas_switch(economy = '10_MAS', biogas_ref = False, biogas_tgt = False)
+biodiesel_switch(economy = '10_MAS', biogas_ref = True, biogas_tgt = True, biogas_rate_ref = 0.007, biogas_rate_tgt = 0.015)
 
 # Mexico
 biogas_switch(economy = '11_MEX', biogas_ref = False, biogas_tgt = False)

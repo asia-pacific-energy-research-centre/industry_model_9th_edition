@@ -11,7 +11,8 @@ with open(config_file) as infile:
 
 # Only use 21 APEC economies (economy_list defined in config file)
 economy_select = economy_list[:-7]
-economy_select = economy_select[[3, 10, 13]]
+# economy_select = economy_select[1:2]
+#economy_select = economy_select[[3, 10, 13]]
 
 # Fuels
 egeda_fuels = pd.read_csv('./data/config/EGEDA_fuels.csv', header = 0).squeeze().to_dict()

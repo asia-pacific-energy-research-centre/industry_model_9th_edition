@@ -44,8 +44,8 @@ nonenergy_production = pd.read_csv('./data/non_energy/1_nonenergy_projections/in
 
 #################################### Australia #################################################################
 # Mining
-industry_traj(economy = '01_AUS', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2060,
-              shape = 'decrease', magnitude = 1.3, apex_mag = 1.5, apex_loc = 20, data = industry_interim)
+industry_traj(economy = '01_AUS', sub1sectors = ind1[0], sub2sectors = 'x', proj_start_year = 2024,
+              shape = 'peak', magnitude = 1.3, apex_mag = 1.1, apex_loc = 50, data = industry_interim)
 
 # Construction
 industry_traj(economy = '01_AUS', sub1sectors = ind1[1], sub2sectors = 'x', proj_start_year = 2035,
@@ -480,27 +480,41 @@ nonenergy_traj(economy = '10_MAS', proj_start_year = 2025,
 
 # Construction: no adjustment
 
-# Steel: no adjustment
+# Steel
+industry_traj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[0], proj_start_year = 2024,
+              shape = 'decrease', magnitude = 1.6, data = industry_interim)
 
-# Chemicals: no adjustment
+# Chemicals: 
+industry_traj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[1], proj_start_year = 2021,
+              shape = 'decrease', magnitude = 2.6, data = industry_interim)
 
 # Non-ferrous metals: no adjustment
 
 # Non-metallic minerals: no adjustment
 
-# Transportation equipment: no adjustment
+# Transportation equipment
+industry_traj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[4], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 1.6, data = industry_interim)
 
-# Machinery: no adjustment
+# Machinery
+industry_traj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[5], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 1.6, data = industry_interim)
 
-# Food and beverages: no adjustment
+# Food and beverages
+industry_traj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[6], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 1.6, data = industry_interim)
 
-# Pulp and paper: no adjustment
+# Pulp and paper
+industry_traj(economy = '11_MEX', sub1sectors = ind1[2], sub2sectors = ind2[7], proj_start_year = 2025,
+              shape = 'decrease', magnitude = 1.7, data = industry_interim)
 
 # Wood and wood products: no adjustment
 
 # Textiles: no adjustment
 
 # Non-specified: no adjustment
+
+# Non-energy: no adjustment: no adjustment
 
 
 ############################################## New Zealand #####################################################

@@ -38,15 +38,15 @@ nonenergy_refine2 = pd.read_csv('./data/non_energy/3_nonenergy_refine2/refined_n
 # Australia
 # Mining
 scenario_adj(economy = '01_AUS', sub1sectors = ind1[0], sub2sectors = 'x', 
-             increment = 0.015, start_year = 2024, end_year = 2060, data = industry_refine2)
+             increment = 0.008, start_year = 2024, end_year = 2060, data = industry_refine2)
 
 # Steel: Green steel production massive ramp up
-scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[0], 
-             increment = 0.07, start_year = 2030, end_year = 2070, data = industry_refine2)
+# scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[0], 
+#              increment = 0.07, start_year = 2030, end_year = 2070, data = industry_refine2)
 
 # # Steel: No green steel in TGT
-# scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[0], 
-#              increment = -0.003, start_year = 2023, end_year = 2100, data = industry_refine2) 
+scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[0], 
+             increment = -0.003, start_year = 2023, end_year = 2100, data = industry_refine2) 
 
 # Chemicals: Material efficiency
 scenario_adj(economy = '01_AUS', sub1sectors = ind1[2], sub2sectors = ind2[1], 
