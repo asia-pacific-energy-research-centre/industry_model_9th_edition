@@ -103,7 +103,7 @@ subfuels_list = pd.read_csv(variable_path + 'EGEDA_subfuels.csv').iloc[:, 0]
 
 # Latest APEC_GDP_data file
 path_to_gdp = '../macro_variables_9th/results/GDP_estimates/data/'
-gdp_prefix = 'APEC_GDP_data_'
+gdp_prefix = '00_APEC_GDP_data_'
 
 gdp_files = glob.glob(path_to_gdp + gdp_prefix + '*.csv')
 
