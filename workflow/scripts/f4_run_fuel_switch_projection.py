@@ -240,8 +240,7 @@ fuel_switch_ne(economy = '04_CHL', hyd_increment_ref = 0.002, hyd_increment_tgt 
 ###########################################################################################################
 # China
 # Mining
-fuel_switch(economy = '05_PRC', sector = ind1[0], elec_rate_tgt = 0.011, c2g_rate_ref = 0.0005, 
-            c2g_rate_tgt = 0.0005)
+fuel_switch(economy = '05_PRC', sector = ind1[0], elec_rate_tgt = 0.011, c2g_rate_ref = 0.0005, c2g_rate_tgt = 0.0005)
 
 # Construction
 fuel_switch(economy = '05_PRC', sector = ind1[1], elec_rate_tgt = 0.008, c2g_rate_ref = 0.0005, 
