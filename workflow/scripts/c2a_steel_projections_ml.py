@@ -47,9 +47,14 @@ model_choice = {'OLS': LinearRegression,
 
 ##############################################################################################
 
-economy_list = list(steel_df['economy_code'].unique())
-# Remove Brunei
-economy_list = [i for i in economy_list if i not in ['06_HKC', 'World']]
+# economy_list = list(steel_df['economy_code'].unique())
+# # Remove Brunei
+# economy_list = [i for i in economy_list if i not in ['06_HKC', 'World']]
+
+# economy_list = ['01_AUS', '03_CDA', '04_CHL', '05_PRC', '07_INA']
+# economy_list = ['08_JPN', '09_ROK', '10_MAS', '11_MEX', '12_NZ']
+# economy_list = ['14_PE', '15_RP', '16_RUS', '17_SIN', '18_CT']
+economy_list = ['19_THA', '20_USA', '21_VN']
 
 for economy in economy_list:
     # Create empty data frame that saves k-fold fit information later
@@ -493,5 +498,3 @@ for economy in economy_list:
     plt.tight_layout()
     plt.savefig(build_save + economy + '_model_prediction_no_tlag.png')
     plt.close()
-
-

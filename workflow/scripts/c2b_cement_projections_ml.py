@@ -49,9 +49,14 @@ model_choice = {'OLS': LinearRegression,
 
 ##############################################################################################
 
-economy_list = list(cement_df['economy_code'].unique())
-# Remove Brunei
-economy_list = [i for i in economy_list if i != '02_BD']
+# economy_list = list(cement_df['economy_code'].unique())
+# # Remove Brunei
+# economy_list = [i for i in economy_list if i != '02_BD']
+
+# economy_list = ['01_AUS', '03_CDA', '04_CHL', '05_PRC', '06_HKC']
+# economy_list = ['07_INA', '08_JPN', '09_ROK', '10_MAS', '11_MEX']
+# economy_list = ['12_NZ', '13_PNG', '14_PE', '15_RP', '16_RUS']
+economy_list = ['17_SIN', '18_CT', '19_THA', '20_USA', '21_VN']
 
 for economy in economy_list:
     # Create empty data frame that saves k-fold fit information later
