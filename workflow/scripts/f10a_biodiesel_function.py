@@ -139,7 +139,9 @@ def biodiesel_switch(economy = '01_AUS',
                             new_others_fuel.loc[0, str(year)] = others_fuel.loc[0, str(year)] + adjust_ref.loc[year, 'amount']
                     
                     new_sector_df = pd.concat([new_sector_df, filtered_data, new_gas, new_biogas, new_gas_fuel, new_others_fuel]).copy().reset_index(drop = True)
+                    new_sector_df.to_csv(save_location + economy + '_new_sector_df_' + scenario + sector + '_' + '.csv', index = False)
 
+            new_sector_df.to_csv(save_location + economy + '_industry_' + scenario + '_' + file_date + '.csv', index = False)
             # Now move to the next level up
             relevant_2sectors = np.delete(scenario_df['sub2sectors'].unique(),
                                         np.where(scenario_df['sub2sectors'].unique() == 'x'))

@@ -223,6 +223,10 @@ industry_adj(economy = '11_MEX',
 #              data = industry_refine1)
 
 ##################################################################
+# Peru
+nonenergy_adj(economy = '14_PE', adjust = {2022: 1.6}, data = nonenergy_refine1)
+
+##################################################################
 # Chinese Taipei
 
 industry_adj(economy = '18_CT',
